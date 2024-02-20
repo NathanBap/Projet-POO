@@ -8,7 +8,7 @@ public class Case {
     private String bonus;
     private int x;
     private int y;
-
+    private Lettre lettre;
 
     //constructeurs
     public Case() {
@@ -23,24 +23,23 @@ public class Case {
         this.y=y;
     }
 
-
-
-  
     //méthodes 
     public void verifierEmplacement() {
         // TODO implement here
     }
 
-    //setter getter BONUS
+    //setter getter
      public String getBonus () {
-    	return bonus;
+    	return this.bonus;
     }
-   
-
-
-    //setter getter 
      public int getX () {
-    	return x;
+    	return this.x;
+    }
+    public int getY () {
+    	return this.y;
+    }
+    public Lettre getLettre() {
+        return this.lettre;
     }
     // public void setX(int x){
     //     this.x=x;
@@ -48,9 +47,7 @@ public class Case {
 
 
     //setter getter 
-     public int getY () {
-    	return y;
-    }
+
     // public void setY(int y){
     //     this.y=y;
     // }

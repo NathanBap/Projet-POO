@@ -6,7 +6,7 @@ public class Joueur {
 // Attributs
     private int score;
     private String nom;
-    private List<Lettre> ListesLettre = new ArrayList<Lettre>();
+    private List<Lettre> listeLettre = new ArrayList<Lettre>();
     
 //Constructeur
     public Joueur(String nameGiven) {
@@ -14,13 +14,18 @@ public class Joueur {
         this.nom = nameGiven;
     }
 
-// Méthodes;
+    //Getters / Setters
     public int getScore(){
         return this.score;   
     }
     public String getNom(){
         return this.nom;  
     }
+    public List<Lettre> getListeLettre() {
+        return this.listeLettre;
+    }
+
+    // Méthodes;
     public void jouer() {
         // TODO implement here
     }
@@ -28,7 +33,7 @@ public class Joueur {
         // TODO implement here
     }
     public void prendreLettre(Lettre l) {
-        this.ListesLettre.add(l);  
+        this.listeLettre.add(l);  
     }
     public void deposerLettre() {
         // TODO implement here
