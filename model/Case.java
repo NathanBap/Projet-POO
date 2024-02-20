@@ -35,27 +35,25 @@ public class Case {
      public String getBonus () {
     	return bonus;
     }
-    public String setBonus(String bonus){
-        this.bonus=bonus;
-    }
+   
 
 
     //setter getter 
-     public String getX () {
+     public int getX () {
     	return x;
     }
-    public String setX(int x){
-        this.x=x;
-    }
+    // public void setX(int x){
+    //     this.x=x;
+    // }
 
 
     //setter getter 
-     public String getY () {
+     public int getY () {
     	return y;
     }
-    public String setY(int y){
-        this.y=y;
-    }
+    // public void setY(int y){
+    //     this.y=y;
+    // }
 
 
 }
