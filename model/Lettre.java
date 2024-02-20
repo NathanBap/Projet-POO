@@ -1,4 +1,4 @@
-
+package model;
 import java.util.*;
 
 /**
@@ -22,15 +22,11 @@ public class Lettre {
      */
     private int points;
 
-    /**
-     * 
-     */
-    public void Attribute1;
 
     /**
      * 
      */
-    private bool joker;
+    private boolean joker;
 
 
 

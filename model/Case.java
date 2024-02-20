@@ -1,4 +1,4 @@
-
+package model;
 import java.util.*;
 
 /**
@@ -16,15 +16,6 @@ public class Case {
      * 
      */
     private String bonus;
-
-
-
-    /**
-     * 
-     */
-    public void bonus() {
-        // TODO implement here
-    }
 
     /**
      * 
