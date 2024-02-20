@@ -1,36 +1,27 @@
 package model;
 import java.util.*;
 
-/**
- * 
- */
 public class Sac {
+    //Attributs
+    private int nbrLettres;
+    private List<Lettre> listLettres = new ArrayList<Lettre>();
 
-    /**
-     * Default constructor
-     */
+    //Constructeur
     public Sac() {
     }
 
-    /**
-     * 
-     */
-    private int nbrLettres;
-
-
-
-    /**
-     * 
-     */
-    public void decrementer() {
-        // TODO implement here
+    //Getters / Setters
+    public int getNbrLettres() {
+        return this.nbrLettres;
+    }
+    public List<Lettre> getListLettres() {
+        return this.listLettres;
     }
 
-    /**
-     * 
-     */
+    //Méthodes
+    public void decrementer() {
+    }
     public void melanger() {
-        // TODO implement here
     }
 
 }

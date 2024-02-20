@@ -4,15 +4,19 @@ import java.util.*;
 
 public class Plateau {
     //Attributs
-    List<Case> listCase = new ArrayList<Case>();
+    private List<Case> listCase = new ArrayList<Case>();
 
     //Constructeur
     public Plateau() {
     }
 
+    //Getters / Setters
+    public List<Case> getListCase() {
+        return listCase;
+    }
+
     //Méthodes
     public void insererLettre() {
-        // TODO implement here
     }
 
 }
