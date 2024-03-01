@@ -5,7 +5,7 @@ import java.util.*;
  
 public class Case {
     //attributs 
-    private String bonus;
+    private String bonus = "  ";
     private int x;
     private int y;
     private Lettre lettre;
@@ -14,7 +14,9 @@ public class Case {
     public Case() {
     }
 
-    public Case(String bonus){
+    public Case(int x, int y, String bonus){
+        this.x=x;
+        this.y=y;
         this.bonus=bonus;
     }
 
