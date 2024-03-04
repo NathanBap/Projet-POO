@@ -15,6 +15,9 @@ public class Plateau {
     public Case[][] getPlateau() {
         return this.plateau;
     }
+    public Case getCase(int x, int y) {
+        return this.plateau[x][y];
+    }
 
     //Méthodes
     public void initPlateau() {  // A modifier pour les cases avec des bonus
@@ -23,25 +26,30 @@ public class Plateau {
         List<Integer> MD = new ArrayList<Integer>(Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
         List<Integer> MT = new ArrayList<Integer>(Arrays.asList(0, 7, 14, 105, 119, 210, 217, 224)); 
 
-        for (int i = 0; i < 15; i++) {
-            for (int j = 0; j < 15; j++) {
-                if (LD.contains(i * 15 + j)) {
-                    this.plateau[i][j] = new Case(i, j, "LD");
-                } else if (LT.contains(i * 15 + j)) {
-                    this.plateau[i][j] = new Case(i, j, "LT");
-                } else if (MD.contains(i * 15 + j)) {
-                    this.plateau[i][j] = new Case(i, j, "MD");
-                } else if (MT.contains(i * 15 + j)) {
-                    this.plateau[i][j] = new Case(i, j, "MT");
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                if (LD.contains(row * 15 + col)) {
+                    this.plateau[row][col] = new Case(row, col, "LD");
+                } else if (LT.contains(row * 15 + col)) {
+                    this.plateau[row][col] = new Case(row, col, "LT");
+                } else if (MD.contains(row * 15 + col)) {
+                    this.plateau[row][col] = new Case(row, col, "MD");
+                } else if (MT.contains(row * 15 + col)) {
+                    this.plateau[row][col] = new Case(row, col, "MT");
                 } else {
-                    this.plateau[i][j] = new Case(i, j);
+                    this.plateau[row][col] = new Case(row, col);
                 }
             }
         }
     }
 
-    public Case getCase(int x, int y) {
-        return this.plateau[x][y];
+    public boolean jouerLettre(int x, int y, Lettre lettre) {
+        if (this.plateau[x][y].placerLettre(lettre)) {
+            return true;
+        }
+        return false;
     }
 
+    public void jouerMot() { // Appelé par la classe joueur qui prend en entrée soit une liste de lettres soit un String
+    }
 }

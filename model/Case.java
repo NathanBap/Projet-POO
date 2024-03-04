@@ -2,7 +2,6 @@ package model;
 import java.util.*;
 
 
- 
 public class Case {
     //attributs 
     private String bonus = "  ";
@@ -26,8 +25,13 @@ public class Case {
     }
 
     //méthodes 
-    public void verifierEmplacement() {
-        // TODO implement here
+    public boolean placerLettre(Lettre lettre) {
+        if (this.lettre == null) {
+            lettre.setCase(this);
+            this.lettre = lettre;
+            return true;
+        }
+        return false;
     }
 
     //setter getter
@@ -43,16 +47,5 @@ public class Case {
     public Lettre getLettre() {
         return this.lettre;
     }
-    // public void setX(int x){
-    //     this.x=x;
-    // }
-
-
-    //setter getter 
-
-    // public void setY(int y){
-    //     this.y=y;
-    // }
-
 
 }
