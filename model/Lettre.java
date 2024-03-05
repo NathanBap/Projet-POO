@@ -4,18 +4,35 @@ import java.util.*;
 public class Lettre {
 
     //Attributs
-    private String lettre;
+    private char lettre;
     private int points;
-    private boolean joker;
-    private Case casee;
+    private boolean joker = false;
+    private Case casee = null;
 
     //Constructeur
-    public Lettre(String l) {
+    public Lettre(char l) {
         this.lettre = l;
+
+        if (l == 'A' || l == 'E' || l == 'I' || l == 'L' || l == 'N' || l == 'O' || l == 'R' || l == 'S' || l == 'T' || l == 'U') {
+            this.points = 1;
+        } else if (l == 'D' || l == 'G' || l == 'M') {
+            this.points = 2;
+        } else if (l == 'B' || l == 'C'  || l == 'P') {
+            this.points = 3;
+        } else if (l == 'F' || l == 'H' || l == 'V') {
+            this.points = 4;
+        } else if (l == 'J' || l == 'Q') {
+            this.points = 8;
+        } else if (l == 'K' || l == 'W' || l == 'X' || l == 'Y' || l == 'Z') {
+            this.points = 10;
+        } else if (l == '*') {
+            this.points = 0;
+            this.joker = true;
+        }
     }
 
     //Getter / Setter
-    public String getLettre() {
+    public char getLettre() {
         return this.lettre;
     }
     public int getPoints() {
@@ -26,6 +43,9 @@ public class Lettre {
     }
     public Case getCase() {
         return this.casee;
+    }
+    public void setCase(Case c) {
+        this.casee = c;
     }
 
     //Méthodes
