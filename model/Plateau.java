@@ -43,13 +43,55 @@ public class Plateau {
         }
     }
 
-    public boolean jouerLettre(int x, int y, Lettre lettre) {
-        if (this.plateau[x][y].placerLettre(lettre)) {
-            return true;
+    public int jouerMot(List<Lettre> mot, int xDep, int yDep, String dir) { 
+        int count = 0;
+        int motDouble = 1;
+        int motTriple = 1;
+
+        // Vérifie que le mot peut être placé
+        if (dir == "H") {
+            for (int i=yDep; i<mot.size(); i++) {
+                if (!this.plateau[xDep][i].isEmpty()) {
+                    return -1;
+                }
+            }
         }
-        return false;
+        if (dir == "V") {
+            for (int i=xDep; i<mot.size(); i++) {
+                if (!this.plateau[i][yDep].isEmpty()) {
+                    return -1;
+                }
+            }
+        }
+
+        // Joue le mot
+        for (Lettre l : mot) {  // A modifier pour gérer les jokers
+            Case c = this.plateau[xDep][yDep];
+            c.placerLettre(l);
+
+            if (c.getBonus() == "LD") {
+                count += l.getPoints() * 2;
+            } else if (c.getBonus() == "LT") {
+                count += l.getPoints() * 3;
+            } else if (c.getBonus() == "MD") {
+                motDouble *= 2;
+                count += l.getPoints();
+            } else if (c.getBonus() == "MT") {
+                motTriple *= 3;
+                count += l.getPoints();
+            } else {
+                count += l.getPoints();
+            }
+
+            if (dir == "H") xDep++;
+            else yDep++;
+        }
+
+        return count * motDouble * motTriple;
     }
 
-    public void jouerMot() { // Appelé par la classe joueur qui prend en entrée soit une liste de lettres soit un String
+    // Regarde s'il y a des lettres adjacentes à la case
+    public void adjacence() {
+
     }
 }
