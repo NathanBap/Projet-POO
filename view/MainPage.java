@@ -2,10 +2,8 @@ package view;
 
 import javax.swing.*;
 
-import java.awt.Desktop;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -23,7 +21,7 @@ public class MainPage extends JFrame {
         menu.add(e1);
         menu.addSeparator();
         menu.add(e2);
-
+        // Ajoute le menu à la barre du Menu (bizarre mais sinon on a pas l'option menu)
         menubar.add(menu);
         this.setJMenuBar(menubar);
         setTitle("Page de Bienvenue");
@@ -31,6 +29,7 @@ public class MainPage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         e1.addActionListener(new ActionListener() {
+            //Fonction de l'option donc potentiellement une autre action que rediriger vers le dépot
             @Override
             public void actionPerformed(ActionEvent e) {
                 openWebPage("https://github.com/NathanBap/Projet-POO");
@@ -45,6 +44,7 @@ public class MainPage extends JFrame {
         });
 
         JLabel welcomeLabel = new JLabel("Bienvenue sur notre Scrabble !");
+        //Une fois le squelette du Scrabble assez poussé -> faire une page d'introduction au principe du scrabble et du projet
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
 
         JButton launchButton = new JButton("Lancer l'application");
@@ -60,20 +60,21 @@ public class MainPage extends JFrame {
         panel.add(welcomeLabel);
         panel.add(Box.createVerticalStrut(25));
         panel.add(launchButton);
-
+        //Tout pomper sur le code de l'hotel
         add(panel);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-    private void launchOtherJavaFile() {
+    public void launchOtherJavaFile() {
         // Code pour lancer l'autre fichier Java ici
             PlateauView plateauView = new PlateauView();
             plateauView.setVisible(true);
 
     }
 
-    private void openWebPage(String url) {
+    public void openWebPage(String url) {
+        //Fonction d'ouverture du navigateur par defaut et recherche avec l'url donnée en paramètre
         try {
             Desktop.getDesktop().browse(new URI(url));
         } catch (IOException | URISyntaxException ex) {
