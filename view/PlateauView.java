@@ -44,3 +44,5 @@ public class PlateauView extends JFrame {
         });
     }
 }
+
+//TODO, la pose de pièces sur le plateau
