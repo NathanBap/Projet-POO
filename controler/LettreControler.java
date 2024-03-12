@@ -4,10 +4,13 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.JPanel;
 
-public class LettreControler extends MouseAdapter {
-        private JPanel lettreView;
+import view.PlateauView;
 
-    public LettreControler(JPanel lettreView) {
+public class LettreControler extends MouseAdapter {
+    private JPanel lettreView;
+    private PlateauView plateau;
+
+    public LettreControler(JPanel lettreView, PlateauView plateau) {
         this.lettreView = lettreView;
     }
 
@@ -15,5 +18,6 @@ public class LettreControler extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         System.out.println("Lettre clicked");
         lettreView.setBackground(Color.RED);
+        plateau.lettreClicked = lettreView;
     }
 }

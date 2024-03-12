@@ -28,8 +28,6 @@ public class LettreView extends JPanel {
         pointsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         add(pointsLabel, BorderLayout.SOUTH);
 
-        addMouseListener(new LettreControler(this));
-
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         setPreferredSize(new Dimension(100, 100));
 

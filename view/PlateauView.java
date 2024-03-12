@@ -4,6 +4,7 @@ import model.Plateau;
 import javax.swing.*;
 
 import controler.CaseControler;
+import controler.LettreControler;
 
 import java.awt.*;
 
@@ -29,12 +30,16 @@ public class PlateauView extends JFrame {
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
+                JPanel casee = new JPanel(new BorderLayout());
                 JLabel label = new JLabel(String.valueOf(plateau.getCase(i, j).getBonus()));
-                label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                mainPanel.add(label);
 
-                label.addMouseListener(new CaseControler(label));
+                casee.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                //label.setHorizontalAlignment(SwingConstants.CENTER);
+
+                casee.add(label, BorderLayout.CENTER);
+                mainPanel.add(casee);
+
+                label.addMouseListener(new CaseControler(casee, this));
             }
         }
 
@@ -62,6 +67,8 @@ public class PlateauView extends JFrame {
         footerPanel.add(lettre);
 
         add(footerPanel, BorderLayout.SOUTH);
+
+        lettre.addMouseListener(new LettreControler(lettre, this));
     }
 
     public static void main(String[] args) {
