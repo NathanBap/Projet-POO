@@ -15,4 +15,15 @@ public class LettreView extends JLabel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
         setPreferredSize(new Dimension(50, 50));
     }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            LettreView lettreView = new LettreView();
+            JFrame frame = new JFrame();
+            lettreView.setVisible(true);
+            frame.getContentPane().add(lettreView);
+            frame.pack();
+            frame.setVisible(true);
+        });
+    }
 }
