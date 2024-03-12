@@ -1,7 +1,7 @@
 package view;
 
 import javax.swing.*;
-
+import controler.Main;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -9,6 +9,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class MainPage extends JFrame {
+
+    Main controlleur = new Main();
+
     public MainPage() {
         JMenuItem e1, e2;
         JMenuBar menubar = new JMenuBar();
@@ -30,16 +33,16 @@ public class MainPage extends JFrame {
 
         e1.addActionListener(new ActionListener() {
             //Fonction de l'option donc potentiellement une autre action que rediriger vers le dépot
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                openWebPage("https://github.com/NathanBap/Projet-POO");
-            }
-        });
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    controlleur.openWebPage("https://github.com/NathanBap/Projet-POO");
+                }
+            });
 
         e2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                openWebPage("https://github.com/NathanBap/Projet-POO");
+                controlleur.openWebPage("https://github.com/NathanBap/Projet-POO");
             }
         });
 
@@ -51,10 +54,14 @@ public class MainPage extends JFrame {
         launchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Action à effectuer lors du clic sur le bouton
-                launchOtherJavaFile();
+                controlleur.launchOtherJavaFile();
             }
         });
+
+        JPanel footerPanel = new JPanel();
+        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
+        footerPanel.setBackground(Color.WHITE);
+        add(footerPanel, BorderLayout.SOUTH);
 
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.add(welcomeLabel);
@@ -66,22 +73,6 @@ public class MainPage extends JFrame {
         setVisible(true);
     }
 
-    public void launchOtherJavaFile() {
-        // Code pour lancer l'autre fichier Java ici
-            PlateauView plateauView = new PlateauView();
-            plateauView.setVisible(true);
-
-    }
-
-    public void openWebPage(String url) {
-        //Fonction d'ouverture du navigateur par defaut et recherche avec l'url donnée en paramètre
-        try {
-            Desktop.getDesktop().browse(new URI(url));
-        } catch (IOException | URISyntaxException ex) {
-            ex.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -91,5 +82,3 @@ public class MainPage extends JFrame {
         });
     }
 }
-
-//TODO, comment faire en sorte que la fermeture du plateau ne soit pas celle de la totalité du main
