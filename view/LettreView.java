@@ -4,23 +4,39 @@ import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
 
-public class LettreView extends JLabel {
+public class LettreView extends JPanel {
     private Lettre piece;
 
-    public LettreView() {
-        this.piece = new Lettre('A');
-        setText(String.valueOf(piece.getLettre()));
-        setHorizontalAlignment(SwingConstants.CENTER);
-        setFont(new Font("Arial", Font.BOLD, 40));
-        setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-        setPreferredSize(new Dimension(50, 50));
+    public LettreView(char lettre) {
+        this.piece = new Lettre(lettre);
+
+        // Définir la mise en page du JPanel
+        setLayout(new BorderLayout());
+
+        // un JLabel pour afficher la lettre au centre
+        JLabel lettreLabel = new JLabel(String.valueOf(lettre));
+        lettreLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        lettreLabel.setVerticalAlignment(SwingConstants.CENTER);
+        lettreLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        add(lettreLabel, BorderLayout.CENTER);
+
+        // JLabel pour afficher les points
+        JLabel pointsLabel = new JLabel(String.valueOf(piece.getPoints()));
+        pointsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        pointsLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        pointsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        add(pointsLabel, BorderLayout.SOUTH);
+
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        setPreferredSize(new Dimension(100, 100));
+
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            LettreView lettreView = new LettreView();
+            LettreView lettreView = new LettreView('W');
             JFrame frame = new JFrame();
-            lettreView.setVisible(true);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.getContentPane().add(lettreView);
             frame.pack();
             frame.setVisible(true);
