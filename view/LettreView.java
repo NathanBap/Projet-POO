@@ -16,25 +16,28 @@ public class LettreView extends JPanel {
         // un JLabel pour afficher la lettre au centre
         JLabel lettreLabel = new JLabel(String.valueOf(lettre));
         lettreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lettreLabel.setVerticalAlignment(SwingConstants.CENTER);
-        lettreLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        lettreLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        lettreLabel.setFont(new Font("Arial", Font.BOLD, 35));
         add(lettreLabel, BorderLayout.CENTER);
 
         // JLabel pour afficher les points
         JLabel pointsLabel = new JLabel(String.valueOf(piece.getPoints()));
         pointsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         pointsLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        pointsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        pointsLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         add(pointsLabel, BorderLayout.SOUTH);
 
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        setPreferredSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(70, 70));
+        setBackground(new Color(255, 245, 215));
+        // Appliquer un effet 3D
+        setBorder(BorderFactory.createRaisedBevelBorder());
 
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            LettreView lettreView = new LettreView('W');
+            LettreView lettreView = new LettreView('B');
             JFrame frame = new JFrame();
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new FlowLayout());
