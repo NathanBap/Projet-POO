@@ -10,6 +10,9 @@ public class PlateauView extends JFrame {
     public PlateauView() {
         initGame();
         initComponents();
+        pack(); // Ajuste automatiquement la taille
+        setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
+        setVisible(true);
     }
 
     private void initGame() {
@@ -39,7 +42,6 @@ public class PlateauView extends JFrame {
         JPanel footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
-        footerPanel.setPreferredSize(new Dimension(getWidth(), 80));
 
         JButton valider = new JButton("Valider");
         JButton effacer = new JButton("Effacer");
