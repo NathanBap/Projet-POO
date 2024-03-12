@@ -2,10 +2,14 @@ package view;
 import model.Plateau;
 
 import javax.swing.*;
+
+import controler.CaseControler;
+
 import java.awt.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
+    public static JPanel lettreClicked;
     
     public PlateauView() {
         initGame();
@@ -29,6 +33,8 @@ public class PlateauView extends JFrame {
                 label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 mainPanel.add(label);
+
+                label.addMouseListener(new CaseControler(label));
             }
         }
 
@@ -46,12 +52,14 @@ public class PlateauView extends JFrame {
         JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
+        JPanel lettre = new LettreView('A');
 
         footerPanel.add(valider);
         footerPanel.add(effacer);
         footerPanel.add(effacerAll);
         footerPanel.add(aide);
         footerPanel.add(test);
+        footerPanel.add(lettre);
 
         add(footerPanel, BorderLayout.SOUTH);
     }
