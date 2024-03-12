@@ -1,5 +1,6 @@
 package view;
 
+import controler.LettreControler;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
