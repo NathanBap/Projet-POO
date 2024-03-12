@@ -36,8 +36,12 @@ public class LettreView extends JPanel {
         SwingUtilities.invokeLater(() -> {
             LettreView lettreView = new LettreView('W');
             JFrame frame = new JFrame();
+            JPanel mainPanel = new JPanel();
+            mainPanel.setLayout(new FlowLayout());
+            mainPanel.add(lettreView);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(lettreView);
+            frame.setPreferredSize(new Dimension(400, 200));
+            frame.add(mainPanel);
             frame.pack();
             frame.setVisible(true);
         });
