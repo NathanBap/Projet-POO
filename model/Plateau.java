@@ -21,6 +21,9 @@ public class Plateau {
     public Case getCase(int x, int y) {
         return this.plateau[x][y];
     }
+    public boolean getPremierTour() {
+        return this.premierTour;
+    }
 
     //Méthodes
     public void addPendingCase(Case c) {
