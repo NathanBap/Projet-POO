@@ -12,6 +12,7 @@ public class LettreControler extends MouseAdapter {
 
     public LettreControler(JPanel lettreView, PlateauView plateau) {
         this.lettreView = lettreView;
+        this.plateau = plateau;
     }
 
     @Override

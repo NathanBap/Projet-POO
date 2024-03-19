@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
-    public static JPanel lettreClicked;
+    public JPanel lettreClicked;
     
     public PlateauView() {
         initGame();
