@@ -36,6 +36,10 @@ public class LettreView extends JPanel {
 
     }
 
+    public Lettre getPiece() {
+        return piece;
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             LettreView lettreView = new LettreView('B');

@@ -1,16 +1,21 @@
 package view;
+import model.Case;
 import model.Plateau;
 
 import javax.swing.*;
 
+import controler.ButtonsControler;
 import controler.CaseControler;
 import controler.LettreControler;
 
 import java.awt.*;
+import java.util.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
-    public JPanel lettreClicked;
+
+    public LettreView lettreClicked;
+
     
     public PlateauView() {
         initGame();
@@ -18,6 +23,17 @@ public class PlateauView extends JFrame {
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
         setVisible(true);
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
+    }
+    public void valider() { // Appelé par ButtonsControler
+        if (this.plateau.valider()) {
+            System.out.println("Valider");  // Remplacer par un affichage graphique
+        } else {
+            System.out.println("Impossible de valider");  // Remplacer par un affichage graphique
+        }
     }
 
     private void initGame() {
@@ -33,22 +49,17 @@ public class PlateauView extends JFrame {
 
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                JPanel casee = new JPanel(new BorderLayout());
-                JLabel label = new JLabel(String.valueOf(plateau.getCase(i, j).getBonus()));
+                CaseView casee = new CaseView(plateau.getCase(i, j));
+                casee.addMouseListener(new CaseControler(casee, this));
 
-                casee.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                //label.setHorizontalAlignment(SwingConstants.CENTER);
-
-                casee.add(label, BorderLayout.CENTER);
                 mainPanel.add(casee);
-
-                label.addMouseListener(new CaseControler(casee, this));
             }
         }
 
         add(mainPanel);
         pack();
-        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setLocationRelativeTo(null);
 
         JPanel footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
@@ -59,7 +70,10 @@ public class PlateauView extends JFrame {
         JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
-        JPanel lettre = new LettreView('A');
+        LettreView lettre = new LettreView('A');
+        LettreView lettre2 = new LettreView('B');
+        LettreView lettre3 = new LettreView('C');
+
 
         footerPanel.add(valider);
         footerPanel.add(effacer);
@@ -67,10 +81,16 @@ public class PlateauView extends JFrame {
         footerPanel.add(aide);
         footerPanel.add(test);
         footerPanel.add(lettre);
-
+        footerPanel.add(lettre2);
+        footerPanel.add(lettre3);
+        
         add(footerPanel, BorderLayout.SOUTH);
 
         lettre.addMouseListener(new LettreControler(lettre, this));
+        lettre2.addMouseListener(new LettreControler(lettre2, this));
+        lettre3.addMouseListener(new LettreControler(lettre3, this));
+        valider.addActionListener(new ButtonsControler(valider, this));
+
     }
 
     public static void main(String[] args) {
