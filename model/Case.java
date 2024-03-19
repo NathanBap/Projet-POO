@@ -1,8 +1,11 @@
 package model;
 import java.util.*;
+import view.PlateauView;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;  
 
 
-public class Case {
+public class Case extends MouseAdapter {
     //attributs 
     private String bonus = "  ";
     private int x;
@@ -25,6 +28,12 @@ public class Case {
     }
 
     //méthodes 
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // Action à effectuer lorsque la case est cliquée
+        System.out.println("Case cliquée : [" + x + ", " + y + "]");
+    }
     public void placerLettre(Lettre lettre) {
         lettre.setCase(this);
         this.lettre = lettre;
@@ -47,4 +56,4 @@ public class Case {
         return this.lettre;
     }
 
-}
+} 

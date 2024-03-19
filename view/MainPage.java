@@ -4,9 +4,6 @@ import javax.swing.*;
 import controler.Main;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class MainPage extends JFrame {
 

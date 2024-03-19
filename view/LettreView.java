@@ -1,15 +1,19 @@
 package view;
 
 import controler.LettreControler;
+import model.Joueur;
 import model.Lettre;
+import java.awt.event.MouseAdapter;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class LettreView extends JPanel {
     private Lettre piece;
 
-    public LettreView(char lettre) {
-        this.piece = new Lettre(lettre);
+    public LettreView(Lettre lettre) {
+        this.piece = lettre;
+        //piece.addMouseListener(new LettreControler(piece, this));
 
         // Définir la mise en page du JPanel
         setLayout(new BorderLayout());
@@ -38,7 +42,7 @@ public class LettreView extends JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            LettreView lettreView = new LettreView('B');
+            LettreView lettreView = new LettreView(new Lettre('f'));
             JFrame frame = new JFrame();
             JPanel mainPanel = new JPanel();
             mainPanel.setLayout(new FlowLayout());
