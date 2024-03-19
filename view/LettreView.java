@@ -1,5 +1,6 @@
 package view;
 
+import controler.LettreControler;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,7 @@ public class LettreView extends JPanel {
         JLabel lettreLabel = new JLabel(String.valueOf(lettre));
         lettreLabel.setHorizontalAlignment(SwingConstants.CENTER);
         lettreLabel.setVerticalAlignment(SwingConstants.BOTTOM);
-        lettreLabel.setFont(new Font("Arial", Font.BOLD, 35));
+        lettreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(lettreLabel, BorderLayout.CENTER);
 
         // JLabel pour afficher les points
@@ -28,7 +29,7 @@ public class LettreView extends JPanel {
         add(pointsLabel, BorderLayout.SOUTH);
 
         setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-        setPreferredSize(new Dimension(70, 70));
+        setPreferredSize(new Dimension(50, 50));
         setBackground(new Color(255, 245, 215));
         // Appliquer un effet 3D
         setBorder(BorderFactory.createRaisedBevelBorder());

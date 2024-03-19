@@ -3,11 +3,20 @@ package view;
 import model.Plateau;
 
 import javax.swing.*;
+
+import controler.CaseControler;
+import controler.LettreControler;
+
 import java.awt.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
+<<<<<<< HEAD
 
+=======
+    public JPanel lettreClicked;
+    
+>>>>>>> 3b9481f3af9263cc4183576474300e50982f5454
     public PlateauView() {
         initGame();
         initComponents();
@@ -28,6 +37,7 @@ public class PlateauView extends JFrame {
         JPanel mainPanel = new JPanel(new GridLayout(15, 15));
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
+<<<<<<< HEAD
                 // Création d'un panneau pour chaque case
                 JPanel panel = new JPanel(new BorderLayout());
                 panel.setBorder(BorderFactory.createLineBorder(Color.WHITE)); // Bordure blanche
@@ -70,6 +80,18 @@ public class PlateauView extends JFrame {
                 }
                 mainPanel.add(panel);
 
+=======
+                JPanel casee = new JPanel(new BorderLayout());
+                JLabel label = new JLabel(String.valueOf(plateau.getCase(i, j).getBonus()));
+
+                casee.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                //label.setHorizontalAlignment(SwingConstants.CENTER);
+
+                casee.add(label, BorderLayout.CENTER);
+                mainPanel.add(casee);
+
+                label.addMouseListener(new CaseControler(casee, this));
+>>>>>>> 3b9481f3af9263cc4183576474300e50982f5454
             }
         }
 
@@ -92,14 +114,18 @@ public class PlateauView extends JFrame {
         JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
+        JPanel lettre = new LettreView('A');
 
         footerPanel.add(valider);
         footerPanel.add(effacer);
         footerPanel.add(effacerAll);
         footerPanel.add(aide);
         footerPanel.add(test);
+        footerPanel.add(lettre);
 
         add(footerPanel, BorderLayout.SOUTH);
+
+        lettre.addMouseListener(new LettreControler(lettre, this));
     }
 
     public static void main(String[] args) {
