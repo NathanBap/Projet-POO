@@ -25,13 +25,12 @@ public class Case {
     }
 
     //méthodes 
-    public boolean placerLettre(Lettre lettre) {
-        if (this.lettre == null) {
-            lettre.setCase(this);
-            this.lettre = lettre;
-            return true;
-        }
-        return false;
+    public void placerLettre(Lettre lettre) {
+        lettre.setCase(this);
+        this.lettre = lettre;
+    }
+    public boolean isEmpty() {
+        return this.lettre == null;
     }
 
     //setter getter
