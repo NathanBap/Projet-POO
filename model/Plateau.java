@@ -29,6 +29,12 @@ public class Plateau {
     public void addPendingCase(Case c) {
         pendingCases.add(c);
     }
+    public boolean arePendingCases() {
+        return !this.pendingCases.isEmpty();
+    }
+    public List<Case> getPendingCases() {
+        return this.pendingCases;
+    }
 
     public void initPlateau() {  // A modifier pour les cases avec des bonus
         List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116, 122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
@@ -53,6 +59,7 @@ public class Plateau {
         }
     }
 
+    // A FAIRE : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
     public boolean valider() { // Appelé par PlateauView
         for (Case c : this.pendingCases) {
             System.out.println("Case : " + c.getX() + " " + c.getY());
@@ -78,7 +85,9 @@ public class Plateau {
             boolean centre = false;
             for (Case c : this.pendingCases) {
                 if (!this.adjacence(c)) {
-                    c.retirerLettre();
+                    for (Case c2 : this.pendingCases) {
+                        c2.retirerLettre();
+                    }
                     return false;
                 }
                 if (c.getX() == 7 && c.getY() == 7) {
@@ -105,7 +114,9 @@ public class Plateau {
         else {
             for (Case c : this.pendingCases) {
                 if (!this.adjacence(c)) {
-                    c.retirerLettre();
+                    for (Case c2 : this.pendingCases) {
+                        c2.retirerLettre();
+                    }
                     return false;
                 }
                 if (c.getBonus() == "LD") {
@@ -132,8 +143,13 @@ public class Plateau {
         this.pendingCases.clear();
 
         return true;
-        
-        //pendingCases.clear();
+    }
+
+    public void annuler() {
+        for (Case c : this.pendingCases) {
+            //c.retirerLettre();
+        }
+        this.pendingCases.clear();
     }
 
 

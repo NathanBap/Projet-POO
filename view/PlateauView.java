@@ -13,9 +13,9 @@ import java.util.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
+    private java.util.List<CaseView> allCases = new ArrayList<CaseView>();
 
     public LettreView lettreClicked;
-
     
     public PlateauView() {
         initGame();
@@ -28,13 +28,6 @@ public class PlateauView extends JFrame {
     public Plateau getPlateau() {
         return plateau;
     }
-    public void valider() { // Appelé par ButtonsControler
-        if (this.plateau.valider()) {
-            System.out.println("Valider");  // Remplacer par un affichage graphique
-        } else {
-            System.out.println("Impossible de valider");  // Remplacer par un affichage graphique
-        }
-    }
 
     private void initGame() {
         plateau = new Plateau();
@@ -46,13 +39,14 @@ public class PlateauView extends JFrame {
         setTitle("Scrabble POO");
 
         JPanel mainPanel = new JPanel(new GridLayout(15, 15));
-
+        
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
                 CaseView casee = new CaseView(plateau.getCase(i, j));
                 casee.addMouseListener(new CaseControler(casee, this));
 
                 mainPanel.add(casee);
+                allCases.add(casee);
             }
         }
 
@@ -66,7 +60,7 @@ public class PlateauView extends JFrame {
         footerPanel.setBackground(Color.WHITE);
 
         JButton valider = new JButton("Valider");
-        JButton effacer = new JButton("Effacer");
+        JButton annuler = new JButton("Annuler");
         JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
@@ -76,7 +70,7 @@ public class PlateauView extends JFrame {
 
 
         footerPanel.add(valider);
-        footerPanel.add(effacer);
+        footerPanel.add(annuler);
         footerPanel.add(effacerAll);
         footerPanel.add(aide);
         footerPanel.add(test);
@@ -90,7 +84,16 @@ public class PlateauView extends JFrame {
         lettre2.addMouseListener(new LettreControler(lettre2, this));
         lettre3.addMouseListener(new LettreControler(lettre3, this));
         valider.addActionListener(new ButtonsControler(valider, this));
+        annuler.addActionListener(new ButtonsControler(annuler, this));
 
+    }
+
+    public void removeAllLetters() {
+        for (CaseView c : this.allCases) {
+            c.removeLettrePosee();
+        }
+        repaint();
+        //revalidate();
     }
 
     public static void main(String[] args) {
