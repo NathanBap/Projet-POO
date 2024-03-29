@@ -1,6 +1,8 @@
 package view;
 import model.*;
 import javax.swing.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
 import controler.CaseControler;
@@ -22,8 +24,11 @@ public class PlateauView extends JFrame {
     }
 
     private void initGame() {
+        List<Joueur> joueurs = new ArrayList<Joueur>();
+        Scrabble scrabble = new Scrabble(joueurs);
         plateau = new Plateau();
         plateau.initPlateau();
+        scrabble.debutDuTour();
     }
 
     public void initComponents() {
