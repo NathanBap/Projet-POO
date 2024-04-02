@@ -71,6 +71,8 @@ public class PlateauView extends JFrame {
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
         JPanel listeLettres = new LettreView(lettresDuJoueur);
+        int score = joueur.getScore();
+        JLabel scoreLabel = new JLabel(String.valueOf(score));
 
         footerPanel.add(valider);
         footerPanel.add(effacer);
@@ -78,6 +80,7 @@ public class PlateauView extends JFrame {
         footerPanel.add(aide);
         footerPanel.add(test);
         footerPanel.add(listeLettres);
+        footerPanel.add(scoreLabel);
         add(footerPanel, BorderLayout.SOUTH);
 
 
