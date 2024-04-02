@@ -61,7 +61,10 @@ public class Plateau {
     }
 
     // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
-    // EN COURS : Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
+    // A FAIRE: Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
+    // A FAIRE : Modifier le calcul du score et la méthode adjacence
+    // IDEE : Calculer le score du mot formé entre la première et dernière lettre posée + s'il y a des cases vides entre ces lettres, afficher une erreur
+
     public String valider() { // Appelé par PlateauView
         for (Case c : this.pendingCases) {
             System.out.println("Case : " + c.getX() + " " + c.getY());
@@ -92,12 +95,10 @@ public class Plateau {
         int count = 0;
         int motDouble = 1;
         int motTriple = 1;
+        int score;
 
         if (this.premierTour) {
             boolean centre = false;
-            if (!this.motAdjacent()) {
-                return "Mot non adjacent";
-            }
             for (Case c : this.pendingCases) {
                 if (!this.adjacence(c)) {
                     return "Non adjacent";
@@ -123,29 +124,18 @@ public class Plateau {
                 return "Non centre";
             }
             this.premierTour = false;
+            score = count * motDouble * motTriple;
         }
         else {
-            for (Case c : this.pendingCases) {
-                if (!this.adjacence(c)) {
-                    return "Non adjacent";
-                }
-                if (c.getBonus() == "LD") {
-                    count += c.getLettre().getPoints() * 2;
-                } else if (c.getBonus() == "LT") {
-                    count += c.getLettre().getPoints() * 3;
-                } else if (c.getBonus() == "MD") {
-                    motDouble *= 2;
-                    count += c.getLettre().getPoints();
-                } else if (c.getBonus() == "MT") {
-                    motTriple *= 3;
-                    count += c.getLettre().getPoints();
-                } else {
-                    count += c.getLettre().getPoints();
-                }
+            if (!this.motAdjacent()) {
+                return "Mot non adjacent";
+            }
+            score = this.calcScore(pendingCases);
+            if (score == -1) {
+                return "Non adjacent";
             }
         }
 
-        int score = count * motDouble * motTriple;
         System.out.println("Score : " + score);
 
         //this.joueurActuel.addScore(score);
@@ -153,6 +143,33 @@ public class Plateau {
         this.pendingCases.clear();
 
         return "OK";
+    }
+
+    public int calcScore(List<Case> listC) {
+        int count = 0;
+        int motDouble = 1;
+        int motTriple = 1;
+
+        for (Case c : this.pendingCases) {
+            if (!this.adjacence(c)) {
+                return -1;
+            }
+            if (c.getBonus() == "LD") {
+                count += c.getLettre().getPoints() * 2;
+            } else if (c.getBonus() == "LT") {
+                count += c.getLettre().getPoints() * 3;
+            } else if (c.getBonus() == "MD") {
+                motDouble *= 2;
+                count += c.getLettre().getPoints();
+            } else if (c.getBonus() == "MT") {
+                motTriple *= 3;
+                count += c.getLettre().getPoints();
+            } else {
+                count += c.getLettre().getPoints();
+            }
+        }
+
+        return count * motDouble * motTriple;
     }
 
     public void annuler() {
