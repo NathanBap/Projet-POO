@@ -1,28 +1,35 @@
 package view;
 
+import model.Case;
 import model.Plateau;
 
 import javax.swing.*;
 
+import controler.ButtonsControler;
 import controler.CaseControler;
 import controler.LettreControler;
 
 import java.awt.*;
+import java.util.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
-<<<<<<< HEAD
+    private java.util.List<CaseView> allCases = new ArrayList<CaseView>();
 
-=======
+    public LettreView lettreClicked;
+
     public JPanel lettreClicked;
     
->>>>>>> 3b9481f3af9263cc4183576474300e50982f5454
     public PlateauView() {
         initGame();
         initComponents();
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
         setVisible(true);
+    }
+
+    public Plateau getPlateau() {
+        return plateau;
     }
 
     private void initGame() {
@@ -35,14 +42,20 @@ public class PlateauView extends JFrame {
         setTitle("Scrabble POO");
         // Création du panneau principal du plateau
         JPanel mainPanel = new JPanel(new GridLayout(15, 15));
+
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-<<<<<<< HEAD
+              
+                
+                CaseView panel = new CaseView(plateau.getCase(i, j));
+                panel.addMouseListener(new CaseControler(casee, this));
+              
                 // Création d'un panneau pour chaque case
-                JPanel panel = new JPanel(new BorderLayout());
+                // Mettre tout ça dans CaseView
                 panel.setBorder(BorderFactory.createLineBorder(Color.WHITE)); // Bordure blanche
-                JLabel label = new JLabel(String.valueOf(plateau.getCase(i, j).getBonus()));
-                label.setHorizontalAlignment(SwingConstants.CENTER);
+              
+                // TMP
+                JLabel label = new JLabel();
 
                 if (i == 7 && j == 7) {
                     panel.setBackground(Color.PINK);
@@ -80,18 +93,9 @@ public class PlateauView extends JFrame {
                 }
                 mainPanel.add(panel);
 
-=======
-                JPanel casee = new JPanel(new BorderLayout());
-                JLabel label = new JLabel(String.valueOf(plateau.getCase(i, j).getBonus()));
+                allCases.add(casee);
 
-                casee.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                //label.setHorizontalAlignment(SwingConstants.CENTER);
 
-                casee.add(label, BorderLayout.CENTER);
-                mainPanel.add(casee);
-
-                label.addMouseListener(new CaseControler(casee, this));
->>>>>>> 3b9481f3af9263cc4183576474300e50982f5454
             }
         }
 
@@ -102,7 +106,8 @@ public class PlateauView extends JFrame {
 
         add(mainPanel);
         pack();
-        setLocationRelativeTo(null);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setLocationRelativeTo(null);
 
         JPanel footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si
@@ -110,22 +115,40 @@ public class PlateauView extends JFrame {
         footerPanel.setBackground(Color.WHITE);
 
         JButton valider = new JButton("Valider");
-        JButton effacer = new JButton("Effacer");
+        JButton annuler = new JButton("Annuler");
         JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
         JButton test = new JButton("Test");
-        JPanel lettre = new LettreView('A');
+        LettreView lettre = new LettreView('A');
+        LettreView lettre2 = new LettreView('B');
+        LettreView lettre3 = new LettreView('C');
+
 
         footerPanel.add(valider);
-        footerPanel.add(effacer);
+        footerPanel.add(annuler);
         footerPanel.add(effacerAll);
         footerPanel.add(aide);
         footerPanel.add(test);
         footerPanel.add(lettre);
-
+        footerPanel.add(lettre2);
+        footerPanel.add(lettre3);
+        
         add(footerPanel, BorderLayout.SOUTH);
 
         lettre.addMouseListener(new LettreControler(lettre, this));
+        lettre2.addMouseListener(new LettreControler(lettre2, this));
+        lettre3.addMouseListener(new LettreControler(lettre3, this));
+        valider.addActionListener(new ButtonsControler(valider, this));
+        annuler.addActionListener(new ButtonsControler(annuler, this));
+
+    }
+
+    public void removeAllLetters() {
+        for (CaseView c : this.allCases) {
+            c.removeLettrePosee();
+        }
+        repaint();
+        //revalidate();
     }
 
     public static void main(String[] args) {

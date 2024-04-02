@@ -4,21 +4,26 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.JPanel;
 
-import view.PlateauView;
+import view.*;
 
 public class LettreControler extends MouseAdapter {
-    private JPanel lettreView;
+    private LettreView lettreView;
     private PlateauView plateau;
 
-    public LettreControler(JPanel lettreView, PlateauView plateau) {
+    public LettreControler(LettreView lettreView, PlateauView plateau) {
         this.lettreView = lettreView;
         this.plateau = plateau;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Lettre clicked");
-        lettreView.setBackground(Color.RED);
-        plateau.lettreClicked = lettreView;
+        if (plateau.lettreClicked != null){
+            this.plateau.lettreClicked.setBackground(new Color(255, 245, 215));
+        }
+        if (lettreView.getPiece().getCase() == null) {
+            System.out.println("Lettre clicked");
+            this.lettreView.setBackground(Color.RED);
+            this.plateau.lettreClicked = lettreView;   
+        }
     }
 }

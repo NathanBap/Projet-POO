@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Scrabble {
     private List<Joueur> joueurs = new ArrayList<Joueur>();
+    
     public static void main(String[] args) {
         Plateau plateau = new Plateau();
         plateau.initPlateau();

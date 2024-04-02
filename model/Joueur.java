@@ -4,7 +4,7 @@ import java.util.*;
 public class Joueur {
 
 // Attributs
-    private int score;
+    private int score = 0;
     private String nom;
     private Sac sac;
     private List<Lettre> listeLettre = new ArrayList<Lettre>();
@@ -13,7 +13,6 @@ public class Joueur {
     
 //Constructeur
     public Joueur(String name, Sac sac, Plateau plateau) {
-        this.score = 0;
         this.nom = name;
         this.sac = sac;
         this.plateau = plateau;
@@ -37,6 +36,9 @@ public class Joueur {
         }
         tailleMain = 7;
     }
+    public void addScore(int score) {
+        this.score += score;
+    }
 
     // Marque le début du tour du joueur
     public void startTour() {
@@ -59,33 +61,6 @@ public class Joueur {
 
     // Choix 1
     public boolean jouer() {
-        // Gérer à l'interface le drag and drop des lettres sur le plateau
-        // Bouton valider qui valide le mot 
-
-        List<Lettre> mot = new ArrayList<Lettre>();
-        int xDep, yDep, xArr, yArr; // Coordonnées de départ du mot
-        String direction; // H pour Horizontal ou V pour Vertical
-
-        xDep = 0;
-        yDep = 0;
-        xArr = 0;
-        yArr = 0;
-
-        if (mot.size() < 2  /* || !méthode qui vérifie si un mot est valide */) {
-            return false;
-        }
-
-        if (xDep == xArr) {
-            direction = "H";
-        } else {
-            direction = "V";
-        }
-
-        int scoreMot = this.plateau.jouerMot(mot, xDep, yDep, direction);
-        if (scoreMot == -1) {
-            return false;
-        }
-
         return true;
         
     }

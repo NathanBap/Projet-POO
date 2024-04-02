@@ -47,6 +47,9 @@ public class Lettre {
     public void setCase(Case c) {
         this.casee = c;
     }
+    public void removeCase() {
+        this.casee = null;
+    }
 
     //Méthodes
 

@@ -1,3 +1,4 @@
+
 <?xml version="1.0" encoding="UTF-8"?><project name="Gantt Projet POO MIAGE" company="" webLink="http://" view-date="2024-01-22" view-index="0" gantt-divider-location="422" resource-divider-location="300" version="3.3.3303" locale="fr_FR">
     <description/>
     <view zooming-state="default:6" id="gantt-chart">
@@ -52,6 +53,7 @@
         <task id="9" uid="5936862bafb049d58f241f0d364e577f" name="Génération des classes à partir du diagramme" color="#8cb6ce" meeting="false" start="2024-02-19" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="true">
             <depend id="14" type="2" difference="0" hardness="Rubber"/>
         </task>
+
         <task id="4" uid="012618318e0f474cb759ead25dc24521" name="Milestone" color="#8cb6ce" meeting="true" start="2024-05-05" duration="0" complete="0" thirdDate="2024-05-05" thirdDate-constraint="1" expand="true"/>
         <task id="8" uid="b90a577d43624aa7ab20792c43b118d0" name="Developpement" color="#8cb6ce" meeting="false" start="2024-02-20" duration="76" complete="60" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true">
             <task id="12" uid="e997e366a0c54761bd78152ffce02d1b" name="Controleur" color="#8cb6ce" meeting="false" start="2024-03-12" duration="25" complete="55" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
@@ -76,6 +78,7 @@
             </task>
             <task id="15" uid="ddc68fbfbf1b4dc2a226e5c698b4e630" name="Optimisation et correction du code" color="#8cb6ce" meeting="false" start="2024-04-26" duration="10" complete="0" thirdDate="2024-04-26" thirdDate-constraint="1" expand="true"/>
         </task>
+
         <task id="14" uid="7a2756209c4a41b599c3607601682c0e" name="Préparation du passage à l'oral" color="#8cb6ce" meeting="false" start="2024-05-06" duration="15" complete="0" expand="true"/>
     </tasks>
     <resources>
@@ -96,6 +99,7 @@
         <allocation task-id="15" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="14" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="21" resource-id="1" function="Default:0" responsible="false" load="20.0"/>
+
         <allocation task-id="26" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="16" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="28" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
@@ -109,6 +113,7 @@
         <allocation task-id="24" resource-id="3" function="Default:0" responsible="false" load="20.0"/>
         <allocation task-id="15" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="14" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
+
         <allocation task-id="20" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
     </allocations>
     <vacations/>
