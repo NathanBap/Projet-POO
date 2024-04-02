@@ -42,18 +42,23 @@ public class PlateauView extends JFrame {
         
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
+              
+                
                 CaseView casee = new CaseView(plateau.getCase(i, j));
                 casee.addMouseListener(new CaseControler(casee, this));
 
                 mainPanel.add(casee);
                 allCases.add(casee);
+              
             }
         }
-
-        add(mainPanel);
+        // Ajout du panneau principal et du panneau flou à la fenêtre
+        setLayout(new BorderLayout());
+        add(mainPanel, BorderLayout.CENTER);
         pack();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);  
+
 
         JPanel footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
@@ -104,4 +109,4 @@ public class PlateauView extends JFrame {
     }
 }
 
-//TODO, la pose de pièces sur le plateau
+// TODO, la pose de pièces sur le plateau

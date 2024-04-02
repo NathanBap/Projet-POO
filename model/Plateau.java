@@ -148,7 +148,7 @@ public class Plateau {
 
     public void annuler() {
         for (Case c : this.pendingCases) {
-            //c.retirerLettre();
+            c.retirerLettre();
         }
         this.pendingCases.clear();
     }
