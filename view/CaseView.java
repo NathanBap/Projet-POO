@@ -5,7 +5,7 @@ import model.Lettre;
 import java.awt.*;
 import javax.swing.*;
 
-public class CaseView extends JLayeredPane{
+public class CaseView extends JPanel{
     private Case casee;
     private LettreView lettrePosee;
 
@@ -14,7 +14,7 @@ public class CaseView extends JLayeredPane{
         setLayout(new BorderLayout());
         JLabel label = new JLabel(String.valueOf(casee.getBonus()));
         label.setHorizontalAlignment(SwingConstants.CENTER);
-        add(label, 1);
+        add(label, BorderLayout.CENTER);
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
@@ -24,7 +24,7 @@ public class CaseView extends JLayeredPane{
     public void setLettrePosee(LettreView lettrePosee) {
         //removeAll();
         this.lettrePosee = lettrePosee;
-        add(lettrePosee, 2);
+        add(lettrePosee, BorderLayout.CENTER);
         repaint();
         revalidate();
     }
