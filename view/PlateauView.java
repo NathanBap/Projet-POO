@@ -1,4 +1,5 @@
 package view;
+
 import model.Case;
 import model.Plateau;
 
@@ -16,6 +17,8 @@ public class PlateauView extends JFrame {
     private java.util.List<CaseView> allCases = new ArrayList<CaseView>();
 
     public LettreView lettreClicked;
+
+    public JPanel lettreClicked;
     
     public PlateauView() {
         initGame();
@@ -37,18 +40,69 @@ public class PlateauView extends JFrame {
     private void initComponents() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Scrabble POO");
-
+        // Création du panneau principal du plateau
         JPanel mainPanel = new JPanel(new GridLayout(15, 15));
-        
+
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-                CaseView casee = new CaseView(plateau.getCase(i, j));
-                casee.addMouseListener(new CaseControler(casee, this));
+              
+                
+                CaseView panel = new CaseView(plateau.getCase(i, j));
+                panel.addMouseListener(new CaseControler(casee, this));
+              
+                // Création d'un panneau pour chaque case
+                // Mettre tout ça dans CaseView
+                panel.setBorder(BorderFactory.createLineBorder(Color.WHITE)); // Bordure blanche
+              
+                // TMP
+                JLabel label = new JLabel();
 
-                mainPanel.add(casee);
+                if (i == 7 && j == 7) {
+                    panel.setBackground(Color.PINK);
+
+                } else {
+                    // Récupérer le bonus de la case
+                    String bonus = plateau.getCase(i, j).getBonus();
+
+                    // Modifier la couleur de fond en fonction du bonus
+                    switch (bonus) {
+                        case "LD":
+                            panel.setBackground(new Color(153, 204, 255)); // Bleu clair
+                            label.setText("<html><center>LETTRE<br>DOUBLE</center></html>");
+                            break;
+                        case "LT":
+                            panel.setBackground(new Color(40, 103, 199)); // Bleu foncé
+                            label.setText("<html><center>LETTRE<br>TRIPLE</center></html>");
+                            break;
+                        case "MD":
+                            panel.setBackground(new Color(255, 204, 102)); // Saumon clair
+                            label.setText("<html><center>MOT<br>DOUBLE</center></html>");
+                            break;
+                        case "MT":
+                            panel.setBackground(new Color(204, 51, 51)); // Rouge foncé
+                            label.setText("<html><center>MOT<br>TRIPLE</center></html>");
+                            break;
+                        default:
+                            panel.setBackground(new Color(75, 173, 101));
+                    }
+                    Font font = new Font(" Ubuntu", Font.BOLD, 12);
+                    label.setFont(font);
+
+                    // Ajout de l'effet 3D
+                    panel.add(label, BorderLayout.CENTER);
+                }
+                mainPanel.add(panel);
+
                 allCases.add(casee);
+
+
             }
         }
+
+        // Ajout du panneau principal et du panneau flou à la fenêtre
+        setLayout(new BorderLayout());
+        add(mainPanel, BorderLayout.CENTER);
+        add(mainPanel, BorderLayout.CENTER);
 
         add(mainPanel);
         pack();
@@ -56,7 +110,8 @@ public class PlateauView extends JFrame {
         //setLocationRelativeTo(null);
 
         JPanel footerPanel = new JPanel();
-        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
+        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si
+        // nécessaire
         footerPanel.setBackground(Color.WHITE);
 
         JButton valider = new JButton("Valider");
@@ -102,6 +157,7 @@ public class PlateauView extends JFrame {
             plateauView.setVisible(true);
         });
     }
+
 }
 
-//TODO, la pose de pièces sur le plateau
+// TODO, la pose de pièces sur le plateau
