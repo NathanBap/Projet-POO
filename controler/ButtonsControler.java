@@ -31,7 +31,10 @@ public class ButtonsControler implements ActionListener {
             } else {
                 //plateauView.valider();
                 if (plateau.valider()) {
+                    String msg = "Les lettres ont été placées avec succès."; // A FAIRE : Afficher le score du mot posé
                     System.out.println("Valider");  // A FAIRE : Remplacer par un affichage graphique
+                    JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
+
                     // A FAIRE : Remettre le background des lettres normal
                     
                 } else {

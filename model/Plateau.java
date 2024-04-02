@@ -60,6 +60,7 @@ public class Plateau {
     }
 
     // A FAIRE : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
+    // A FAIRE : Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
     public boolean valider() { // Appelé par PlateauView
         for (Case c : this.pendingCases) {
             System.out.println("Case : " + c.getX() + " " + c.getY());
