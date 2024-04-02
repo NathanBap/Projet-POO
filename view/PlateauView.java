@@ -10,10 +10,11 @@ import controler.LettreControler;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
-    private java.util.List<CaseView> allCases = new ArrayList<CaseView>();
+    private List<CaseView> allCases = new ArrayList<CaseView>();
 
     public LettreView lettreClicked;
     
@@ -95,7 +96,10 @@ public class PlateauView extends JFrame {
 
     public void removeAllLetters() {
         for (CaseView c : this.allCases) {
-            c.removeLettrePosee();
+            List<Case> pendingCases = plateau.getPendingCases();
+            if (pendingCases.contains(c.getCase())) {
+                c.removeLettrePosee();
+            }
         }
         repaint();
         //revalidate();

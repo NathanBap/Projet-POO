@@ -8,6 +8,7 @@ public class Plateau {
     private List<Case> pendingCases = new ArrayList<Case>();
     private Joueur joueurActuel;
     private boolean premierTour = true;
+    private Dico dico = new Dico();
 
     //Constructeur
     public Plateau() {
@@ -59,11 +60,14 @@ public class Plateau {
         }
     }
 
-    // A FAIRE : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
-    // A FAIRE : Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
-    public boolean valider() { // Appelé par PlateauView
+    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
+    // EN COURS : Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
+    public String valider() { // Appelé par PlateauView
         for (Case c : this.pendingCases) {
             System.out.println("Case : " + c.getX() + " " + c.getY());
+        }
+        if (this.pendingCases.size() < 2) {
+            return "Pas assez de lettres";
         }
         Collections.sort(this.pendingCases, new Comparator<Case>() {
             @Override
@@ -76,7 +80,14 @@ public class Plateau {
             }
         });
 
-        // Vérifier si le mot est valide avec Dictionnaire
+        String mot = "";
+        for (Case c : this.pendingCases) {
+            mot += c.getLettre().getLettre();
+        }
+        if (!this.dico.estValide(mot)) {
+            System.out.println("Mot invalide");
+            return "Mot invalide";
+        }
 
         int count = 0;
         int motDouble = 1;
@@ -84,12 +95,12 @@ public class Plateau {
 
         if (this.premierTour) {
             boolean centre = false;
+            if (!this.motAdjacent()) {
+                return "Mot non adjacent";
+            }
             for (Case c : this.pendingCases) {
                 if (!this.adjacence(c)) {
-                    for (Case c2 : this.pendingCases) {
-                        c2.retirerLettre();
-                    }
-                    return false;
+                    return "Non adjacent";
                 }
                 if (c.getX() == 7 && c.getY() == 7) {
                     centre = true;
@@ -109,16 +120,14 @@ public class Plateau {
                 }
             }
             if (!centre) {
-                return false;
+                return "Non centre";
             }
+            this.premierTour = false;
         }
         else {
             for (Case c : this.pendingCases) {
                 if (!this.adjacence(c)) {
-                    for (Case c2 : this.pendingCases) {
-                        c2.retirerLettre();
-                    }
-                    return false;
+                    return "Non adjacent";
                 }
                 if (c.getBonus() == "LD") {
                     count += c.getLettre().getPoints() * 2;
@@ -143,7 +152,7 @@ public class Plateau {
 
         this.pendingCases.clear();
 
-        return true;
+        return "OK";
     }
 
     public void annuler() {
@@ -159,19 +168,41 @@ public class Plateau {
         int x = c.getX();
         int y = c.getY();
 
-        if (x > 0 && !this.plateau[x-1][y].isEmpty()) {
+        if (x > 0 && !this.plateau[x-1][y].isEmpty() && this.pendingCases.contains(this.plateau[x-1][y])) {
             return true;
         }
-        if (x < 14 && !this.plateau[x+1][y].isEmpty()) {
+        if (x < 14 && !this.plateau[x+1][y].isEmpty() && this.pendingCases.contains(this.plateau[x+1][y])) {
             return true;
         }
-        if (y > 0 && !this.plateau[x][y-1].isEmpty()) {
+        if (y > 0 && !this.plateau[x][y-1].isEmpty() && this.pendingCases.contains(this.plateau[x][y-1])) {
             return true;
         }
-        if (y < 14 && !this.plateau[x][y+1].isEmpty()) {
+        if (y < 14 && !this.plateau[x][y+1].isEmpty() && this.pendingCases.contains(this.plateau[x][y+1])) {
             return true;
         }
         System.out.println("Aucune lettre adjacente");
+        return false;
+    }
+
+    // Pour savoir si le mot placé est adjacent à un ancien mot
+    public boolean motAdjacent() {
+        for (Case c : this.pendingCases) {
+            int x = c.getX();
+            int y = c.getY();
+
+            if (x > 0 && !this.plateau[x-1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x-1][y])) {
+                return true;
+            }
+            if (x < 14 && !this.plateau[x+1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x+1][y])) {
+                return true;
+            }
+            if (y > 0 && !this.plateau[x][y-1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y-1])) {
+                return true;
+            }
+            if (y < 14 && !this.plateau[x][y+1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y+1])) {
+                return true;
+            }
+        }
         return false;
     }
 }
