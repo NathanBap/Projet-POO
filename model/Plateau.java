@@ -8,6 +8,7 @@ public class Plateau {
     private List<Case> pendingCases = new ArrayList<Case>();
     private Joueur joueurActuel;
     private boolean premierTour = true;
+    private Dico dico = new Dico();
 
     //Constructeur
     public Plateau() {
@@ -59,13 +60,47 @@ public class Plateau {
         }
     }
 
-    // A FAIRE : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
-    // A FAIRE : Prendre en compte le cas où on pose des lettres adjacentes à des lettres déjà posées
-    public boolean valider() { // Appelé par PlateauView
-        for (Case c : this.pendingCases) {
-            System.out.println("Case : " + c.getX() + " " + c.getY());
+    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
+    // FAIT : Changement du système du calcul du score
+    // A FAIRE : Quand on pose un mot validé, supprimer le bonus de la case
+    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
+
+    public String valider() { // Appelé par PlateauView
+        boolean sameRow = true;
+        boolean sameColumn = true;
+        int firstX = pendingCases.get(0).getX();
+        int firstY = pendingCases.get(0).getY();
+        int lastX = pendingCases.get(pendingCases.size()-1).getX();
+        int lastY = pendingCases.get(pendingCases.size()-1).getY();
+
+        for (Case c : pendingCases) {
+            if (c.getX() != firstX) {
+                sameRow = false;
+            }
+            if (c.getY() != firstY) {
+                sameColumn = false;
+            }
         }
-        Collections.sort(this.pendingCases, new Comparator<Case>() {
+
+        if (!sameRow && !sameColumn) {
+            return "Pas aligne";
+        }
+
+        if (sameRow) { 
+            for (int y = pendingCases.get(0).getY(); y < lastY; y++) {
+                if (getCase(firstX, y).isEmpty()) {
+                    return "Pas connecte";
+                }
+            }
+        } else {
+            for (int x = pendingCases.get(0).getX(); x < lastX; x++) {
+                if (getCase(x, firstY).isEmpty()) {
+                    return "Pas connecte";
+                }
+            }
+        }
+
+        Comparator<Case> comparator = new Comparator<Case>() {
             @Override
             public int compare(Case c1, Case c2) {
                 if (c1.getX() != c2.getX()) {
@@ -74,104 +109,185 @@ public class Plateau {
                     return Integer.compare(c1.getY(), c2.getY());
                 }
             }
-        });
-
-        // Vérifier si le mot est valide avec Dictionnaire
+        };
+        Collections.sort(this.pendingCases, comparator);
 
         int count = 0;
         int motDouble = 1;
         int motTriple = 1;
+        int score = 0;
+        Map<String, Integer> motsPoint = new HashMap<String, Integer>();
 
         if (this.premierTour) {
             boolean centre = false;
+            if (this.pendingCases.size() < 2) {
+                return "Pas assez de lettres";
+            }
+            String mot = "";
             for (Case c : this.pendingCases) {
-                if (!this.adjacence(c)) {
-                    for (Case c2 : this.pendingCases) {
-                        c2.retirerLettre();
-                    }
-                    return false;
-                }
                 if (c.getX() == 7 && c.getY() == 7) {
                     centre = true;
                 }
-                if (c.getBonus() == "LD") {
-                    count += c.getLettre().getPoints() * 2;
-                } else if (c.getBonus() == "LT") {
-                    count += c.getLettre().getPoints() * 3;
-                } else if (c.getBonus() == "MD") {
-                    motDouble *= 2;
-                    count += c.getLettre().getPoints();
-                } else if (c.getBonus() == "MT") {
-                    motTriple *= 3;
-                    count += c.getLettre().getPoints();
-                } else {
-                    count += c.getLettre().getPoints();
-                }
+                int[] newScore = updateScore(c, count, motDouble, motTriple);
+                count = newScore[0];
+                motDouble = newScore[1];
+                motTriple = newScore[2];
+
+                mot += c.getLettre().getLettre();
             }
             if (!centre) {
-                return false;
+                return "Non centre";
             }
+            this.premierTour = false;
+            score = count * motDouble * motTriple;
+            motsPoint.put(mot, score);
         }
         else {
-            for (Case c : this.pendingCases) {
-                if (!this.adjacence(c)) {
-                    for (Case c2 : this.pendingCases) {
-                        c2.retirerLettre();
+            if (!this.motAdjacent()) {
+                return "Mot non adjacent";
+            }
+            Set<Case> casesVues = new HashSet<Case>();
+            for (Case c : pendingCases) {
+                System.out.println("Cases adjacentes : " + casesAdjacentes(c, casesVues));
+                for (Case cBis : casesAdjacentes(c, casesVues)) {
+                    int scoreMot = calcMot(c, cBis, casesVues, motsPoint);
+                    if (scoreMot == -1) {
+                        return "Mot invalide";
                     }
-                    return false;
+                    score += scoreMot;
                 }
-                if (c.getBonus() == "LD") {
-                    count += c.getLettre().getPoints() * 2;
-                } else if (c.getBonus() == "LT") {
-                    count += c.getLettre().getPoints() * 3;
-                } else if (c.getBonus() == "MD") {
-                    motDouble *= 2;
-                    count += c.getLettre().getPoints();
-                } else if (c.getBonus() == "MT") {
-                    motTriple *= 3;
-                    count += c.getLettre().getPoints();
-                } else {
-                    count += c.getLettre().getPoints();
+            }
+            if (!casesVues.containsAll(pendingCases)) {
+                int scoreMot = calcMot(pendingCases.get(0), pendingCases.get(pendingCases.size()-1), casesVues, motsPoint);
+                if (scoreMot == -1) {
+                    return "Mot invalide";
                 }
+                score += scoreMot;
             }
         }
 
-        int score = count * motDouble * motTriple;
         System.out.println("Score : " + score);
 
         //this.joueurActuel.addScore(score);
 
         this.pendingCases.clear();
 
-        return true;
+        return motsPoint.toString();
+    }
+
+    // c correspond à la case posée, cBis à une case adjacente
+    public int calcMot(Case c, Case cBis, Set<Case> casesVues, Map<String, Integer> motsPoints) {
+        int x = c.getX();
+        int y = c.getY();
+        int xBis = cBis.getX();
+        int count = 0;
+        int motDouble = 1;
+        int motTriple = 1;
+        String mot = "";
+
+        // Soit horizontal soit vertical
+        if (x == xBis) {
+            // Pour aller au début du mot dans tous les cas
+            while (!getCase(x,y-1).isEmpty()) y--;
+                
+            Case currentCase = getCase(x,y);
+            while (!currentCase.isEmpty()) {
+                int[] newScore = updateScore(currentCase, count, motDouble, motTriple);
+                count = newScore[0];
+                motDouble = newScore[1];
+                motTriple = newScore[2];
+                casesVues.add(currentCase);
+                mot += currentCase.getLettre().getLettre();
+                currentCase = getCase(x,++y);
+            }
+        } else {
+            while (!getCase(x-1,y).isEmpty()) x--;
+                
+            Case currentCase = getCase(x,y);
+            while (!currentCase.isEmpty()) {
+                int[] newScore = updateScore(currentCase, count, motDouble, motTriple);
+                count = newScore[0];
+                motDouble = newScore[1];
+                motTriple = newScore[2];
+                casesVues.add(currentCase);
+                mot += currentCase.getLettre().getLettre();
+                currentCase = getCase(++x,y);
+            }
+        }
+        if (!this.dico.estValide(mot)) {
+            System.out.println("Mot invalide : " + mot);
+            return -1;
+        }
+        int score = count * motDouble * motTriple;
+        System.out.println("Score du mot : " + mot + " -> " + score);
+        motsPoints.put(mot, score);
+        return score;
+    }
+
+    public int[] updateScore(Case c, int count, int motDouble, int motTriple) {
+        if (c.getBonus() == "LD") {
+            count += c.getLettre().getPoints() * 2;
+        } else if (c.getBonus() == "LT") {
+            count += c.getLettre().getPoints() * 3;
+        } else if (c.getBonus() == "MD") {
+            motDouble *= 2;
+            count += c.getLettre().getPoints();
+        } else if (c.getBonus() == "MT") {
+            motTriple *= 3;
+            count += c.getLettre().getPoints();
+        } else {
+            count += c.getLettre().getPoints();
+        }
+        return new int[] {count, motDouble, motTriple};
     }
 
     public void annuler() {
         for (Case c : this.pendingCases) {
-            //c.retirerLettre();
+            c.retirerLettre();
         }
         this.pendingCases.clear();
     }
 
-
-    // Regarde s'il y a des lettres adjacentes à la case
-    public boolean adjacence(Case c) {
+    public List<Case> casesAdjacentes(Case c, Set<Case> casesVues) {
         int x = c.getX();
         int y = c.getY();
+        List<Case> casesAdj = new ArrayList<Case>();
 
-        if (x > 0 && !this.plateau[x-1][y].isEmpty()) {
-            return true;
+        if (x > 0 && !getCase(x-1,y).isEmpty() && !this.pendingCases.contains(getCase(x-1,y)) && !casesVues.contains(getCase(x-1,y))) {
+            casesAdj.add(getCase(x-1, y));
         }
-        if (x < 14 && !this.plateau[x+1][y].isEmpty()) {
-            return true;
+        if (x < 14 && !getCase(x+1,y).isEmpty() && !this.pendingCases.contains(getCase(x+1,y)) && !casesVues.contains(getCase(x+1,y))) {
+            casesAdj.add(getCase(x+1, y));
         }
-        if (y > 0 && !this.plateau[x][y-1].isEmpty()) {
-            return true;
+        if (y > 0 && !getCase(x,y-1).isEmpty() && !this.pendingCases.contains(getCase(x,y-1)) && !casesVues.contains(getCase(x,y-1))) {
+            casesAdj.add(getCase(x, y-1));
         }
-        if (y < 14 && !this.plateau[x][y+1].isEmpty()) {
-            return true;
+        if (y < 14 && !getCase(x,y+1).isEmpty() && !this.pendingCases.contains(getCase(x,y+1)) && !casesVues.contains(getCase(x,y+1))) {
+            casesAdj.add(getCase(x, y+1));
         }
         System.out.println("Aucune lettre adjacente");
+        return casesAdj;
+    }
+
+    // Pour savoir si le mot placé est adjacent à un ancien mot
+    public boolean motAdjacent() {
+        for (Case c : this.pendingCases) {
+            int x = c.getX();
+            int y = c.getY();
+
+            if (x > 0 && !this.plateau[x-1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x-1][y])) {
+                return true;
+            }
+            if (x < 14 && !this.plateau[x+1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x+1][y])) {
+                return true;
+            }
+            if (y > 0 && !this.plateau[x][y-1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y-1])) {
+                return true;
+            }
+            if (y < 14 && !this.plateau[x][y+1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y+1])) {
+                return true;
+            }
+        }
         return false;
     }
 }

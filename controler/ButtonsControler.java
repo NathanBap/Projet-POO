@@ -27,31 +27,50 @@ public class ButtonsControler implements ActionListener {
             if (!plateau.arePendingCases()) {
                 String msg = "Aucune lettre n'a été placée sur le plateau.";
                 JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
-
             } else {
-                //plateauView.valider();
-                if (plateau.valider()) {
-                    String msg = "Les lettres ont été placées avec succès."; // A FAIRE : Afficher le score du mot posé
-                    System.out.println("Valider");  // A FAIRE : Remplacer par un affichage graphique
-                    JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
-
-                    // A FAIRE : Remettre le background des lettres normal
-                    
-                } else {
-                    System.out.println("Impossible de valider");  // Remplacer par un affichage graphique
-                    String msg = "Les lettres ne sont pas adjacentes ou ne forment pas un mot valide.";
-                    JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
-                    plateau.annuler();
-                    plateauView.removeAllLetters();
+                String msg = "";
+                String valider = plateau.valider();
+                
+                switch (valider) {
+                    case "Mot invalide":
+                        msg = "Le mot formé n'est pas valide.";
+                        break;
+                    case "Non centre":
+                        msg = "Le mot formé au premier tour doit passer par la case centrale.";
+                        break;
+                    case "Mot non adjacent":
+                        msg = "Le mot formé n'est pas adjacent à un ancien mot.";
+                        break;
+                    case "Pas assez de lettres":
+                        msg = "Il faut poser minimum 2 lettres.";
+                        break;
+                    case "Pas aligne":
+                        msg = "Les lettres posées ne sont pas toutes sur la même ligne ou colonne.";
+                        break;
+                    case "Pas connecte":
+                        msg = "Les lettres posées ne sont pas toutes connectées.";
+                        break;
+                    default:
+                        break;
                 }
+
+                if (msg != "") {
+                    JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
+                    plateauView.removeAllLetters();
+                    plateau.annuler();
+                } else {
+                    msg = "Les lettres ont été placées avec succès, mots formés : \n" + valider;
+                    JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
+                }
+                // A FAIRE : Remettre le background des lettres normal
             }
 
         }
         
         else if (action.equals("Annuler")) {
             System.out.println("Annuler clicked");
-            plateau.annuler();
             plateauView.removeAllLetters();
+            plateau.annuler();
         }
     }
 }
