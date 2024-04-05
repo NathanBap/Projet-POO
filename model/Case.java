@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 
 public class Case extends MouseAdapter {
     //attributs 
-    private String bonus = "  ";
+    private String bonus = "";
     private int x;
     private int y;
     private Lettre lettre;
@@ -58,6 +58,9 @@ public class Case extends MouseAdapter {
     }
     public Lettre getLettre() {
         return this.lettre;
+    }
+    public void removeBonus() {
+        this.bonus = "";
     }
 
 } 
