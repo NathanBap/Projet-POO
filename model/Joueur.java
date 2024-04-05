@@ -12,10 +12,10 @@ public class Joueur {
     private Plateau plateau;
     
 //Constructeur
-    public Joueur(String name, Sac sac, Plateau plateau) {
+    public Joueur(String name, Plateau plateau) {
         this.nom = name;
-        this.sac = sac;
         this.plateau = plateau;
+        this.sac = plateau.getSac();
     }
 
     //Getters / Setters

@@ -19,9 +19,9 @@ public class PlateauView extends JFrame {
     public LettreView lettreClicked;
     private JPanel listeLettres;
     
-    public PlateauView(Joueur joueur) {
-        this.joueur = joueur;
+    public PlateauView() {
         initGame();
+        this.joueur = plateau.getJoueurActuel();
         initComponents();
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
@@ -33,10 +33,11 @@ public class PlateauView extends JFrame {
     }
 
     private void initGame() {
-        List<Joueur> joueurs = new ArrayList<Joueur>();
-        Scrabble scrabble = new Scrabble(joueurs);
+        // Scrabble scrabble = new Scrabble(joueurs);
         plateau = new Plateau();
         plateau.initPlateau();
+        plateau.initJoueurs();
+        plateau.debutDuJeu();
         // scrabble.debutDuTour();
     }
 
@@ -88,8 +89,8 @@ public class PlateauView extends JFrame {
         int score = joueur.getScore();
         JLabel scoreLabel = new JLabel(String.valueOf(score));
 
-        LettreView lettre = new LettreView('A');
-        LettreView lettre2 = new LettreView('L');
+        //LettreView lettre = new LettreView('A');
+        //LettreView lettre2 = new LettreView('L');
         //LettreView lettre3 = new LettreView('L');
         //LettreView lettre4 = new LettreView('E');
         //LettreView lettre5 = new LettreView('E');
@@ -97,8 +98,8 @@ public class PlateauView extends JFrame {
         //LettreView lettre7 = new LettreView('C');
         //LettreView lettre8 = new LettreView('S');
 
-        listeLettres.add(lettre);
-        listeLettres.add(lettre2);
+        //listeLettres.add(lettre);
+        //listeLettres.add(lettre2);
 
         footerPanel.add(valider);
         footerPanel.add(annuler);
@@ -118,8 +119,8 @@ public class PlateauView extends JFrame {
         
         //add(footerPanel, BorderLayout.SOUTH);
 
-        lettre.addMouseListener(new LettreControler(lettre, this));
-        lettre2.addMouseListener(new LettreControler(lettre2, this));
+        //lettre.addMouseListener(new LettreControler(lettre, this));
+        //lettre2.addMouseListener(new LettreControler(lettre2, this));
         //lettre3.addMouseListener(new LettreControler(lettre3, this));
         //lettre4.addMouseListener(new LettreControler(lettre4, this));
         //lettre5.addMouseListener(new LettreControler(lettre5, this));
@@ -146,10 +147,7 @@ public class PlateauView extends JFrame {
 
     public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {
-        Sac sac = new Sac();
-        Plateau plateau = new Plateau();
-        Joueur joueur = new Joueur("Test", sac, plateau);
-        PlateauView plateauView = new PlateauView(joueur);
+        PlateauView plateauView = new PlateauView();
             plateauView.setVisible(true);
         });
     }

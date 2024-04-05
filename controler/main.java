@@ -12,7 +12,7 @@ public class Main extends MouseAdapter {
     
     public void launchOtherJavaFile() {
         // Code pour lancer la vue du plateau
-        PlateauView plateauView = new PlateauView(null);
+        PlateauView plateauView = new PlateauView();
         plateauView.setVisible(true);
     }
 
