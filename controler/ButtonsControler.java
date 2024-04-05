@@ -38,14 +38,17 @@ public class ButtonsControler implements ActionListener {
                     case "Non centre":
                         msg = "Le mot formé au premier tour doit passer par la case centrale.";
                         break;
-                    case "Non adjacent":
-                        msg = "Les lettres ne sont pas adjacentes.";
-                        break;
                     case "Mot non adjacent":
                         msg = "Le mot formé n'est pas adjacent à un ancien mot.";
                         break;
                     case "Pas assez de lettres":
                         msg = "Il faut poser minimum 2 lettres.";
+                        break;
+                    case "Pas aligne":
+                        msg = "Les lettres posées ne sont pas toutes sur la même ligne ou colonne.";
+                        break;
+                    case "Pas connecte":
+                        msg = "Les lettres posées ne sont pas toutes connectées.";
                         break;
                     default:
                         break;
@@ -56,7 +59,7 @@ public class ButtonsControler implements ActionListener {
                     plateauView.removeAllLetters();
                     plateau.annuler();
                 } else {
-                    msg = "Les lettres ont été placées avec succès.";
+                    msg = "Les lettres ont été placées avec succès, mot formé : " + valider;
                     JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
                 }
                 // A FAIRE : Afficher le score du mot posé
