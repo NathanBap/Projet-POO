@@ -1,9 +1,8 @@
 package view;
-
-import controler.LettreControler;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class LettreView extends JPanel {
     private Lettre piece;
