@@ -63,7 +63,7 @@ public class Plateau {
     // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
     // FAIT : Changement du système du calcul du score
     // A FAIRE : Quand on pose un mot validé, supprimer le bonus de la case
-    // IDEE : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
+    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
 
     public String valider() { // Appelé par PlateauView
         boolean sameRow = true;

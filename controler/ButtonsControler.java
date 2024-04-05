@@ -62,7 +62,6 @@ public class ButtonsControler implements ActionListener {
                     msg = "Les lettres ont été placées avec succès, mots formés : \n" + valider;
                     JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
                 }
-                // A FAIRE : Afficher le score du mot posé
                 // A FAIRE : Remettre le background des lettres normal
             }
 
