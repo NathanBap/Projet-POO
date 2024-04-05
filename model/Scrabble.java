@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Scrabble {
     private List<Joueur> joueurs = new ArrayList<Joueur>();
+
     private int joueurActuelIndex;
     public Joueur joueurActuel;
 
@@ -23,6 +24,7 @@ public class Scrabble {
     public void passerAuJoueurSuivant() {
         joueurActuelIndex = (joueurActuelIndex + 1) % joueurs.size();
     }
+
     public static void main(String[] args) {
         Plateau plateau = new Plateau();
         plateau.initPlateau();

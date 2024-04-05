@@ -5,12 +5,11 @@ import java.io.BufferedReader;// lire un texte à partir d'un flux d'entrée car
 import java.io.FileReader; //lire des caractères a partir d un fichier
 import java.io.IOException;
 
-public class Dico {
+public class Dico extends ArrayList<String>{
     // attribut
-    private List<String> dictionnaire;
+    //private List<String> dictionnaire;
 
     public Dico() {
-        dictionnaire = new ArrayList<>();
         chargerDictionnaire();
     }
 
@@ -21,7 +20,7 @@ public class Dico {
             String mot;
             // Boucle de lecture des lignes du fichier
             while ((mot = br.readLine()) != null) {
-                dictionnaire.add(mot.trim());
+                add(mot.trim());
             }
         } catch (IOException e) {
             System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
@@ -33,7 +32,7 @@ public class Dico {
 
     // vérifier si un mot est valide
     public boolean estValide(String mot) {
-        return dictionnaire.contains(mot);
+        return contains(mot);
     }
 
 }

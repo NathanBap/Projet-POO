@@ -38,6 +38,10 @@ public class Case extends MouseAdapter {
         lettre.setCase(this);
         this.lettre = lettre;
     }
+    public void retirerLettre() {
+        this.lettre.removeCase();
+        this.lettre = null;
+    }
     public boolean isEmpty() {
         return this.lettre == null;
     }
