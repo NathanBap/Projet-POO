@@ -1,11 +1,12 @@
 package view;
+
 import model.Case;
 import model.Lettre;
 
 import java.awt.*;
 import javax.swing.*;
 
-public class CaseView extends JPanel{
+public class CaseView extends JPanel {
     private Case casee;
     private LettreView lettrePosee;
 
@@ -55,26 +56,41 @@ public class CaseView extends JPanel{
 
             // Ajout de l'effet 3D
             add(label, BorderLayout.CENTER);
-        }  
+        }
     }
 
     public Case getCase() {
         return casee;
     }
+
     public void setLettrePosee(LettreView lettrePosee) {
-        //removeAll();
         this.lettrePosee = lettrePosee;
+        Component[] components = getComponents();
+        for (Component component : components) {
+            if (component instanceof JLabel) {
+                component.setVisible(false);
+            }
+        }
+    
         add(lettrePosee, BorderLayout.CENTER);
         repaint();
         revalidate();
     }
+
     public void removeLettrePosee() {
         // A FAIRE : La remettre dans la main du joueur
         if (lettrePosee != null) {
             remove(lettrePosee);
             lettrePosee = null;
+
+            Component[] components = getComponents();
+            for (Component component : components) {
+                if (component instanceof JLabel) {
+                    component.setVisible(true);
+                }
+            }
+
+            revalidate();
         }
-        //repaint();
-        revalidate();
     }
 }

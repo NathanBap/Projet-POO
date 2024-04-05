@@ -17,13 +17,14 @@ public class LettreControler extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (plateau.lettreClicked != null){
+        if (plateau.lettreClicked != null) {
             this.plateau.lettreClicked.setBackground(new Color(255, 245, 215));
         }
         if (lettreView.getPiece().getCase() == null) {
             System.out.println("Lettre clicked");
-            this.lettreView.setBackground(Color.RED);
-            this.plateau.lettreClicked = lettreView;   
+            // this.lettreView.setBackground(Color.RED);
+            this.lettreView.setBorder(null);
+            this.plateau.lettreClicked = lettreView;
         }
     }
 }
