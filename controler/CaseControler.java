@@ -24,17 +24,11 @@ public class CaseControler extends MouseAdapter{
             // Place la lettre dans le model
             this.casee.getCase().placerLettre(lettrePlaced);
             this.plateauView.getPlateau().addPendingCase(casee.getCase());
-            System.out.println("Pending Cases in Controler : " + plateauView.getPlateau().getPendingCases());
-
-            System.out.println("Cases in controler : " + this.casee.getCase());
-            //System.out.println(this.plateauView.getPlateau().getCase(casee.getCase().getX(), casee.getCase().getY()));
 
             // A FAIRE : Ajouter le fait d'enlever la lettre de la main du joueur
 
             // Place la lettre dans la vue
-            // A FAIRE : Modifier pour ne pas supprimer le label LT, LD, ...
             this.casee.setLettrePosee(plateauView.lettreClicked);
-            //this.plateauView.lettreClicked.setBackground(Color.LIGHT_GRAY);
             this.plateauView.lettreClicked = null;
             this.casee.revalidate();
             this.casee.repaint();

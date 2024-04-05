@@ -81,7 +81,6 @@ public class CaseView extends JPanel {
     }
 
     public void removeLettrePosee() {
-        // A FAIRE : La remettre dans la main du joueur
         if (lettrePosee != null) {
             remove(lettrePosee);
             lettrePosee = null;

@@ -219,6 +219,7 @@ public class Plateau {
         System.out.println("Score : " + score);
 
         for (Case c : this.pendingCases) {
+            joueurActuel.deposerLettre(c.getLettre());
             c.removeBonus();
             pendingCases.remove(c);
         }

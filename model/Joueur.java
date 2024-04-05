@@ -77,8 +77,8 @@ public class Joueur {
     public void prendreLettre(Lettre l) {
         this.listeLettre.add(l);  
     }
-    public void deposerLettre() {
-        // TODO implement here
+    public void deposerLettre(Lettre l) {
+        listeLettre.remove(l);
     }
 
     public void afficherMain() {

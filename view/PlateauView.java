@@ -73,8 +73,6 @@ public class PlateauView extends JFrame {
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
-        //JPanel lettresPanel = this.VueDeLettre(joueur);
-
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
         JButton aide = new JButton("Aide");
@@ -89,18 +87,6 @@ public class PlateauView extends JFrame {
         int score = joueur.getScore();
         JLabel scoreLabel = new JLabel(String.valueOf(score));
 
-        //LettreView lettre = new LettreView('A');
-        //LettreView lettre2 = new LettreView('L');
-        //LettreView lettre3 = new LettreView('L');
-        //LettreView lettre4 = new LettreView('E');
-        //LettreView lettre5 = new LettreView('E');
-        //LettreView lettre6 = new LettreView('A');
-        //LettreView lettre7 = new LettreView('C');
-        //LettreView lettre8 = new LettreView('S');
-
-        //listeLettres.add(lettre);
-        //listeLettres.add(lettre2);
-
         footerPanel.add(valider);
         footerPanel.add(annuler);
 
@@ -108,25 +94,6 @@ public class PlateauView extends JFrame {
         footerPanel.add(scoreLabel);
         add(footerPanel, BorderLayout.SOUTH);
 
-        //footerPanel.add(lettre);
-        //footerPanel.add(lettre2);
-        //footerPanel.add(lettre3);
-        //footerPanel.add(lettre4);
-        //footerPanel.add(lettre5);
-        //footerPanel.add(lettre6);
-        //footerPanel.add(lettre7);
-        //footerPanel.add(lettre8);
-        
-        //add(footerPanel, BorderLayout.SOUTH);
-
-        //lettre.addMouseListener(new LettreControler(lettre, this));
-        //lettre2.addMouseListener(new LettreControler(lettre2, this));
-        //lettre3.addMouseListener(new LettreControler(lettre3, this));
-        //lettre4.addMouseListener(new LettreControler(lettre4, this));
-        //lettre5.addMouseListener(new LettreControler(lettre5, this));
-        //lettre6.addMouseListener(new LettreControler(lettre6, this));
-        //lettre7.addMouseListener(new LettreControler(lettre7, this));
-        //lettre8.addMouseListener(new LettreControler(lettre8, this));
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
 
