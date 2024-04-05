@@ -116,12 +116,14 @@ public class Plateau {
         int motDouble = 1;
         int motTriple = 1;
         int score = 0;
+        Map<String, Integer> motsPoint = new HashMap<String, Integer>();
 
         if (this.premierTour) {
             boolean centre = false;
             if (this.pendingCases.size() < 2) {
                 return "Pas assez de lettres";
             }
+            String mot = "";
             for (Case c : this.pendingCases) {
                 if (c.getX() == 7 && c.getY() == 7) {
                     centre = true;
@@ -130,12 +132,15 @@ public class Plateau {
                 count = newScore[0];
                 motDouble = newScore[1];
                 motTriple = newScore[2];
+
+                mot += c.getLettre().getLettre();
             }
             if (!centre) {
                 return "Non centre";
             }
             this.premierTour = false;
             score = count * motDouble * motTriple;
+            motsPoint.put(mot, score);
         }
         else {
             if (!this.motAdjacent()) {
@@ -143,17 +148,17 @@ public class Plateau {
             }
             Set<Case> casesVues = new HashSet<Case>();
             for (Case c : pendingCases) {
-                
+                System.out.println("Cases adjacentes : " + casesAdjacentes(c, casesVues));
                 for (Case cBis : casesAdjacentes(c, casesVues)) {
-                    int scoreMot = calcMot(c, cBis, casesVues);
+                    int scoreMot = calcMot(c, cBis, casesVues, motsPoint);
                     if (scoreMot == -1) {
                         return "Mot invalide";
                     }
                     score += scoreMot;
                 }
             }
-            if (!casesVues.containsAll(casesVues)) {
-                int scoreMot = calcMot(pendingCases.get(0), pendingCases.get(pendingCases.size()-1), casesVues);
+            if (!casesVues.containsAll(pendingCases)) {
+                int scoreMot = calcMot(pendingCases.get(0), pendingCases.get(pendingCases.size()-1), casesVues, motsPoint);
                 if (scoreMot == -1) {
                     return "Mot invalide";
                 }
@@ -167,11 +172,11 @@ public class Plateau {
 
         this.pendingCases.clear();
 
-        return "";
+        return motsPoint.toString();
     }
 
     // c correspond à la case posée, cBis à une case adjacente
-    public int calcMot(Case c, Case cBis, Set<Case> casesVues) {
+    public int calcMot(Case c, Case cBis, Set<Case> casesVues, Map<String, Integer> motsPoints) {
         int x = c.getX();
         int y = c.getY();
         int xBis = cBis.getX();
@@ -213,8 +218,10 @@ public class Plateau {
             System.out.println("Mot invalide : " + mot);
             return -1;
         }
-        System.out.println("Score du mot : " + mot + " -> " + count*motDouble*motTriple);
-        return count * motDouble * motTriple;
+        int score = count * motDouble * motTriple;
+        System.out.println("Score du mot : " + mot + " -> " + score);
+        motsPoints.put(mot, score);
+        return score;
     }
 
     public int[] updateScore(Case c, int count, int motDouble, int motTriple) {
