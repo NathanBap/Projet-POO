@@ -62,6 +62,9 @@ public class CaseView extends JPanel {
     public Case getCase() {
         return casee;
     }
+    public LettreView getLettrePosee() {
+        return lettrePosee;
+    }
 
     public void setLettrePosee(LettreView lettrePosee) {
         this.lettrePosee = lettrePosee;

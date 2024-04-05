@@ -1,7 +1,6 @@
 package view;
 
-import model.Case;
-import model.Plateau;
+import model.*;
 
 import javax.swing.*;
 
@@ -18,6 +17,7 @@ public class PlateauView extends JFrame {
     private List<CaseView> allCases = new ArrayList<CaseView>();
     public Joueur joueur;
     public LettreView lettreClicked;
+    private JPanel listeLettres;
     
     public PlateauView(Joueur joueur) {
         this.joueur = joueur;
@@ -37,7 +37,7 @@ public class PlateauView extends JFrame {
         Scrabble scrabble = new Scrabble(joueurs);
         plateau = new Plateau();
         plateau.initPlateau();
-        scrabble.debutDuTour();
+        // scrabble.debutDuTour();
     }
 
     public void initComponents() {
@@ -76,18 +76,20 @@ public class PlateauView extends JFrame {
 
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
-        JButton effacerAll = new JButton("Effacer tout");
         JButton aide = new JButton("Aide");
-        JButton test = new JButton("Test");
       
-        // A MODIFIER
-        // JPanel listeLettres = new LettreView(lettresDuJoueur);
-      
+        listeLettres = new JPanel();
+        for (Lettre l : lettresDuJoueur) {
+            LettreView lettre = new LettreView(l.getLettre());
+            lettre.addMouseListener(new LettreControler(lettre, this));
+            listeLettres.add(lettre);
+        }
+
         int score = joueur.getScore();
         JLabel scoreLabel = new JLabel(String.valueOf(score));
 
-        // LettreView lettre = new LettreView('A');
-        //LettreView lettre2 = new LettreView('L');
+        LettreView lettre = new LettreView('A');
+        LettreView lettre2 = new LettreView('L');
         //LettreView lettre3 = new LettreView('L');
         //LettreView lettre4 = new LettreView('E');
         //LettreView lettre5 = new LettreView('E');
@@ -95,11 +97,11 @@ public class PlateauView extends JFrame {
         //LettreView lettre7 = new LettreView('C');
         //LettreView lettre8 = new LettreView('S');
 
+        listeLettres.add(lettre);
+        listeLettres.add(lettre2);
+
         footerPanel.add(valider);
         footerPanel.add(annuler);
-        footerPanel.add(effacerAll);
-        footerPanel.add(aide);
-        footerPanel.add(test);
 
         footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
@@ -116,8 +118,8 @@ public class PlateauView extends JFrame {
         
         //add(footerPanel, BorderLayout.SOUTH);
 
-        //lettre.addMouseListener(new LettreControler(lettre, this));
-        //lettre2.addMouseListener(new LettreControler(lettre2, this));
+        lettre.addMouseListener(new LettreControler(lettre, this));
+        lettre2.addMouseListener(new LettreControler(lettre2, this));
         //lettre3.addMouseListener(new LettreControler(lettre3, this));
         //lettre4.addMouseListener(new LettreControler(lettre4, this));
         //lettre5.addMouseListener(new LettreControler(lettre5, this));
@@ -133,12 +135,13 @@ public class PlateauView extends JFrame {
         for (CaseView c : this.allCases) {
             List<Case> pendingCases = plateau.getPendingCases();
             if (pendingCases.contains(c.getCase())) {
+                LettreView lettrePosee = c.getLettrePosee();
+                listeLettres.add(lettrePosee);
                 c.removeLettrePosee();
             }
         }
         repaint();
         //revalidate();
-
     }
 
     public static void main(String[] args) {
