@@ -3,7 +3,17 @@ package model;
 import java.util.*;
 
 public class Scrabble {
-    private List<Joueur> joueurs = new ArrayList<Joueur>();
+
+
+
+    public Scrabble(List<Joueur> joueurs) {
+
+    }
+    //joueurActuel.getindex
+    //joeurActuel = joueurActuelIndex
+
+    
+
     public static void main(String[] args) {
         Plateau plateau = new Plateau();
         plateau.initPlateau();
@@ -21,12 +31,6 @@ public class Scrabble {
             System.out.println();
         }
     }
-    // 2 joueurs minimum 4 maximum
-    public static void initJoueurs() {
 
-    }
-    // Pour déterminer quel joueur commence
-    public static void tirageAuSort() {
-        
-    }
+    
 }

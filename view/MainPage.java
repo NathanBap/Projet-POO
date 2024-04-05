@@ -4,9 +4,6 @@ import javax.swing.*;
 import controler.Main;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class MainPage extends JFrame {
 
@@ -47,6 +44,7 @@ public class MainPage extends JFrame {
         });
 
         JLabel welcomeLabel = new JLabel("Bienvenue sur notre Scrabble !");
+        
         //Une fois le squelette du Scrabble assez poussé -> faire une page d'introduction au principe du scrabble et du projet
         welcomeLabel.setHorizontalAlignment(JLabel.CENTER);
 
