@@ -30,9 +30,9 @@ public class CaseControler extends MouseAdapter{
             // Place la lettre dans la vue
             this.casee.setLettrePosee(plateauView.lettreClicked);
             this.plateauView.lettreClicked = null;
-            this.casee.revalidate();
-            this.casee.repaint();
-            this.plateauView.repaint();
+            //this.casee.revalidate();
+            //this.casee.repaint();
+            //this.plateauView.repaint();
         } else {
             System.out.println("Aucune lettre n'a été sél tionnée u case pas adjacente.");
         }

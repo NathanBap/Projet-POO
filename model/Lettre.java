@@ -1,5 +1,7 @@
 package model;
-public class Lettre {
+import java.io.Serializable;
+
+public class Lettre implements Serializable{
 
     //Attributs
     private char lettre;

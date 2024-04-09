@@ -4,13 +4,13 @@ import model.*;
 
 import javax.swing.*;
 
-import controler.ButtonsControler;
-import controler.CaseControler;
-import controler.LettreControler;
+import controler.*;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.util.*;
 import java.util.List;
+import java.awt.dnd.*;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
@@ -58,6 +58,42 @@ public class PlateauView extends JFrame {
 
                 mainPanel.add(casee);
                 allCases.add(casee);
+
+                // Création de l'écouteur de drop
+                DropTarget dropTarget = new DropTarget(casee, new DropTargetAdapter() {
+                    @Override
+                    public void drop(DropTargetDropEvent dtde) {
+                        try {
+                            Transferable transferable = dtde.getTransferable();
+                            if (transferable.isDataFlavorSupported(PanelTransferable.PANEL_DATA_FLAVOR)) {
+                                LettreView lettreDropped = (LettreView) transferable.getTransferData(PanelTransferable.PANEL_DATA_FLAVOR);
+                                if (casee.getCase().isEmpty()){
+                                    Lettre lettrePlaced = lettreDropped.getPiece();
+  
+                                    // Place la lettre dans le model
+                                    casee.getCase().placerLettre(lettrePlaced);
+                                    getPlateau().addPendingCase(casee.getCase());
+                        
+                                    // Place la lettre dans la vue
+                                    casee.setLettrePosee(lettreDropped);
+                                    lettreClicked = null;
+                                } else {
+                                    System.out.println("Une lettre est déjà placée ici");
+                                }
+
+                                dtde.acceptDrop(DnDConstants.ACTION_COPY);
+                                dtde.dropComplete(true);
+                            
+                            } else {
+                                System.out.println("No drop");
+                                dtde.rejectDrop();
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                            dtde.rejectDrop();
+                        }
+                    }
+                });
               
             }
         }
@@ -81,7 +117,28 @@ public class PlateauView extends JFrame {
         for (Lettre l : lettresDuJoueur) {
             LettreView lettre = new LettreView(l.getLettre());
             lettre.addMouseListener(new LettreControler(lettre, this));
+            //lettre.addMouseMotionListener(new LettreControler(lettre, this));
             listeLettres.add(lettre);
+
+            // Création de l'écouteur de drag and drop
+            DragSource dragSource = new DragSource();
+            DragSourceListener dsl = new DragSourceAdapter() {
+                @Override
+                public void dragDropEnd(DragSourceDropEvent dsde) {
+                    if (dsde.getDropSuccess()) {
+                        listeLettres.remove(lettre);
+                        listeLettres.revalidate();
+                    }
+                }
+            };
+            dragSource.addDragSourceListener(dsl);
+            dragSource.createDefaultDragGestureRecognizer(lettre, DnDConstants.ACTION_COPY, new DragGestureListener() {
+                @Override
+                public void dragGestureRecognized(DragGestureEvent dge) {
+                    Transferable transferable = new PanelTransferable(lettre);
+                    dragSource.startDrag(dge, DragSource.DefaultCopyDrop, transferable, null);
+                }
+            });
         }
 
         int score = joueur.getScore();
@@ -106,10 +163,11 @@ public class PlateauView extends JFrame {
                 LettreView lettrePosee = c.getLettrePosee();
                 listeLettres.add(lettrePosee);
                 c.removeLettrePosee();
+                lettrePosee.addMouseListener(new LettreControler(lettrePosee, this));
+                // A FAIRE : Rajouter le listener pour le drag and drop
             }
         }
-        repaint();
-        //revalidate();
+        revalidate();
     }
 
     public static void main(String[] args) {
@@ -117,6 +175,34 @@ public class PlateauView extends JFrame {
         PlateauView plateauView = new PlateauView();
             plateauView.setVisible(true);
         });
+    }
+
+    static class PanelTransferable implements Transferable {
+        public static final DataFlavor PANEL_DATA_FLAVOR = new DataFlavor(LettreView.class, "LettreView");
+        private LettreView panel;
+
+        public PanelTransferable(LettreView panel) {
+            this.panel = panel;
+        }
+
+        @Override
+        public DataFlavor[] getTransferDataFlavors() {
+            return new DataFlavor[]{PANEL_DATA_FLAVOR};
+        }
+
+        @Override
+        public boolean isDataFlavorSupported(DataFlavor flavor) {
+            return flavor.equals(PANEL_DATA_FLAVOR);
+        }
+
+        @Override
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
+            if (flavor.equals(PANEL_DATA_FLAVOR)) {
+                return panel;
+            } else {
+                throw new UnsupportedFlavorException(flavor);
+            }
+        }
     }
 }
 
