@@ -216,13 +216,11 @@ public class Plateau {
             }
         }
 
-        System.out.println("Score : " + score);
-
-        for (Case c : this.pendingCases) {
+        for (Case c : pendingCases) {
             joueurActuel.deposerLettre(c.getLettre());
             c.removeBonus();
-            pendingCases.remove(c);
         }
+        pendingCases.clear();
         joueurActuel.addScore(score);
 
         return motsPoint.toString();

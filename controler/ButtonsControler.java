@@ -23,7 +23,7 @@ public class ButtonsControler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (action.equals("Valider")) {
             System.out.println("Valider clicked");
-
+            
             if (!plateau.arePendingCases()) {
                 String msg = "Aucune lettre n'a été placée sur le plateau.";
                 JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
