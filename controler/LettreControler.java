@@ -13,6 +13,8 @@ public class LettreControler extends MouseAdapter {
     private LettreView lettreView;
     private PlateauView plateau;
     private JPanel listeLettres;
+    // La référence changeait lors du drag and drop, donc on a décidé de la rendre statique
+    public static LettreView lettreDragged;
 
     public LettreControler(LettreView lettreView, PlateauView plateau, JPanel listeLettres) {
         this.lettreView = lettreView;
@@ -51,6 +53,7 @@ public class LettreControler extends MouseAdapter {
                 @Override
                 public void dragGestureRecognized(DragGestureEvent dge) {
                     Transferable transferable = new PanelTransferable(lettreView);
+                    lettreDragged = lettreView;
                     dragSource.startDrag(dge, DragSource.DefaultCopyDrop, transferable, null);
                 }
         });

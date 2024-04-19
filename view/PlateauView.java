@@ -74,7 +74,7 @@ public class PlateauView extends JFrame {
         listeLettres = new JPanel();
 
         for (Lettre l : lettresDuJoueur) {
-            LettreView lettre = new LettreView(l.getLettre());
+            LettreView lettre = new LettreView(l);
 
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
             listeLettres.add(lettre);
@@ -109,6 +109,16 @@ public class PlateauView extends JFrame {
         }
         revalidate();
     }
+
+    // public void remplirMain() {
+    //     List<Lettre> lettresDuJoueur = joueur.getListeLettre();
+    //     for (Lettre l : lettresDuJoueur) {
+    //         LettreView lettre = new LettreView(l.getLettre());
+    //         lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
+    //         listeLettres.add(lettre);
+    //     }
+    //     revalidate();
+    // }
 
     public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {

@@ -52,10 +52,10 @@ public class CaseControler extends MouseAdapter{
                 try {
                     Transferable transferable = dtde.getTransferable();
                     if (transferable.isDataFlavorSupported(LettreControler.PanelTransferable.PANEL_DATA_FLAVOR)) {
-                        LettreView lettreDropped = (LettreView) transferable.getTransferData(LettreControler.PanelTransferable.PANEL_DATA_FLAVOR);
+                        // LettreView lettreDropped = (LettreView) transferable.getTransferData(LettreControler.PanelTransferable.PANEL_DATA_FLAVOR);
+                        LettreView lettreDropped = LettreControler.lettreDragged;
                         if (casee.getCase().isEmpty()){
                             Lettre lettrePlaced = lettreDropped.getPiece();
-
                             // Place la lettre dans le model
                             casee.getCase().placerLettre(lettrePlaced);
                             plateauView.getPlateau().addPendingCase(casee.getCase());
@@ -69,7 +69,7 @@ public class CaseControler extends MouseAdapter{
                             System.out.println("Une lettre est déjà placée ici");
                             dtde.dropComplete(false);
                         }
-
+                        LettreControler.lettreDragged = null;
                         dtde.acceptDrop(DnDConstants.ACTION_COPY);
                         
                     

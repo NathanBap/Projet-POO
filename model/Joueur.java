@@ -78,7 +78,7 @@ public class Joueur {
         this.listeLettre.add(l);  
     }
     public void deposerLettre(Lettre l) {
-        listeLettre.remove(l);
+        System.out.println("remove : " + listeLettre.remove(l));
     }
 
     public void afficherMain() {
@@ -86,6 +86,13 @@ public class Joueur {
             System.out.println(l.getLettre());
         }
     }
-    
+    public void piocher(Sac sac) {
+        Lettre l = sac.piocher();
+        if (l != null) {
+            listeLettre.add(l);
+            System.out.println("liste lettre : " + listeLettre);
+            tailleMain++;
+        }
+    }
 
 }
