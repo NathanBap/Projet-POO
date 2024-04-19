@@ -219,12 +219,10 @@ public class Plateau {
         for (Case c : pendingCases) {
             joueurActuel.deposerLettre(c.getLettre());
             c.removeBonus();
-            System.out.println("Lettre : " + c.getLettre());
         }
         pendingCases.clear();
-        //joueurActuel.afficherMain();
         joueurActuel.addScore(score);
-        joueurActuel.piocher(sac);
+        joueurActuel.remplirMain(sac);
 
         return motsPoint.toString();
     }

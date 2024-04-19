@@ -110,15 +110,29 @@ public class PlateauView extends JFrame {
         revalidate();
     }
 
-    // public void remplirMain() {
-    //     List<Lettre> lettresDuJoueur = joueur.getListeLettre();
-    //     for (Lettre l : lettresDuJoueur) {
-    //         LettreView lettre = new LettreView(l.getLettre());
-    //         lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
-    //         listeLettres.add(lettre);
-    //     }
-    //     revalidate();
-    // }
+    public void remplirMain() {
+        List<Lettre> lettresDuJoueur = joueur.getListeLettre();
+
+        for (Lettre l : lettresDuJoueur) {
+            boolean found = false;
+            for (Component lView : listeLettres.getComponents()) {
+                if (lView instanceof LettreView) {
+                    LettreView lettreView = (LettreView) lView;
+                    if (lettreView.getPiece().equals(l)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                LettreView lettre = new LettreView(l);
+                lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
+                listeLettres.add(lettre);
+                System.out.println("Lettre ajoutée");
+            }
+        }
+        revalidate();
+    }
 
     public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {

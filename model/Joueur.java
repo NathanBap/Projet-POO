@@ -86,12 +86,14 @@ public class Joueur {
             System.out.println(l.getLettre());
         }
     }
-    public void piocher(Sac sac) {
-        Lettre l = sac.piocher();
-        if (l != null) {
-            listeLettre.add(l);
-            System.out.println("liste lettre : " + listeLettre);
-            tailleMain++;
+    public void remplirMain(Sac sac) {
+        while (listeLettre.size() < 7) {
+            Lettre l = sac.piocher();
+            if (l != null) {
+                listeLettre.add(l);
+            } else {
+                break;
+            }
         }
     }
 
