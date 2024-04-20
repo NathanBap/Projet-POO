@@ -27,8 +27,6 @@ public class PlateauView extends JFrame {
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
         setVisible(true);
-
-        
     }
 
     public Plateau getPlateau() {
@@ -83,6 +81,9 @@ public class PlateauView extends JFrame {
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
             listeLettres.add(lettre);
         }
+        LettreView lettreJoker = new LettreView(new Lettre('*'));
+        lettreJoker.addMouseListener(new LettreControler(lettreJoker, this, listeLettres));
+        listeLettres.add(lettreJoker);
 
         int score = joueur.getScore();
         JLabel scoreLabel = new JLabel(String.valueOf(score));
@@ -109,6 +110,10 @@ public class PlateauView extends JFrame {
                 List<Case> pendingCases = plateau.getPendingCases();
                 if (pendingCases.contains(c.getCase())) {
                     LettreView lettrePosee = c.getLettrePosee();
+                    if (lettrePosee.getPiece().getJoker()) {
+                        lettrePosee.getPiece().setLettre('*');
+                        lettrePosee.paintLettreView();
+                    }
                     listeLettres.add(lettrePosee);
                     c.removeLettrePosee();
                     lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
@@ -129,6 +134,10 @@ public class PlateauView extends JFrame {
                 if (c.getCase().equals(lastCase)) {
                     // View
                     LettreView lettrePosee = c.getLettrePosee();
+                    if (lettrePosee.getPiece().getJoker()) {
+                        lettrePosee.getPiece().setLettre('*');
+                        lettrePosee.paintLettreView();
+                    }
                     listeLettres.add(lettrePosee);
                     c.removeLettrePosee();
                     lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres)); 

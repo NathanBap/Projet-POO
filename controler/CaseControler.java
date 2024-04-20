@@ -25,20 +25,7 @@ public class CaseControler extends MouseAdapter{
     public void mouseClicked(MouseEvent e) {
         // Rajouter une condition pour vérifier si la case est adjacente à une lettre déjà placée SAUF pour la première lettre
         if (this.plateauView.lettreClicked != null && this.casee.getCase().isEmpty() && this.plateauView.lettreClicked.getPiece().getCase() == null){
-            Lettre lettrePlaced = this.plateauView.lettreClicked.getPiece();
-
-            // Place la lettre dans le model
-            this.casee.getCase().placerLettre(lettrePlaced);
-            this.plateauView.getPlateau().addPendingCase(casee.getCase());
-
-            // A FAIRE : Ajouter le fait d'enlever la lettre de la main du joueur
-
-            // Place la lettre dans la vue
-            this.casee.setLettrePosee(plateauView.lettreClicked);
-            this.plateauView.lettreClicked = null;
-            this.casee.revalidate();
-            this.casee.repaint();
-            this.plateauView.repaint();
+            putLetter(this.plateauView.lettreClicked);
         } else {
             System.out.println("Aucune lettre n'a été sél tionnée u case pas adjacente.");
         }
@@ -55,15 +42,8 @@ public class CaseControler extends MouseAdapter{
                         // LettreView lettreDropped = (LettreView) transferable.getTransferData(LettreControler.PanelTransferable.PANEL_DATA_FLAVOR);
                         LettreView lettreDropped = LettreControler.lettreDragged;
                         if (casee.getCase().isEmpty()){
-                            Lettre lettrePlaced = lettreDropped.getPiece();
-                            // Place la lettre dans le model
-                            casee.getCase().placerLettre(lettrePlaced);
-                            plateauView.getPlateau().addPendingCase(casee.getCase());
-                
-                            // Place la lettre dans la vue
-                            casee.setLettrePosee(lettreDropped);
-                            plateauView.lettreClicked = null;
-
+                            putLetter(lettreDropped);
+                        
                             dtde.dropComplete(true);
                         } else {
                             System.out.println("Une lettre est déjà placée ici");
@@ -71,8 +51,6 @@ public class CaseControler extends MouseAdapter{
                         }
                         LettreControler.lettreDragged = null;
                         dtde.acceptDrop(DnDConstants.ACTION_COPY);
-                        
-                    
                     } else {
                         System.out.println("No drop");
                         dtde.rejectDrop();
@@ -83,5 +61,29 @@ public class CaseControler extends MouseAdapter{
                 }
             }
         });
+    }
+
+    private void putLetter(LettreView lettreViewPlaced) {
+        Lettre lettrePlaced = lettreViewPlaced.getPiece();
+
+        if (lettrePlaced.getJoker()) {
+            String msg = "Veuillez choisir la lettre, elle vaudra 0 points";
+            String response = null;
+            do {
+                response = JOptionPane.showInputDialog(null, msg, "Choisir lettre", JOptionPane.INFORMATION_MESSAGE);
+            } while (response.length() == 0 || response.length() > 1 || !response.matches("[a-zA-Z]"));                                
+            lettrePlaced.setLettre(response.toUpperCase().charAt(0));
+            lettreViewPlaced.paintLettreView();
+        } 
+
+        // Place la lettre dans le model
+        casee.getCase().placerLettre(lettrePlaced);
+        plateauView.getPlateau().addPendingCase(casee.getCase());
+
+        // Place la lettre dans la vue
+        casee.setLettrePosee(lettreViewPlaced);
+        plateauView.lettreClicked = null;
+        casee.revalidate();
+        casee.repaint();
     }
 }

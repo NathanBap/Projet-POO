@@ -9,9 +9,13 @@ public class LettreView extends JPanel {
 
     public LettreView(Lettre piece) {
         this.piece = piece;
+        paintLettreView();
+    }
 
+    public void paintLettreView() {
         char lettre = piece.getLettre();
 
+        removeAll();
         // Définir la mise en page du JPanel
         setLayout(new BorderLayout());
 
@@ -34,7 +38,6 @@ public class LettreView extends JPanel {
         setBackground(new Color(255, 245, 215));
         // Appliquer un effet 3D
         setBorder(BorderFactory.createRaisedBevelBorder());
-
     }
 
     public Lettre getPiece() {
