@@ -68,10 +68,12 @@ public class ButtonsControler implements ActionListener {
 
         }
         
-        else if (action.equals("Annuler")) {
-            System.out.println("Annuler clicked");
+        else if (action.equals("Annuler tout")) {
             plateauView.removeAllLetters();
             plateau.annuler();
+        }
+        else if (action.equals("Annuler")) {
+            plateauView.removeLastLetter();
         }
     }
 }

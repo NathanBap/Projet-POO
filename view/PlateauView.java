@@ -7,6 +7,7 @@ import javax.swing.*;
 import controler.*;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.datatransfer.*;
 import java.util.*;
 import java.util.List;
@@ -26,6 +27,8 @@ public class PlateauView extends JFrame {
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
         setVisible(true);
+
+        
     }
 
     public Plateau getPlateau() {
@@ -69,6 +72,7 @@ public class PlateauView extends JFrame {
 
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
+        JButton annulerTout = new JButton("Annuler tout");
         JButton aide = new JButton("Aide");
       
         listeLettres = new JPanel();
@@ -85,6 +89,7 @@ public class PlateauView extends JFrame {
 
         footerPanel.add(valider);
         footerPanel.add(annuler);
+        footerPanel.add(annulerTout);
 
         footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
@@ -92,24 +97,78 @@ public class PlateauView extends JFrame {
 
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
+        annulerTout.addActionListener(new ButtonsControler(annulerTout, this));
+
+        keyboardShortcuts(mainPanel);
+        
     }
 
     public void removeAllLetters() {
-        for (CaseView c : this.allCases) {
-            List<Case> pendingCases = plateau.getPendingCases();
-            if (pendingCases.contains(c.getCase())) {
-                LettreView lettrePosee = c.getLettrePosee();
-                listeLettres.add(lettrePosee);
-                c.removeLettrePosee();
-                lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
-
-                c.revalidate();
-                c.repaint();
+        if (plateau.arePendingCases()) {
+            for (CaseView c : this.allCases) {
+                List<Case> pendingCases = plateau.getPendingCases();
+                if (pendingCases.contains(c.getCase())) {
+                    LettreView lettrePosee = c.getLettrePosee();
+                    listeLettres.add(lettrePosee);
+                    c.removeLettrePosee();
+                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
+    
+                    c.revalidate();
+                    c.repaint();
+                }
             }
+            revalidate();
         }
-        revalidate();
     }
 
+    public void removeLastLetter() {
+        if (plateau.arePendingCases()) {
+            List<Case> pendingCases = plateau.getPendingCases();
+            Case lastCase = pendingCases.get(pendingCases.size() - 1);
+            for (CaseView c : this.allCases) {
+                if (c.getCase().equals(lastCase)) {
+                    // View
+                    LettreView lettrePosee = c.getLettrePosee();
+                    listeLettres.add(lettrePosee);
+                    c.removeLettrePosee();
+                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres)); 
+                    c.revalidate();
+                    c.repaint();
+    
+                    // Model
+                    pendingCases.remove(lastCase);
+                    lastCase.retirerLettre();
+                    break;
+                }
+            }
+            revalidate();
+        }
+    }
+
+    private void keyboardShortcuts(JPanel mainPanel) {
+        // Define the key stroke
+        KeyStroke commandZ = KeyStroke.getKeyStroke("meta Z");
+        KeyStroke ctrlZ = KeyStroke.getKeyStroke("control Z");
+
+        // Get the InputMap and ActionMap
+        InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = mainPanel.getActionMap();
+
+        // Map the key stroke to an action name
+        inputMap.put(ctrlZ, "undo");
+        inputMap.put(commandZ, "undo");
+
+        // Map the action name to an action
+        actionMap.put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when CTRL+Z is pressed
+                removeLastLetter();
+            }
+        });
+    }
+
+    // TMP
     public void remplirMain() {
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
 
