@@ -75,11 +75,13 @@ public class CaseControler extends MouseAdapter{
             lettrePlaced.setLettre(response.toUpperCase().charAt(0));
             lettreViewPlaced.paintLettreView();
         } 
+        lettreViewPlaced.removeMouseListener(lettreViewPlaced.getMouseListeners()[0]);
 
         // Place la lettre dans le model
         casee.getCase().placerLettre(lettrePlaced);
         plateauView.getPlateau().addPendingCase(casee.getCase());
-
+        plateauView.disableButtons();
+        
         // Place la lettre dans la vue
         casee.setLettrePosee(lettreViewPlaced);
         plateauView.lettreClicked = null;

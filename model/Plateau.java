@@ -342,4 +342,10 @@ public class Plateau {
         }
         return false;
     }
+
+    public void echangerLettres(List<Lettre> lettres) {
+        sac.addAll(lettres);
+        joueurActuel.getListeLettre().removeAll(lettres);
+        joueurActuel.remplirMain(sac);
+    }
 }

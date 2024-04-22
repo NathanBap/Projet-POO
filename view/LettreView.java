@@ -6,6 +6,7 @@ import java.util.List;
 
 public class LettreView extends JPanel {
     private Lettre piece;
+    private boolean isSelected = false;
 
     public LettreView(Lettre piece) {
         this.piece = piece;
@@ -42,6 +43,12 @@ public class LettreView extends JPanel {
 
     public Lettre getPiece() {
         return piece;
+    }
+    public void setSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+    public boolean isSelected() {
+        return isSelected;
     }
 
     public static void main(String[] args) {

@@ -75,5 +75,8 @@ public class ButtonsControler implements ActionListener {
         else if (action.equals("Annuler")) {
             plateauView.removeLastLetter();
         }
+        else if (action.equals("Echanger")) {
+            plateauView.echangerLettres();
+        }
     }
 }

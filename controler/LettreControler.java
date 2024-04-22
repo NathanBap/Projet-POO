@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.awt.*;
 import java.awt.datatransfer.*;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import java.awt.dnd.*;
 
@@ -28,12 +29,15 @@ public class LettreControler extends MouseAdapter {
     public void mouseClicked(MouseEvent e) {
         if (plateau.lettreClicked != null) {
             this.plateau.lettreClicked.setBackground(new Color(255, 245, 215));
+            // this.plateau.lettreClicked.setBorder(BorderFactory.createRaisedBevelBorder());
         }
         if (lettreView.getPiece().getCase() == null) {
             System.out.println("Lettre clicked");
             // this.lettreView.setBackground(Color.RED);
             this.lettreView.setBorder(null);
+            this.lettreView.setSelected(true);
             this.plateau.lettreClicked = lettreView;
+            
         }
     }
 
