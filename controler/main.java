@@ -1,7 +1,7 @@
 package controler;
 
 import view.*;
-import model.*;
+
 import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
@@ -12,9 +12,7 @@ public class Main extends MouseAdapter {
     
     public void launchOtherJavaFile() {
         // Code pour lancer la vue du plateau
-        Scrabble scrabble = new Scrabble(null);
-        Joueur joueurInitial = scrabble.debutDuTour();
-        PlateauView plateauView = new PlateauView(joueurInitial);
+        PlateauView plateauView = new PlateauView();
         plateauView.setVisible(true);
     }
 
