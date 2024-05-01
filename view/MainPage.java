@@ -16,6 +16,7 @@ public class MainPage extends JFrame {
         setSize(850, 600);
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
         // Arrière-plan
+        Color transparentColor = new Color(1, 1, 1, 100);
 		ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");
 		JLabel bgLabel = new JLabel(bgIcon);
 		bgLabel.setBounds(0, 0, 850, 600);
@@ -33,12 +34,15 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.BLUE);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
             }
             @Override
             public void mouseExited(MouseEvent e) {
                 // Action à exécuter lorsque le curseur quitte le hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
+                label.setOpaque(false);
             }
         };
 
@@ -53,12 +57,15 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.GREEN);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
             }
             @Override
             public void mouseExited(MouseEvent e) {
                 // Action à exécuter lorsque le curseur quitte le hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
+                label.setOpaque(false);
             }
         };
 
@@ -80,12 +87,15 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.BLUE);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
             }
             @Override
             public void mouseExited(MouseEvent e) {
                 // Action à exécuter lorsque le curseur quitte le hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
+                label.setOpaque(false);
             }
         };
 
@@ -100,12 +110,15 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.RED);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
             }
             @Override
             public void mouseExited(MouseEvent e) {
                 // Action à exécuter lorsque le curseur quitte le hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
+                label.setOpaque(false);
             }
         };
 
@@ -120,12 +133,15 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.BLUE);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
             }
             @Override
             public void mouseExited(MouseEvent e) {
                 // Action à exécuter lorsque le curseur quitte le hover
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
+                label.setOpaque(false);
             }
         };
 
@@ -133,40 +149,46 @@ public class MainPage extends JFrame {
         welcomeLabel.setFont(new Font("Century Gothic Italic", Font.PLAIN, 30));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		welcomeLabel.setForeground(Color.WHITE);
-		welcomeLabel.setBounds((850 - welcomeLabel.getPreferredSize().width) / 2, 45, welcomeLabel.getPreferredSize().width, 30);
+		welcomeLabel.setBounds((850 - welcomeLabel.getPreferredSize().width) / 2, 45, welcomeLabel.getPreferredSize().width, 50);
 
         JLabel regles = new JLabel("Règles");
         regles.setFont(new Font("Century Gothic", Font.PLAIN, 35));
         regles.setHorizontalAlignment(SwingConstants.CENTER);
 		regles.setForeground(Color.WHITE);
-		regles.setBounds(25, 120, 400, 40);
+		regles.setBounds(212 - (regles.getPreferredSize().width / 2), 120, (10 + regles.getPreferredSize().width), 50);
+        regles.setOpaque(false);
         regles.addMouseListener(affichageRegles);
 
         JLabel lienGit = new JLabel("Lien GitHub");
 		lienGit.setFont(new Font("Century Gothic", Font.PLAIN, 35));
-        //lienGit.setHorizontalAlignment(SwingConstants.CENTER);
+        lienGit.setHorizontalAlignment(SwingConstants.CENTER);
 		lienGit.setForeground(Color.WHITE);
-		lienGit.setBounds(450, 120, 400, 40);
+		lienGit.setBounds(637 - (lienGit.getPreferredSize().width /2), 120, (10 + lienGit.getPreferredSize().width), 50);
+        lienGit.setOpaque(false);
         lienGit.addMouseListener(redirectionGit);
 
         JLabel projet = new JLabel("Le projet");
         projet.setFont(new Font("Century Gothic", Font.PLAIN, 35));
         projet.setHorizontalAlignment(SwingConstants.CENTER);
         projet.setForeground(Color.WHITE);
-        projet.setBounds(25, 190, 400, 40);
+        projet.setBounds(212 - (projet.getPreferredSize().width / 2), 200, (10 + projet.getPreferredSize().width), 50);
+        projet.setOpaque(false);
         projet.addMouseListener(sujetProjet);
 
-        JLabel quitButton = new JLabel("Quitter l'application");
+        JLabel quitButton = new JLabel("Quitter");
         quitButton.setFont(new Font("Century Gothic", Font.PLAIN, 35));
-        //quitButton.setHorizontalAlignment(SwingConstants.CENTER);
+        quitButton.setHorizontalAlignment(SwingConstants.CENTER);
         quitButton.setForeground(Color.WHITE);
-        quitButton.setBounds(450, 190, 400, 40);
-        quitButton.addMouseListener(quitterScrabble);
+		quitButton.setBounds(637 - (quitButton.getPreferredSize().width / 2), 200, (10 + quitButton.getPreferredSize().width), 50);
+        quitButton.setOpaque(false);
+        quitButton.addMouseListener(quitterScrabble);        
 
         JLabel launchButton = new JLabel("Lancer le Scrabble");
         launchButton.setFont(new Font("Century Gothic", Font.PLAIN, 50));
+        launchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		launchButton.setForeground(Color.WHITE);
-		launchButton.setBounds((850 - launchButton.getPreferredSize().width) / 2, 360, 500, 120);
+		launchButton.setBounds((850 - launchButton.getPreferredSize().width) / 2, 360, (10 + launchButton.getPreferredSize().width), 60);
+        launchButton.setOpaque(false);
         launchButton.addMouseListener(lancementPlateau);
 
         /*JLabel continuer = new JLabel("Continuer");
