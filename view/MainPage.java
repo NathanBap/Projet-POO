@@ -126,7 +126,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
-                //ouvrir fichier PDF avec le sujet du projet
+                //ouvir le pdf du sujet du projet dans ressources
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -191,10 +191,16 @@ public class MainPage extends JFrame {
         launchButton.setOpaque(false);
         launchButton.addMouseListener(lancementPlateau);
 
-        /*JLabel continuer = new JLabel("Continuer");
-		continuer.setFont(new Font("Century Gothic Italic", Font.PLAIN, 30));
+        /*
+        si on veut ajouter un bouton pour continuer une partie sauvegardée
+        JLabel continuer = new JLabel("Continuer");
+		continuer.setFont(new Font("Century Gothic", Font.PLAIN, 40));
+        continuer.setHorizontalAlignment(SwingConstants.CENTER);
 		continuer.setForeground(Color.WHITE);
-		continuer.setBounds(20, 100, 500, 30);*/
+		continuer.setBounds((850 - launchButton.getPreferredSize().width) / 2, 360, (10 + launchButton.getPreferredSize().width), 60);
+        continuer.setOpaque(false);
+        continuer.addMouseListener(lancementPlateau);
+        */
         
         JLabel texteFooter = new JLabel("Projet de programmation Orienté Objet de fin d'année - 2023/2024");
         texteFooter.setFont(texteFooter.getFont().deriveFont(10f));
