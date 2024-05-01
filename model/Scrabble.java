@@ -12,7 +12,7 @@ public class Scrabble {
     public Scrabble(List<Joueur> joueurs) {
         this.joueurs = joueurs;
         this.joueurActuelIndex = 0;
-        this.joueurActuel = null;
+        this.joueurActuel = joueurs.get(joueurActuelIndex);
     }
     //joueurActuel.getindex
     //joeurActuel = joueurActuelIndex
@@ -43,7 +43,7 @@ public class Scrabble {
         }
     }
 
-    public void debutDuTour() {
+    public Joueur debutDuTour() {
         // Initialiser les mains des joueurs
         for (Joueur joueur : joueurs) {
             joueur.initMain();
@@ -51,6 +51,7 @@ public class Scrabble {
         // Déterminer quel joueur commence
         joueurActuelIndex = tirageAuSort(joueurs);
         joueurActuel = joueurs.get(joueurActuelIndex);
+        return joueurActuel;
     }
     
     public void changementJoueur() {
