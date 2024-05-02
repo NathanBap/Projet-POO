@@ -15,12 +15,12 @@ public class MainPage extends JFrame {
         setTitle("Scrabble POO - Page d'accueil");
         setSize(850, 600);
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
+		setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         // Arrière-plan
         Color transparentColor = new Color(1, 1, 1, 100);
 		ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");
 		JLabel bgLabel = new JLabel(bgIcon);
 		bgLabel.setBounds(0, 0, 850, 600);
-		setIconImage(new ImageIcon("Logo.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         MouseListener redirectionGit = new MouseAdapter() {
@@ -126,7 +126,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
-                //ouvir le pdf du sujet du projet dans ressources
+                controlleur.ouvrirPDF();
             }
             @Override
             public void mouseEntered(MouseEvent e) {
