@@ -76,6 +76,7 @@ public class CaseControler extends MouseAdapter{
             lettreViewPlaced.paintLettreView();
         } 
         lettreViewPlaced.removeMouseListener(lettreViewPlaced.getMouseListeners()[0]);
+        lettreViewPlaced.setBorder(BorderFactory.createRaisedBevelBorder());
 
         // Place la lettre dans le model
         casee.getCase().placerLettre(lettrePlaced);

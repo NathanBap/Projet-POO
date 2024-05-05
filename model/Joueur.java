@@ -86,15 +86,18 @@ public class Joueur {
             System.out.println(l.getLettre());
         }
     }
-    public void remplirMain(Sac sac) {
+    public List<Lettre> remplirMain(Sac sac) {
+        List<Lettre> lettrePiochees = new ArrayList<>();
         while (listeLettre.size() < 7) {
             Lettre l = sac.piocher();
             if (l != null) {
                 listeLettre.add(l);
+                lettrePiochees.add(l);
             } else {
                 break;
             }
         }
+        return lettrePiochees;
     }
 
 }

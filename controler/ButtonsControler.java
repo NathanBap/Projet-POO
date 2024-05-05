@@ -62,6 +62,7 @@ public class ButtonsControler implements ActionListener {
                     msg = "Les lettres ont été placées avec succès, mots formés : \n" + valider;
                     JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
                     plateauView.remplirMain();
+                    plateauView.joueurSuivant();
                 }
                 // A FAIRE : Remettre le background des lettres normal
             }
@@ -77,6 +78,9 @@ public class ButtonsControler implements ActionListener {
         }
         else if (action.equals("Echanger")) {
             plateauView.echangerLettres();
+        }
+        else if (action.equals("Passer")) {
+            plateauView.joueurSuivant();
         }
     }
 }

@@ -17,11 +17,13 @@ import javax.swing.Timer;
 public class PlateauView extends JFrame {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
-    public Joueur joueur;
+    private Joueur joueur;
     public LettreView lettreClicked;
     private JPanel listeLettres;
     private JButton passer;
     private JButton echanger;
+    private JPanel footerPanel;
+    private JLabel scoreLabel;
     
     public PlateauView() {
         initGame();
@@ -67,7 +69,7 @@ public class PlateauView extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         //setLocationRelativeTo(null);  
 
-        JPanel footerPanel = new JPanel();
+        footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
@@ -90,12 +92,13 @@ public class PlateauView extends JFrame {
         }
 
         int score = joueur.getScore();
-        JLabel scoreLabel = new JLabel(String.valueOf(score));
+        scoreLabel = new JLabel(String.valueOf(score));
 
         footerPanel.add(valider);
         footerPanel.add(annuler);
         footerPanel.add(annulerTout);
         footerPanel.add(echanger);
+        footerPanel.add(passer);
 
         footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
@@ -105,9 +108,15 @@ public class PlateauView extends JFrame {
         annuler.addActionListener(new ButtonsControler(annuler, this));
         annulerTout.addActionListener(new ButtonsControler(annulerTout, this));
         echanger.addActionListener(new ButtonsControler(echanger, this));
+        passer.addActionListener(new ButtonsControler(passer, this));
 
         keyboardShortcuts(mainPanel);
         
+    }
+
+    public void editScore() {
+        scoreLabel.setText(String.valueOf(joueur.getScore()));
+        scoreLabel.revalidate();
     }
 
     public void removeAllLetters() {
@@ -131,6 +140,24 @@ public class PlateauView extends JFrame {
             revalidate();
         }
         enableButtons();
+    }
+
+    public void joueurSuivant() {
+        plateau.passerAuJoueurSuivant();
+        joueur = plateau.getJoueurActuel();
+        for (Component c : listeLettres.getComponents()) {
+            if (c instanceof LettreView) {
+                LettreView lettre = (LettreView) c;
+                lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+                listeLettres.remove(lettre);
+            }
+        }
+        listeLettres.revalidate();
+        String msg = "Cliquer sur \"OK\" quand le joueur suivant est prêt";
+        JOptionPane.showMessageDialog(this, msg, "Joueur suivant", JOptionPane.INFORMATION_MESSAGE);
+        remplirMain();
+        enableButtons();
+        editScore();
     }
 
     public void removeLastLetter() {
@@ -176,8 +203,8 @@ public class PlateauView extends JFrame {
         }
 
         int retour = JOptionPane.showConfirmDialog(this, copiedListeLettres, "Choisissez les lettres à échanger", JOptionPane.OK_CANCEL_OPTION);
-
         if (retour == JOptionPane.OK_OPTION) {
+            String msg = "<html>Les lettres : <b>";
             System.out.println("Echanger clicked");
             List<Lettre> lettresEchangees = new ArrayList<Lettre>();
             // Parcour la liste des lettres copiées
@@ -193,6 +220,7 @@ public class PlateauView extends JFrame {
                                 if (lettreMain.getPiece().equals(lettreCopiee.getPiece())) {
                                     listeLettres.remove(lettreMain);
                                     lettresEchangees.add(lettreMain.getPiece());
+                                    msg += lettreMain.getPiece().getLettre() + " ";
                                     System.out.println("Lettres retirée : " + lettreCopiee.getPiece().getLettre());
                                     break;
                                 }
@@ -202,18 +230,13 @@ public class PlateauView extends JFrame {
                 }
             }
 
-            Timer timer = new Timer(1000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    plateau.echangerLettres(lettresEchangees);
-                    remplirMain();
-                }
-            });
-
-            listeLettres.revalidate();
-            // Start the Timer
-            timer.setRepeats(false); // Make sure the timer only runs once
-            timer.start();   
+            msg += " </b>ont été échangées avec succès.<br>Lettres piochées : <b>";
+            for (Lettre l : plateau.echangerLettres(lettresEchangees)) {
+                msg += l.getLettre() + " ";
+            }
+            msg += "</b></html>";
+            JOptionPane.showMessageDialog(this, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
+            joueurSuivant();
         }
     }
 
@@ -258,7 +281,6 @@ public class PlateauView extends JFrame {
                 LettreView lettre = new LettreView(l);
                 lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
                 listeLettres.add(lettre);
-                System.out.println("Lettre ajoutée");
             }
         }
         revalidate();
