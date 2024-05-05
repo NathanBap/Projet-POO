@@ -37,6 +37,9 @@ public class Plateau {
     public Sac getSac() {
         return this.sac;
     }
+    public List<Joueur> getJoueurs() {
+        return this.joueurs;
+    }
 
     //Méthodes
     public void addPendingCase(Case c) {

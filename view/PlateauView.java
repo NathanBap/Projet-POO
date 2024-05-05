@@ -261,6 +261,54 @@ public class PlateauView extends JFrame {
                 removeLastLetter();
             }
         });
+
+        JDialog dialog = new JDialog(); // Create the dialog
+        dialog.setLayout(new GridBagLayout()); // Set the layout to GridBagLayout
+
+        JPanel gameState = new JPanel();
+        gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER; // Center the panel
+        dialog.add(gameState, gbc); // Add the panel with the constraints
+
+        dialog.setSize(300, 200);
+        dialog.setLocationRelativeTo(null);
+
+        // Define the key stroke
+        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
+        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
+
+        // Map the key stroke to an action name
+        inputMap.put(pressM, "showDialog");
+
+        // Map the action name to an action
+        actionMap.put("showDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is pressed
+                gameState.removeAll();
+                for (Joueur j : plateau.getJoueurs()) {
+                    gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
+                }
+                dialog.setVisible(true);
+                System.out.println("Key pressed");
+            }
+        });
+
+        InputMap inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(releaseM, "hideDialog");
+        ActionMap actionMap2 = gameState.getActionMap();
+
+        actionMap2.put("hideDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is released
+                dialog.setVisible(false);
+                System.out.println("Key released");
+            }
+        });
+
     }
 
     public void remplirMain() {
