@@ -24,6 +24,7 @@ public class PlateauView extends JFrame {
     private JButton echanger;
     private JPanel footerPanel;
     private JLabel scoreLabel;
+    private JPanel mainPanel;
     
     public PlateauView() {
         initGame();
@@ -51,7 +52,7 @@ public class PlateauView extends JFrame {
         
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
 
-        JPanel mainPanel = new JPanel(new GridLayout(15, 15));
+        mainPanel = new JPanel(new GridLayout(15, 15));
         
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
@@ -344,6 +345,35 @@ public class PlateauView extends JFrame {
     public void enableButtons() {
         passer.setEnabled(true);
         echanger.setEnabled(true);
+    }
+
+    public void finPartie() {
+        plateau.finPartie();
+
+        String msg = "La partie est terminée !\n";
+        for (Joueur j : plateau.getJoueurs()) {
+            msg += j.getNom() + " a obtenu " + j.getScore() + " points.\n";
+        }
+        Object[] options = {"Nouvelle partie", "Menu principal", "Quitter"};
+
+        int n = JOptionPane.showOptionDialog(this,
+            msg,
+            "Fin de partie",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+        if (n == 2) {
+            System.exit(0);
+        } else if (n == 1) {
+            
+        } else {
+            System.out.println("Nouvelle partie");
+            dispose();
+            new PlateauView();
+        }
     }
 
     public static void main(String[] args) {

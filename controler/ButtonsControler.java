@@ -62,6 +62,10 @@ public class ButtonsControler implements ActionListener {
                 } else {
                     msg = "Les lettres ont été placées avec succès, mots formés : \n" + valider;
                     JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    if (plateau.getJoueurActuel().getListeLettre().size() == 0) {
+                        plateauView.finPartie();
+                        return;
+                    }
                     plateauView.remplirMain();
                     plateauView.joueurSuivant();
                     passerCount = 0;
@@ -85,9 +89,8 @@ public class ButtonsControler implements ActionListener {
             plateauView.joueurSuivant();
             passerCount += 1;
             if (passerCount / plateau.getJoueurs().size() >= 3) {
-                // Décompte du score de chaque joueur le cumul des valeurs des lettres restantes dans leur main
-                // plateauView.finPartie();
-                
+                //Décompte du score de chaque joueur le cumul des valeurs des lettres restantes dans leur main
+                plateauView.finPartie();
             }
         }
     }

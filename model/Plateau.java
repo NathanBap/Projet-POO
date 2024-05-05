@@ -352,4 +352,17 @@ public class Plateau {
         List<Lettre> lettresPiochees = joueurActuel.remplirMain(sac);
         return lettresPiochees;
     }
+
+    public void finPartie() {
+        for (Joueur joueur : joueurs) {
+            int pointsRestants = 0;
+            for (Lettre l : joueur.getListeLettre()) {
+                pointsRestants += l.getPoints();
+            }
+            joueur.addScore(-pointsRestants);
+            if (joueurActuel.getListeLettre().size() == 0) {
+                joueurActuel.addScore(pointsRestants);
+            }
+        }
+    }
 }
