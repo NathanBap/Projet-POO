@@ -190,6 +190,12 @@ public class PlateauView extends JFrame {
     }
 
     public void echangerLettres() {
+        if (plateau.getSac().getNbrLettres() < 7) {
+            JOptionPane.showMessageDialog(this, "Il n'y a plus assez de lettres dans le sac", "Erreur", JOptionPane.ERROR_MESSAGE);
+            echanger.setEnabled(false);
+            return;
+        }
+
         JPanel copiedListeLettres = new JPanel();
 
         // Add a copy of each letter to the new panel
@@ -292,7 +298,6 @@ public class PlateauView extends JFrame {
                     gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
                 }
                 dialog.setVisible(true);
-                System.out.println("Key pressed");
             }
         });
 
@@ -305,10 +310,8 @@ public class PlateauView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Perform the action when M is released
                 dialog.setVisible(false);
-                System.out.println("Key released");
             }
         });
-
     }
 
     public void remplirMain() {
