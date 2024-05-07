@@ -10,9 +10,15 @@ public class Plateau {
     private boolean premierTour = true;
     private Dico dico = new Dico();
 
+    // Attributs de Scrabble
+    private List<Joueur> joueurs = new ArrayList<Joueur>();
+    private int joueurActuelIndex;
+    private Sac sac;
+
     //Constructeur
     public Plateau() {
         this.plateau = new Case[15][15];
+        this.sac = new Sac();
     }
 
     //Getters / Setters
@@ -24,6 +30,15 @@ public class Plateau {
     }
     public boolean getPremierTour() {
         return this.premierTour;
+    }
+    public Joueur getJoueur() {
+        return this.joueurActuel;
+    }
+    public Sac getSac() {
+        return this.sac;
+    }
+    public List<Joueur> getJoueurs() {
+        return this.joueurs;
     }
 
     //Méthodes
@@ -60,9 +75,44 @@ public class Plateau {
         }
     }
 
+    public void debutDuJeu() {
+        // Initialiser les mains des joueurs
+        for (Joueur joueur : joueurs) {
+            joueur.initMain();
+        }
+        // Déterminer quel joueur commence
+        joueurActuelIndex = tirageAuSort(joueurs);
+        joueurActuel = joueurs.get(joueurActuelIndex);
+    }
+
+    // 2 joueurs minimum 4 maximum
+    public void initJoueurs() {
+        // TMP : Création de 2 joueurs
+        Joueur joueur1 = new Joueur("Joueur 1", this);
+        Joueur joueur2 = new Joueur("Joueur 2", this);
+
+        joueurs.add(joueur1);
+        joueurs.add(joueur2);
+    }
+
+    public Joueur getJoueurActuel() {
+        return joueurs.get(joueurActuelIndex);
+    }
+
+    public void passerAuJoueurSuivant() {
+        joueurActuelIndex = (joueurActuelIndex + 1) % joueurs.size();
+        joueurActuel = joueurs.get(joueurActuelIndex);
+    }
+    
+    // Pour déterminer quel joueur commence
+    public int tirageAuSort(List<Joueur> joueurs) {
+        Random rand = new Random();
+        return rand.nextInt(joueurs.size());
+    }
+
     // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
     // FAIT : Changement du système du calcul du score
-    // A FAIRE : Quand on pose un mot validé, supprimer le bonus de la case
+    // FAIT : Quand on pose un mot validé, supprimer le bonus de la case
     // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
 
     public String valider() { // Appelé par PlateauView
@@ -138,6 +188,9 @@ public class Plateau {
             if (!centre) {
                 return "Non centre";
             }
+            if (!dico.estValide(mot)) {
+                return "Mot invalide";
+            }
             this.premierTour = false;
             score = count * motDouble * motTriple;
             motsPoint.put(mot, score);
@@ -166,11 +219,13 @@ public class Plateau {
             }
         }
 
-        System.out.println("Score : " + score);
-
-        //this.joueurActuel.addScore(score);
-
-        this.pendingCases.clear();
+        for (Case c : pendingCases) {
+            joueurActuel.deposerLettre(c.getLettre());
+            c.removeBonus();
+        }
+        pendingCases.clear();
+        joueurActuel.addScore(score);
+        joueurActuel.remplirMain(sac);
 
         return motsPoint.toString();
     }
@@ -289,5 +344,25 @@ public class Plateau {
             }
         }
         return false;
+    }
+
+    public List<Lettre> echangerLettres(List<Lettre> lettres) {
+        sac.addAll(lettres);
+        joueurActuel.getListeLettre().removeAll(lettres);
+        List<Lettre> lettresPiochees = joueurActuel.remplirMain(sac);
+        return lettresPiochees;
+    }
+
+    public void finPartie() {
+        for (Joueur joueur : joueurs) {
+            int pointsRestants = 0;
+            for (Lettre l : joueur.getListeLettre()) {
+                pointsRestants += l.getPoints();
+            }
+            joueur.addScore(-pointsRestants);
+            if (joueurActuel.getListeLettre().size() == 0) {
+                joueurActuel.addScore(pointsRestants);
+            }
+        }
     }
 }
