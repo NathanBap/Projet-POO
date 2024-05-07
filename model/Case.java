@@ -2,10 +2,11 @@ package model;
 import java.util.*;
 import view.PlateauView;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;  
+import java.awt.event.MouseEvent;
+import java.io.Serializable;  
 
 
-public class Case extends MouseAdapter {
+public class Case extends MouseAdapter implements Serializable {
     //attributs 
     private String bonus = "";
     private int x;

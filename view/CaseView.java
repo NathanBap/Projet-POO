@@ -4,9 +4,11 @@ import model.Case;
 import model.Lettre;
 
 import java.awt.*;
+import java.io.Serializable;
+
 import javax.swing.*;
 
-public class CaseView extends JPanel {
+public class CaseView extends JPanel implements Serializable {
     private Case casee;
     private LettreView lettrePosee;
 

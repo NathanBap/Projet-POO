@@ -4,8 +4,9 @@ import java.util.*;
 import java.io.BufferedReader;// lire un texte à partir d'un flux d'entrée caractère
 import java.io.FileReader; //lire des caractères a partir d un fichier
 import java.io.IOException;
+import java.io.Serializable;
 
-public class Dico extends ArrayList<String>{
+public class Dico extends ArrayList<String> implements Serializable{
     // attribut
     //private List<String> dictionnaire;
 

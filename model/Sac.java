@@ -1,7 +1,8 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
-public class Sac {
+public class Sac implements Serializable {
     //Attributs
     private List<Lettre> listLettres = new ArrayList<Lettre>();
 

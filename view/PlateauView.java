@@ -8,13 +8,21 @@ import controler.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.awt.datatransfer.*;
 import java.util.*;
 import java.util.List;
 import java.awt.dnd.*;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
-public class PlateauView extends JFrame {
+public class PlateauView extends JFrame implements Serializable {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
     private Joueur joueur;
@@ -27,12 +35,33 @@ public class PlateauView extends JFrame {
     private JPanel mainPanel;
     
     public PlateauView() {
-        initGame();
-        this.joueur = plateau.getJoueurActuel();
-        initComponents();
-        pack(); // Ajuste automatiquement la taille
-        setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
-        setVisible(true);
+        //File f = new File("sauvegarde.ser");
+        // if (f.exists() && !f.isDirectory()) {
+        //     try {
+        //         FileInputStream fis = new FileInputStream("sauvegarde.ser");
+        //         ObjectInputStream ois = new ObjectInputStream(fis);
+        //         PlateauView plateau = (PlateauView) ois.readObject(); 
+
+                
+        //         ois.close();
+        //         fis.close();
+        //     } catch (IOException ioe) {
+        //         ioe.printStackTrace();
+        //         return;
+        //     } catch (ClassNotFoundException c) {
+        //         System.out.println("Class not found");
+        //         c.printStackTrace();
+        //         return;
+        //     }
+        // } else {
+            initGame();
+            this.joueur = plateau.getJoueurActuel();
+            initComponents();
+            pack(); // Ajuste automatiquement la taille
+            setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
+            setVisible(true);
+        //}
+
     }
 
     public Plateau getPlateau() {
@@ -276,21 +305,23 @@ public class PlateauView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Perform the action when ESCAPE is pressed
                 System.out.println("Pause");
-                JDialog dialog = new JDialog(); // Create the dialog
-                dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS)); // Set the layout to BoxLayout with vertical alignment
+                JDialog echapDialog = new JDialog(); // Create the dialog
 
-                // Create buttons
-                JButton button1 = new JButton("Button 1");
-                JButton button2 = new JButton("Button 2");
-                JButton button3 = new JButton("Button 3");
+                JButton reprendre = new JButton("Reprendre");
+                JButton quitter = new JButton("Sauvegarder et quitter");
 
-                // Add buttons to the dialog
-                dialog.add(button1);
-                dialog.add(button2);
-                dialog.add(button3);
+                echapDialog.add(new JPanel());
+                echapDialog.add(reprendre);
+                echapDialog.add(quitter);
 
-                dialog.pack(); // Adjust the size of the dialog to fit its content
-                dialog.setVisible(true); // Show the dialog
+                echapDialog.getContentPane().setLayout(new GridLayout(4, 1));
+                echapDialog.setLocationRelativeTo(null);
+                echapDialog.setSize(300, 300);
+                echapDialog.setVisible(true); // Show the dialog
+
+                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
+                quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
+        
             }
         });
 
@@ -394,7 +425,8 @@ public class PlateauView extends JFrame {
         if (n == 2) {
             System.exit(0);
         } else if (n == 1) {
-            
+            new MainPage();
+            dispose();
         } else {
             System.out.println("Nouvelle partie");
             dispose();

@@ -4,6 +4,10 @@ import javax.swing.*;
 import controler.Main;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class MainPage extends JFrame {
 
@@ -51,6 +55,7 @@ public class MainPage extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
                 controlleur.launchOtherJavaFile();
+                dispose();
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -224,7 +229,26 @@ public class MainPage extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MainPage();
+                // new MainPage();
+                File f = new File("sauvegarde.ser");
+                if (f.exists() && !f.isDirectory()) {
+                    try {
+                        FileInputStream fis = new FileInputStream("sauvegarde.ser");
+                        ObjectInputStream ois = new ObjectInputStream(fis);
+                        PlateauView plateau = (PlateauView) ois.readObject(); 
+                        plateau.setVisible(true);
+
+                        ois.close();
+                        fis.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                        return;
+                    } catch (ClassNotFoundException c) {
+                        System.out.println("Class not found");
+                        c.printStackTrace();
+                        return;
+                    }
+                }
             }
         });
     }

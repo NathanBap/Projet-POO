@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Scrabble {
+public class Scrabble implements Serializable {
 
 
 

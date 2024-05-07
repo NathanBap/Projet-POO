@@ -1,8 +1,9 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Plateau {
+public class Plateau implements Serializable {
     //Attributs
     private Case[][] plateau;
     private List<Case> pendingCases = new ArrayList<Case>();

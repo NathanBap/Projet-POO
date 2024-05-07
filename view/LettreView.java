@@ -2,9 +2,10 @@ package view;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.List;
 
-public class LettreView extends JPanel {
+public class LettreView extends JPanel implements Serializable {
     private Lettre piece;
     private boolean isSelected = false;
 

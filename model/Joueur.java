@@ -1,7 +1,8 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
-public class Joueur {
+public class Joueur implements Serializable {
 
 // Attributs
     private int score = 0;

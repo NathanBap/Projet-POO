@@ -1,6 +1,7 @@
 package controler;
 
 import java.awt.event.*;
+import java.io.Serializable;
 import java.awt.*;
 import java.awt.datatransfer.*;
 
@@ -10,7 +11,7 @@ import java.awt.dnd.*;
 
 import view.*;
 
-public class LettreControler extends MouseAdapter {
+public class LettreControler extends MouseAdapter implements Serializable {
     private LettreView lettreView;
     private PlateauView plateau;
     private JPanel listeLettres;
