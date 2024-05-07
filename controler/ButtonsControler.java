@@ -11,6 +11,7 @@ public class ButtonsControler implements ActionListener {
     private String action;
     private Plateau plateau;
     private PlateauView plateauView;
+    private static float passerCount = 0;
 
     public ButtonsControler(JButton button, PlateauView plateauView) {
         this.button = button;
@@ -23,7 +24,7 @@ public class ButtonsControler implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (action.equals("Valider")) {
             System.out.println("Valider clicked");
-
+            
             if (!plateau.arePendingCases()) {
                 String msg = "Aucune lettre n'a été placée sur le plateau.";
                 JOptionPane.showMessageDialog(null, msg, "Erreur", JOptionPane.ERROR_MESSAGE);
@@ -61,16 +62,36 @@ public class ButtonsControler implements ActionListener {
                 } else {
                     msg = "Les lettres ont été placées avec succès, mots formés : \n" + valider;
                     JOptionPane.showMessageDialog(null, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
+                    if (plateau.getJoueurActuel().getListeLettre().size() == 0) {
+                        plateauView.finPartie();
+                        return;
+                    }
+                    plateauView.remplirMain();
+                    plateauView.joueurSuivant();
+                    passerCount = 0;
                 }
-                // A FAIRE : Remettre le background des lettres normal
             }
 
         }
         
-        else if (action.equals("Annuler")) {
-            System.out.println("Annuler clicked");
+        else if (action.equals("Annuler tout")) {
             plateauView.removeAllLetters();
             plateau.annuler();
+        }
+        else if (action.equals("Annuler")) {
+            plateauView.removeLastLetter();
+        }
+        else if (action.equals("Echanger")) {
+            plateauView.echangerLettres();
+            passerCount = 0;
+        }
+        else if (action.equals("Passer")) {
+            plateauView.joueurSuivant();
+            passerCount += 1;
+            if (passerCount / plateau.getJoueurs().size() >= 3) {
+                //Décompte du score de chaque joueur le cumul des valeurs des lettres restantes dans leur main
+                plateauView.finPartie();
+            }
         }
     }
 }

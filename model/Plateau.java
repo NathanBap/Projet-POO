@@ -37,6 +37,9 @@ public class Plateau {
     public Sac getSac() {
         return this.sac;
     }
+    public List<Joueur> getJoueurs() {
+        return this.joueurs;
+    }
 
     //Méthodes
     public void addPendingCase(Case c) {
@@ -216,13 +219,13 @@ public class Plateau {
             }
         }
 
-        System.out.println("Score : " + score);
-
-        for (Case c : this.pendingCases) {
+        for (Case c : pendingCases) {
+            joueurActuel.deposerLettre(c.getLettre());
             c.removeBonus();
-            pendingCases.remove(c);
         }
+        pendingCases.clear();
         joueurActuel.addScore(score);
+        joueurActuel.remplirMain(sac);
 
         return motsPoint.toString();
     }
@@ -341,5 +344,25 @@ public class Plateau {
             }
         }
         return false;
+    }
+
+    public List<Lettre> echangerLettres(List<Lettre> lettres) {
+        sac.addAll(lettres);
+        joueurActuel.getListeLettre().removeAll(lettres);
+        List<Lettre> lettresPiochees = joueurActuel.remplirMain(sac);
+        return lettresPiochees;
+    }
+
+    public void finPartie() {
+        for (Joueur joueur : joueurs) {
+            int pointsRestants = 0;
+            for (Lettre l : joueur.getListeLettre()) {
+                pointsRestants += l.getPoints();
+            }
+            joueur.addScore(-pointsRestants);
+            if (joueurActuel.getListeLettre().size() == 0) {
+                joueurActuel.addScore(pointsRestants);
+            }
+        }
     }
 }

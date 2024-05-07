@@ -4,20 +4,27 @@ import model.*;
 
 import javax.swing.*;
 
-import controler.ButtonsControler;
-import controler.CaseControler;
-import controler.LettreControler;
+import controler.*;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.awt.datatransfer.*;
 import java.util.*;
 import java.util.List;
+import java.awt.dnd.*;
+import javax.swing.Timer;
 
 public class PlateauView extends JFrame {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
-    public Joueur joueur;
+    private Joueur joueur;
     public LettreView lettreClicked;
     private JPanel listeLettres;
+    private JButton passer;
+    private JButton echanger;
+    private JPanel footerPanel;
+    private JLabel scoreLabel;
+    private JPanel mainPanel;
     
     public PlateauView() {
         initGame();
@@ -33,12 +40,10 @@ public class PlateauView extends JFrame {
     }
 
     private void initGame() {
-        // Scrabble scrabble = new Scrabble(joueurs);
         plateau = new Plateau();
         plateau.initPlateau();
         plateau.initJoueurs();
         plateau.debutDuJeu();
-        // scrabble.debutDuTour();
     }
 
     public void initComponents() {
@@ -47,19 +52,16 @@ public class PlateauView extends JFrame {
         
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
 
-        JPanel mainPanel = new JPanel(new GridLayout(15, 15));
+        mainPanel = new JPanel(new GridLayout(15, 15));
         
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-              
-                
                 CaseView casee = new CaseView(plateau.getCase(i, j));
                 casee.addMouseListener(new CaseControler(casee, this));
 
                 mainPanel.add(casee);
                 allCases.add(casee);
-              
-            }
+            }       
         }
         // Ajout du panneau principal et du panneau flou à la fenêtre
         setLayout(new BorderLayout());
@@ -68,81 +70,310 @@ public class PlateauView extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         //setLocationRelativeTo(null);  
 
-
-        JPanel footerPanel = new JPanel();
+        footerPanel = new JPanel();
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
-        //JPanel lettresPanel = this.VueDeLettre(joueur);
-
+        // A FAIRE : Créer une méthode create button, qui l'ajoute au panel et ajoute un action listener
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
+        JButton annulerTout = new JButton("Annuler tout");
         JButton aide = new JButton("Aide");
-      
+        // Attributs de classe
+        passer = new JButton("Passer");
+        echanger = new JButton("Echanger");
+        
         listeLettres = new JPanel();
+
         for (Lettre l : lettresDuJoueur) {
-            LettreView lettre = new LettreView(l.getLettre());
-            lettre.addMouseListener(new LettreControler(lettre, this));
+            LettreView lettre = new LettreView(l);
+
+            lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
             listeLettres.add(lettre);
         }
 
         int score = joueur.getScore();
-        JLabel scoreLabel = new JLabel(String.valueOf(score));
-
-        //LettreView lettre = new LettreView('A');
-        //LettreView lettre2 = new LettreView('L');
-        //LettreView lettre3 = new LettreView('L');
-        //LettreView lettre4 = new LettreView('E');
-        //LettreView lettre5 = new LettreView('E');
-        //LettreView lettre6 = new LettreView('A');
-        //LettreView lettre7 = new LettreView('C');
-        //LettreView lettre8 = new LettreView('S');
-
-        //listeLettres.add(lettre);
-        //listeLettres.add(lettre2);
+        scoreLabel = new JLabel(String.valueOf(score));
 
         footerPanel.add(valider);
         footerPanel.add(annuler);
+        footerPanel.add(annulerTout);
+        footerPanel.add(echanger);
+        footerPanel.add(passer);
 
         footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
         add(footerPanel, BorderLayout.SOUTH);
 
-        //footerPanel.add(lettre);
-        //footerPanel.add(lettre2);
-        //footerPanel.add(lettre3);
-        //footerPanel.add(lettre4);
-        //footerPanel.add(lettre5);
-        //footerPanel.add(lettre6);
-        //footerPanel.add(lettre7);
-        //footerPanel.add(lettre8);
-        
-        //add(footerPanel, BorderLayout.SOUTH);
-
-        //lettre.addMouseListener(new LettreControler(lettre, this));
-        //lettre2.addMouseListener(new LettreControler(lettre2, this));
-        //lettre3.addMouseListener(new LettreControler(lettre3, this));
-        //lettre4.addMouseListener(new LettreControler(lettre4, this));
-        //lettre5.addMouseListener(new LettreControler(lettre5, this));
-        //lettre6.addMouseListener(new LettreControler(lettre6, this));
-        //lettre7.addMouseListener(new LettreControler(lettre7, this));
-        //lettre8.addMouseListener(new LettreControler(lettre8, this));
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
+        annulerTout.addActionListener(new ButtonsControler(annulerTout, this));
+        echanger.addActionListener(new ButtonsControler(echanger, this));
+        passer.addActionListener(new ButtonsControler(passer, this));
 
+        keyboardShortcuts(mainPanel);
+        
+    }
+
+    public void editScore() {
+        scoreLabel.setText(String.valueOf(joueur.getScore()));
+        scoreLabel.revalidate();
     }
 
     public void removeAllLetters() {
-        for (CaseView c : this.allCases) {
-            List<Case> pendingCases = plateau.getPendingCases();
-            if (pendingCases.contains(c.getCase())) {
-                LettreView lettrePosee = c.getLettrePosee();
-                listeLettres.add(lettrePosee);
-                c.removeLettrePosee();
+        if (plateau.arePendingCases()) {
+            for (CaseView c : this.allCases) {
+                List<Case> pendingCases = plateau.getPendingCases();
+                if (pendingCases.contains(c.getCase())) {
+                    LettreView lettrePosee = c.getLettrePosee();
+                    if (lettrePosee.getPiece().getJoker()) {
+                        lettrePosee.getPiece().setLettre('*');
+                        lettrePosee.paintLettreView();
+                    }
+                    listeLettres.add(lettrePosee);
+                    c.removeLettrePosee();
+                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
+    
+                    c.revalidate();
+                    c.repaint();
+                }
+            }
+            revalidate();
+        }
+        enableButtons();
+    }
+
+    public void joueurSuivant() {
+        plateau.passerAuJoueurSuivant();
+        joueur = plateau.getJoueurActuel();
+        for (Component c : listeLettres.getComponents()) {
+            if (c instanceof LettreView) {
+                LettreView lettre = (LettreView) c;
+                lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+                listeLettres.remove(lettre);
             }
         }
-        repaint();
-        //revalidate();
+        listeLettres.revalidate();
+        String msg = "Cliquer sur \"OK\" quand le joueur suivant est prêt";
+        JOptionPane.showMessageDialog(this, msg, "Joueur suivant", JOptionPane.INFORMATION_MESSAGE);
+        remplirMain();
+        enableButtons();
+        editScore();
+    }
+
+    public void removeLastLetter() {
+        if (plateau.arePendingCases()) {
+            List<Case> pendingCases = plateau.getPendingCases();
+            Case lastCase = pendingCases.get(pendingCases.size() - 1);
+            for (CaseView c : this.allCases) {
+                if (c.getCase().equals(lastCase)) {
+                    // View
+                    LettreView lettrePosee = c.getLettrePosee();
+                    if (lettrePosee.getPiece().getJoker()) {
+                        lettrePosee.getPiece().setLettre('*');
+                        lettrePosee.paintLettreView();
+                    }
+                    listeLettres.add(lettrePosee);
+                    c.removeLettrePosee();
+                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres)); 
+                    c.revalidate();
+                    c.repaint();
+    
+                    // Model
+                    pendingCases.remove(lastCase);
+                    lastCase.retirerLettre();
+                    break;
+                }
+            }
+            revalidate();
+        }
+        if (!plateau.arePendingCases()) { enableButtons(); }
+    }
+
+    public void echangerLettres() {
+        if (plateau.getSac().getNbrLettres() < 7) {
+            JOptionPane.showMessageDialog(this, "Il n'y a plus assez de lettres dans le sac", "Erreur", JOptionPane.ERROR_MESSAGE);
+            echanger.setEnabled(false);
+            return;
+        }
+
+        JPanel copiedListeLettres = new JPanel();
+
+        // Add a copy of each letter to the new panel
+        for (Component c : listeLettres.getComponents()) {
+            if (c instanceof LettreView) {
+                LettreView lettre = (LettreView) c;
+                LettreView lettreCopy = new LettreView(lettre.getPiece());
+                lettreCopy.addMouseListener(new LettreControler(lettreCopy, this, copiedListeLettres));
+                copiedListeLettres.add(lettreCopy);
+            }
+        }
+
+        int retour = JOptionPane.showConfirmDialog(this, copiedListeLettres, "Choisissez les lettres à échanger", JOptionPane.OK_CANCEL_OPTION);
+        if (retour == JOptionPane.OK_OPTION) {
+            String msg = "<html>Les lettres : <b>";
+            System.out.println("Echanger clicked");
+            List<Lettre> lettresEchangees = new ArrayList<Lettre>();
+            // Parcour la liste des lettres copiées
+            for (Component c : copiedListeLettres.getComponents()) {
+                if (c instanceof LettreView) {
+                    LettreView lettreCopiee = (LettreView) c;
+                    if (lettreCopiee.isSelected()) {
+                        // Parcour la liste des lettres du joueur originale
+                        for (Component l : listeLettres.getComponents()) {
+                            if (l instanceof LettreView) {
+                                LettreView lettreMain = (LettreView) l;
+                                // Retrouve la lettre copiée cliquée dans la liste du joueur puis l'enlève
+                                if (lettreMain.getPiece().equals(lettreCopiee.getPiece())) {
+                                    listeLettres.remove(lettreMain);
+                                    lettresEchangees.add(lettreMain.getPiece());
+                                    msg += lettreMain.getPiece().getLettre() + " ";
+                                    System.out.println("Lettres retirée : " + lettreCopiee.getPiece().getLettre());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            msg += " </b>ont été échangées avec succès.<br>Lettres piochées : <b>";
+            for (Lettre l : plateau.echangerLettres(lettresEchangees)) {
+                msg += l.getLettre() + " ";
+            }
+            msg += "</b></html>";
+            JOptionPane.showMessageDialog(this, msg, "Succès", JOptionPane.INFORMATION_MESSAGE);
+            joueurSuivant();
+        }
+    }
+
+    private void keyboardShortcuts(JPanel mainPanel) {
+        // Define the key stroke
+        KeyStroke commandZ = KeyStroke.getKeyStroke("meta Z");
+        KeyStroke ctrlZ = KeyStroke.getKeyStroke("control Z");
+
+        // Get the InputMap and ActionMap
+        InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = mainPanel.getActionMap();
+
+        // Map the key stroke to an action name
+        inputMap.put(ctrlZ, "undo");
+        inputMap.put(commandZ, "undo");
+
+        // Map the action name to an action
+        actionMap.put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when CTRL+Z is pressed
+                removeLastLetter();
+            }
+        });
+
+        JDialog dialog = new JDialog(); // Create the dialog
+        dialog.setLayout(new GridBagLayout()); // Set the layout to GridBagLayout
+
+        JPanel gameState = new JPanel();
+        gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER; // Center the panel
+        dialog.add(gameState, gbc); // Add the panel with the constraints
+
+        dialog.setSize(300, 200);
+        dialog.setLocationRelativeTo(null);
+
+        // Define the key stroke
+        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
+        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
+
+        // Map the key stroke to an action name
+        inputMap.put(pressM, "showDialog");
+
+        // Map the action name to an action
+        actionMap.put("showDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is pressed
+                gameState.removeAll();
+                for (Joueur j : plateau.getJoueurs()) {
+                    gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
+                }
+                dialog.setVisible(true);
+            }
+        });
+
+        InputMap inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(releaseM, "hideDialog");
+        ActionMap actionMap2 = gameState.getActionMap();
+
+        actionMap2.put("hideDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is released
+                dialog.setVisible(false);
+            }
+        });
+    }
+
+    public void remplirMain() {
+        List<Lettre> lettresDuJoueur = joueur.getListeLettre();
+
+        for (Lettre l : lettresDuJoueur) {
+            boolean found = false;
+            for (Component lView : listeLettres.getComponents()) {
+                if (lView instanceof LettreView) {
+                    LettreView lettreView = (LettreView) lView;
+                    if (lettreView.getPiece().equals(l)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                LettreView lettre = new LettreView(l);
+                lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
+                listeLettres.add(lettre);
+            }
+        }
+        revalidate();
+    }
+
+    public void disableButtons() {
+        passer.setEnabled(false);
+        echanger.setEnabled(false);
+    }
+    public void enableButtons() {
+        passer.setEnabled(true);
+        echanger.setEnabled(true);
+    }
+
+    public void finPartie() {
+        plateau.finPartie();
+
+        String msg = "La partie est terminée !\n";
+        for (Joueur j : plateau.getJoueurs()) {
+            msg += j.getNom() + " a obtenu " + j.getScore() + " points.\n";
+        }
+        Object[] options = {"Nouvelle partie", "Menu principal", "Quitter"};
+
+        int n = JOptionPane.showOptionDialog(this,
+            msg,
+            "Fin de partie",
+            JOptionPane.YES_NO_CANCEL_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            options,
+            options[0]);
+
+        if (n == 2) {
+            System.exit(0);
+        } else if (n == 1) {
+            
+        } else {
+            System.out.println("Nouvelle partie");
+            dispose();
+            new PlateauView();
+        }
     }
 
     public static void main(String[] args) {

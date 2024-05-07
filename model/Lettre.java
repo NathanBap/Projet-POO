@@ -1,5 +1,7 @@
 package model;
-public class Lettre {
+import java.io.Serializable;
+
+public class Lettre implements Serializable{
 
     //Attributs
     private char lettre;
@@ -44,6 +46,9 @@ public class Lettre {
     }
     public void setCase(Case c) {
         this.casee = c;
+    }
+    public void setLettre(char l) {
+        this.lettre = l;
     }
 
     public void removeCase() {

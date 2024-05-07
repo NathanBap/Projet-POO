@@ -77,8 +77,8 @@ public class Joueur {
     public void prendreLettre(Lettre l) {
         this.listeLettre.add(l);  
     }
-    public void deposerLettre() {
-        // TODO implement here
+    public void deposerLettre(Lettre l) {
+        System.out.println("remove : " + listeLettre.remove(l));
     }
 
     public void afficherMain() {
@@ -86,6 +86,18 @@ public class Joueur {
             System.out.println(l.getLettre());
         }
     }
-    
+    public List<Lettre> remplirMain(Sac sac) {
+        List<Lettre> lettrePiochees = new ArrayList<>();
+        while (listeLettre.size() < 7) {
+            Lettre l = sac.piocher();
+            if (l != null) {
+                listeLettre.add(l);
+                lettrePiochees.add(l);
+            } else {
+                break;
+            }
+        }
+        return lettrePiochees;
+    }
 
 }
