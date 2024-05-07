@@ -251,6 +251,7 @@ public class PlateauView extends JFrame {
         // Define the key stroke
         KeyStroke commandZ = KeyStroke.getKeyStroke("meta Z");
         KeyStroke ctrlZ = KeyStroke.getKeyStroke("control Z");
+        KeyStroke echap = KeyStroke.getKeyStroke("ESCAPE");
 
         // Get the InputMap and ActionMap
         InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -259,6 +260,7 @@ public class PlateauView extends JFrame {
         // Map the key stroke to an action name
         inputMap.put(ctrlZ, "undo");
         inputMap.put(commandZ, "undo");
+        inputMap.put(echap,"pause");
 
         // Map the action name to an action
         actionMap.put("undo", new AbstractAction() {
@@ -266,6 +268,29 @@ public class PlateauView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Perform the action when CTRL+Z is pressed
                 removeLastLetter();
+            }
+        });
+
+        actionMap.put("pause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when ESCAPE is pressed
+                System.out.println("Pause");
+                JDialog dialog = new JDialog(); // Create the dialog
+                dialog.setLayout(new BoxLayout(dialog.getContentPane(), BoxLayout.Y_AXIS)); // Set the layout to BoxLayout with vertical alignment
+
+                // Create buttons
+                JButton button1 = new JButton("Button 1");
+                JButton button2 = new JButton("Button 2");
+                JButton button3 = new JButton("Button 3");
+
+                // Add buttons to the dialog
+                dialog.add(button1);
+                dialog.add(button2);
+                dialog.add(button3);
+
+                dialog.pack(); // Adjust the size of the dialog to fit its content
+                dialog.setVisible(true); // Show the dialog
             }
         });
 
@@ -313,6 +338,7 @@ public class PlateauView extends JFrame {
                 dialog.setVisible(false);
             }
         });
+
     }
 
     public void remplirMain() {

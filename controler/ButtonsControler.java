@@ -88,6 +88,7 @@ public class ButtonsControler implements ActionListener {
         else if (action.equals("Passer")) {
             plateauView.joueurSuivant();
             passerCount += 1;
+            // La partie s'arrête si tous les joueurs passent 3 fois d'affilé
             if (passerCount / plateau.getJoueurs().size() >= 3) {
                 //Décompte du score de chaque joueur le cumul des valeurs des lettres restantes dans leur main
                 plateauView.finPartie();
