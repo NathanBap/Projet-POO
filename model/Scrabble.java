@@ -31,6 +31,5 @@ public class Scrabble {
             System.out.println();
         }
     }
-
     
 }
