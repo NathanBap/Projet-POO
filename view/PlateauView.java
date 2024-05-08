@@ -355,6 +355,7 @@ public class PlateauView extends JFrame implements Serializable {
                     gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
                 }
                 dialog.setVisible(true);
+                dialog.requestFocus();
             }
         });
 
@@ -431,6 +432,18 @@ public class PlateauView extends JFrame implements Serializable {
             System.out.println("Nouvelle partie");
             dispose();
             new PlateauView();
+        }
+    }
+
+    public void resetControlers() {
+        for (CaseView c : allCases) {
+            c.removeMouseListener(c.getMouseListeners()[0]);
+            c.addMouseListener(new CaseControler(c, this));
+        }
+        for (Component l : listeLettres.getComponents()) {
+            LettreView lettre = (LettreView) l;
+            lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+            lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
         }
     }
 

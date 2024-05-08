@@ -54,7 +54,9 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
-                controlleur.launchOtherJavaFile();
+                //controlleur.launchOtherJavaFile();
+                PlateauView plateauView = new PlateauView();
+                plateauView.setVisible(true);
                 dispose();
             }
             @Override
@@ -73,6 +75,50 @@ public class MainPage extends JFrame {
                 label.setOpaque(false);
             }
         };
+
+        MouseListener continuerPartie = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Action à exécuter lors du clic
+                //controlleur.launchOtherJavaFile();
+                try {
+                    FileInputStream fis = new FileInputStream("sauvegarde.ser");
+                    ObjectInputStream ois = new ObjectInputStream(fis);
+                    PlateauView plateau = (PlateauView) ois.readObject(); 
+                    plateau.resetControlers();
+                    plateau.setVisible(true);
+                    dispose();
+                    plateau.requestFocus();
+
+                    ois.close();
+                    fis.close();
+                } catch (IOException ioe) {
+                    ioe.printStackTrace();
+                    return;
+                } catch (ClassNotFoundException c) {
+                    System.out.println("Class not found");
+                    c.printStackTrace();
+                    return;
+                }
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Action à exécuter lors du hover
+                JLabel label = (JLabel) e.getSource();
+                label.setForeground(Color.GREEN);
+                label.setOpaque(true);
+                label.setBackground(transparentColor);
+                
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Action à exécuter lorsque le curseur quitte le hover
+                JLabel label = (JLabel) e.getSource();
+                label.setForeground(Color.WHITE);
+                label.setOpaque(false);
+            }
+        };
+
 
         MouseListener affichageRegles = new MouseAdapter() {
             @Override
@@ -188,25 +234,29 @@ public class MainPage extends JFrame {
         quitButton.setOpaque(false);
         quitButton.addMouseListener(quitterScrabble);        
 
-        JLabel launchButton = new JLabel("Lancer le Scrabble");
+        JLabel launchButton = new JLabel("Nouvelle partie");
         launchButton.setFont(new Font("Century Gothic", Font.PLAIN, 50));
         launchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		launchButton.setForeground(Color.WHITE);
-		launchButton.setBounds((850 - launchButton.getPreferredSize().width) / 2, 360, (10 + launchButton.getPreferredSize().width), 60);
+		launchButton.setBounds((850 - launchButton.getPreferredSize().width) / 2, 300, (10 + launchButton.getPreferredSize().width), 60);
         launchButton.setOpaque(false);
         launchButton.addMouseListener(lancementPlateau);
 
-        /*
-        si on veut ajouter un bouton pour continuer une partie sauvegardée
-        JLabel continuer = new JLabel("Continuer");
-		continuer.setFont(new Font("Century Gothic", Font.PLAIN, 40));
-        continuer.setHorizontalAlignment(SwingConstants.CENTER);
-		continuer.setForeground(Color.WHITE);
-		continuer.setBounds((850 - launchButton.getPreferredSize().width) / 2, 360, (10 + launchButton.getPreferredSize().width), 60);
-        continuer.setOpaque(false);
-        continuer.addMouseListener(lancementPlateau);
-        */
         
+        // si on veut ajouter un bouton pour continuer une partie sauvegardée
+        JLabel continuer = new JLabel("Continuer");
+        File f = new File("sauvegarde.ser");
+        continuer.setFont(new Font("Century Gothic", Font.PLAIN, 50));
+        continuer.setHorizontalAlignment(SwingConstants.CENTER);
+        continuer.setBounds((850 - continuer.getPreferredSize().width) / 2, 400, (10 + continuer.getPreferredSize().width), 60);
+        continuer.setOpaque(false);
+        if(f.exists() && !f.isDirectory()) {
+            continuer.setForeground(Color.WHITE);
+            continuer.addMouseListener(continuerPartie);
+        } else {
+            continuer.setForeground(Color.GRAY);
+        }
+
         JLabel texteFooter = new JLabel("Projet de programmation Orienté Objet de fin d'année - 2023/2024");
         texteFooter.setFont(texteFooter.getFont().deriveFont(10f));
         JPanel footerPanel = new JPanel();
@@ -221,6 +271,7 @@ public class MainPage extends JFrame {
         bgLabel.add(projet);
         bgLabel.add(launchButton);
         bgLabel.add(quitButton);
+        bgLabel.add(continuer);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -229,26 +280,7 @@ public class MainPage extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                // new MainPage();
-                File f = new File("sauvegarde.ser");
-                if (f.exists() && !f.isDirectory()) {
-                    try {
-                        FileInputStream fis = new FileInputStream("sauvegarde.ser");
-                        ObjectInputStream ois = new ObjectInputStream(fis);
-                        PlateauView plateau = (PlateauView) ois.readObject(); 
-                        plateau.setVisible(true);
-
-                        ois.close();
-                        fis.close();
-                    } catch (IOException ioe) {
-                        ioe.printStackTrace();
-                        return;
-                    } catch (ClassNotFoundException c) {
-                        System.out.println("Class not found");
-                        c.printStackTrace();
-                        return;
-                    }
-                }
+                new MainPage();
             }
         });
     }
