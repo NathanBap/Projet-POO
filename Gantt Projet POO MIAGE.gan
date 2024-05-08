@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Gantt Projet POO MIAGE" company="" webLink="http://" view-date="2024-02-26" view-index="0" gantt-divider-location="425" resource-divider-location="300" version="3.3.3303" locale="fr_FR">
+<?xml version="1.0" encoding="UTF-8"?><project name="Gantt Projet POO MIAGE" company="" webLink="http://" view-date="2024-03-25" view-index="0" gantt-divider-location="535" resource-divider-location="300" version="3.3.3303" locale="fr_FR">
     <description/>
     <view zooming-state="default:6" id="gantt-chart">
-        <field id="tpd3" name="Nom" width="221" order="0"/>
-        <field id="tpd4" name="Date de début" width="93" order="1"/>
-        <field id="tpd5" name="Date de fin" width="94" order="2"/>
+        <field id="tpd3" name="Nom" width="320" order="0"/>
+        <field id="tpd4" name="Date de début" width="117" order="1"/>
+        <field id="tpd5" name="Date de fin" width="96" order="2"/>
         <option id="filter.completedTasks" value="false"/>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
@@ -37,74 +37,89 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="0" uid="943e82403d674410abe77308ccf767ef" name="1 - Prise de connaissance du projet" color="#8cb6ce" meeting="false" start="2024-02-20" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="false">
+        <task id="0" uid="c8d90e47b018421ab29e467095d46842" name="1 - Prise de connaissance du projet" color="#8cb6ce" meeting="false" start="2024-02-20" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="false">
             <depend id="1" type="2" difference="0" hardness="Strong"/>
-            <task id="5" uid="8b5d1038edf4493e8395c269392c478d" name="Choix du projet" color="#8cb6ce" meeting="false" start="2024-02-12" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
-            <task id="6" uid="2cd5f664300f4150b0b0ea5aa361d416" name="Création du dépot GitHub" color="#8cb6ce" meeting="false" start="2024-02-12" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
+            <task id="5" uid="ed84d15e1d304a848fe2b2ee4b4cff4f" name="Choix du projet" color="#8cb6ce" meeting="false" start="2024-02-12" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
+            <task id="6" uid="5ec54665039f4e7d88d7bd7d06df753e" name="Création du dépot GitHub" color="#8cb6ce" meeting="false" start="2024-02-12" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
         </task>
-        <task id="1" uid="72c7290fefe74f87952486a39c6bcc3b" name="2 - Identification des Classes" color="#8cb6ce" meeting="false" start="2024-02-21" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="false">
+        <task id="1" uid="84d54ede08164a519b956e51523faf70" name="2 - Identification des Classes" color="#8cb6ce" meeting="false" start="2024-02-21" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="false">
             <depend id="14" type="2" difference="0" hardness="Rubber"/>
-            <task id="7" uid="2d150c469dbc44e491f057c8fa5c632f" name="Réalisation du diagramme des classes" color="#8cb6ce" meeting="false" start="2024-02-21" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
+            <task id="7" uid="97a36298d69948ba858aecadd1a17854" name="Réalisation du diagramme des classes" color="#8cb6ce" meeting="false" start="2024-02-21" duration="1" complete="0" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true"/>
         </task>
-        <task id="3" uid="b6a2a5a8161443ce9ad8f9cd2c9bcae4" name="Réalisation du diagramm de Gantt" color="#8cb6ce" meeting="false" start="2024-02-20" duration="1" complete="0" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
-            <depend id="14" type="2" difference="0" hardness="Rubber"/>
-        </task>
-        <task id="9" uid="5beb0e9193774529bf36a43b5dc2165c" name="Génération des classes à partir du diagramme" color="#8cb6ce" meeting="false" start="2024-02-19" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="true">
+        <task id="3" uid="acf02121f9404033897f799449d5f948" name="Réalisation du diagramm de Gantt" color="#8cb6ce" meeting="false" start="2024-02-20" duration="1" complete="0" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
             <depend id="14" type="2" difference="0" hardness="Rubber"/>
         </task>
-        <task id="4" uid="48316c516cd544088b491b0c2fbd7cb0" name="Milestone" color="#8cb6ce" meeting="true" start="2024-05-05" duration="0" complete="0" thirdDate="2024-05-05" thirdDate-constraint="1" expand="true"/>
-        <task id="8" uid="16490ae91a9e4358a36bbf74e4f8b530" name="Developpement" color="#8cb6ce" meeting="false" start="2024-02-20" duration="76" complete="77" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true">
-            <task id="12" uid="927e480f412a4c9898c2b46cecd80fe1" name="Controleur" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="70" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
-                <task id="30" uid="c26e5880b8e041729208c359f8ef8cb6" name="ControllerDragAndDrop" meeting="false" start="2024-04-23" duration="13" complete="0" expand="true"/>
-                <task id="27" uid="b44002ff55904b0fb30e872f04856f00" name="ButtonsControler" color="#8cb6ce" meeting="false" start="2024-03-19" duration="48" complete="60" thirdDate="2024-03-19" thirdDate-constraint="0" expand="true">
+        <task id="9" uid="762d9204d4eb426e897efbfac3db8e63" name="Génération des classes à partir du diagramme" color="#8cb6ce" meeting="false" start="2024-02-19" duration="1" complete="0" thirdDate="2024-02-19" thirdDate-constraint="1" expand="true">
+            <depend id="14" type="2" difference="0" hardness="Rubber"/>
+        </task>
+        <task id="4" uid="91fbd9001f504534b3123d3a709f2903" name="Milestone" color="#8cb6ce" meeting="true" start="2024-05-05" duration="0" complete="0" thirdDate="2024-05-05" thirdDate-constraint="1" expand="true"/>
+        <task id="8" uid="42673a7b9c344df6aa449c85ea0276a1" name="Developpement" color="#8cb6ce" meeting="false" start="2024-02-20" duration="93" complete="93" thirdDate="2024-02-12" thirdDate-constraint="1" expand="true">
+            <task id="31" uid="20b8836309ce4691a90e5003e2541a09" name="Sauvegarde de la partie" meeting="false" start="2024-05-07" duration="7" complete="30" expand="true"/>
+            <task id="12" uid="3783d69c0b354434a6f35c62152f01ba" name="Controleur" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="96" thirdDate="2024-02-20" thirdDate-constraint="1" expand="false">
+                <task id="30" uid="99a1306865614c1eae2566a7a11dcb91" name="ControllerDragAndDrop" color="#8cb6ce" meeting="false" start="2024-04-23" duration="13" complete="100" thirdDate="2024-04-23" thirdDate-constraint="0" expand="true"/>
+                <task id="27" uid="7b33beb08c2e446592a64757beb9ddaa" name="ButtonsControler" color="#8cb6ce" meeting="false" start="2024-03-19" duration="48" complete="90" thirdDate="2024-03-19" thirdDate-constraint="0" expand="true">
                     <notes><![CDATA[
+                        
                         Modifications apportées par Lyna sur BoutonControler
+                    
                     ]]></notes>
                 </task>
-                <task id="24" uid="6c2cd3f0290d45659203a6aa8f2bc699" name="LettreControler" meeting="false" start="2024-03-12" duration="35" complete="90" expand="true"/>
-                <task id="26" uid="ecaeb8561b8542f5901ef5d4e1944ad8" name="CaseConroller" color="#8cb6ce" meeting="false" start="2024-03-12" duration="25" complete="100" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true"/>
+                <task id="24" uid="bf1804ed2f6e46ba871547092236e90c" name="LettreControler" color="#8cb6ce" meeting="false" start="2024-03-12" duration="35" complete="100" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true"/>
+                <task id="26" uid="bbbe7c77ce5347418eab4679c68ed841" name="CaseController" color="#8cb6ce" meeting="false" start="2024-03-12" duration="25" complete="100" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true"/>
             </task>
-            <task id="11" uid="ddd0c94c38f646e4b512eb3095eb3003" name="Vue" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="63" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
-                <task id="29" uid="7ce00bac17874187a252d234205fbb15" name="Page d'accueil" meeting="false" start="2024-04-05" duration="31" complete="10" expand="true"/>
-                <task id="28" uid="fefb16d002114defbd7573f668a86b4f" name="Case" color="#8cb6ce" meeting="false" start="2024-03-12" duration="25" complete="100" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
+            <task id="11" uid="fdba9f188a2f424b8275ed5b18c2f97c" name="Vue" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="84" thirdDate="2024-02-20" thirdDate-constraint="1" expand="false">
+                <task id="29" uid="4203253d8e6745b282b6dda8fa380fee" name="Page d'accueil" color="#8cb6ce" meeting="false" start="2024-04-05" duration="31" complete="90" thirdDate="2024-04-05" thirdDate-constraint="0" expand="true"/>
+                <task id="28" uid="5ec0376daf574033a3a02edd3cc5083c" name="Case" color="#8cb6ce" meeting="false" start="2024-03-12" duration="25" complete="100" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
                     <notes><![CDATA[
+                        
                         Agencement des cases et de leur visuel
+                    
                     ]]></notes>
                 </task>
-                <task id="22" uid="d5fea74aa9df46ed93001e6b4baf8dc5" name="Lettres" color="#8cb6ce" meeting="false" start="2024-03-12" duration="35" complete="90" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
+                <task id="22" uid="90a812d17bb745a98f24c83dce68185f" name="Lettres" color="#8cb6ce" meeting="false" start="2024-03-12" duration="35" complete="90" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
                     <notes><![CDATA[
+                        
                         Modification de lettreView par Sekou
+                    
                     ]]></notes>
                 </task>
-                <task id="21" uid="0e2de711a66a431f8e23fe76b2522187" name="Plateau" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="60" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
+                <task id="21" uid="58775a1ee57f49429f90f0423250f0f0" name="Plateau" color="#8cb6ce" meeting="false" start="2024-03-12" duration="55" complete="70" thirdDate="2024-03-12" thirdDate-constraint="0" expand="true">
                     <notes><![CDATA[
+                        
                         Modification par l'ensemble du groupe de PlateauView pour l'ajout des lettres, l'action des boutons.
+                    
                     ]]></notes>
                 </task>
             </task>
-            <task id="10" uid="b94051971daf49b9bb8006bb312fe027" name="Model" color="#8cb6ce" meeting="false" start="2024-02-20" duration="60" complete="89" thirdDate="2024-02-20" thirdDate-constraint="1" expand="true">
-                <task id="16" uid="45c1fd02030e459fadd8a266ea860ac0" name="Classe Joueur" color="#8cb6ce" meeting="false" start="2024-02-10" duration="70" complete="80" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
-                <task id="19" uid="b5a5cdc6881c4831af464257426e560c" name="Classe Plateau" color="#8cb6ce" meeting="false" start="2024-02-10" duration="70" complete="75" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true">
+            <task id="10" uid="f930e1dbb81f4057be9a7f548607162c" name="Model" color="#8cb6ce" meeting="false" start="2024-02-20" duration="60" complete="100" thirdDate="2024-02-20" thirdDate-constraint="1" expand="false">
+                <task id="16" uid="58620217b4fa4508a2025621961dacb9" name="Classe Joueur" color="#8cb6ce" meeting="false" start="2024-02-10" duration="70" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
+                <task id="19" uid="2f774712ee7040d893a17d3beba229d6" name="Classe Plateau" color="#8cb6ce" meeting="false" start="2024-02-10" duration="70" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true">
                     <notes><![CDATA[
+                        
                         Modification du plateau par Nathan et Sekou
+                    
                     ]]></notes>
                 </task>
-                <task id="18" uid="2613c0c6dd47467196970de18dc27a80" name="Classe Lettre" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
-                <task id="17" uid="7e449b8ff8314b42b1ba804bd0d47338" name="Classe Sac" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
-                <task id="20" uid="6bbd3528995d4021bec259fff0fed11d" name="Classe Case" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true">
+                <task id="18" uid="f096e6095fcf4e8da405eb0ccdb8cced" name="Classe Lettre" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
+                <task id="17" uid="cacddeccb988455cb2aac361a85075f6" name="Classe Sac" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true"/>
+                <task id="20" uid="d036459c6868481ba9faf16acb89d475" name="Classe Case" color="#8cb6ce" meeting="false" start="2024-02-10" duration="55" complete="100" thirdDate="2024-02-10" thirdDate-constraint="1" expand="true">
                     <notes><![CDATA[
+                        
                         Modification des verifications par Nathan lors de la pose des lettres sur les Cases
+                    
                     ]]></notes>
                 </task>
-                <task id="23" uid="11118c2d064a4793b6ed15dfcee2d8a2" name="Classe Dico" color="#8cb6ce" meeting="false" start="2024-03-05" duration="1" complete="100" thirdDate="2024-03-05" thirdDate-constraint="0" expand="true">
+                <task id="23" uid="fc7c3190f65b46aa845c0d56ed26cb56" name="Classe Dico" color="#8cb6ce" meeting="false" start="2024-03-05" duration="1" complete="100" thirdDate="2024-03-05" thirdDate-constraint="0" expand="true">
                     <notes><![CDATA[
+                        
                         Ajout de la classe Dico où on recupère les mots du dictionnaire (fichier text) afin de vérifier avec les mots qui seront saisis par le joueur 
+                    
                     ]]></notes>
                 </task>
             </task>
-            <task id="15" uid="3f18b20a1a454feebc591d09b7becda2" name="Optimisation et correction du code" color="#8cb6ce" meeting="false" start="2024-04-26" duration="10" complete="0" thirdDate="2024-04-26" thirdDate-constraint="1" expand="true"/>
+            <task id="15" uid="472760c1e477412c9f30c6177f4bdf71" name="Optimisation et correction du code" color="#8cb6ce" meeting="false" start="2024-05-07" duration="16" complete="50" thirdDate="2024-04-26" thirdDate-constraint="0" expand="true"/>
         </task>
-        <task id="14" uid="da89e923b04f4a29b17a42aa056951f7" name="Préparation du passage à l'oral" color="#8cb6ce" meeting="false" start="2024-05-06" duration="15" complete="0" expand="true"/>
+        <task id="14" uid="7dd84985de8b46bfa3991cf737aab883" name="Préparation du passage à l'oral" color="#8cb6ce" meeting="false" start="2024-05-06" duration="15" complete="10" thirdDate="2024-05-06" thirdDate-constraint="0" expand="false"/>
     </tasks>
     <resources>
         <resource id="0" name="Groupe Complet" function="Default:0" contacts="" phone=""/>
@@ -122,21 +137,19 @@
         <allocation task-id="12" resource-id="1" function="Default:0" responsible="true" load="70.0"/>
         <allocation task-id="24" resource-id="1" function="Default:0" responsible="true" load="80.0"/>
         <allocation task-id="15" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
-        <allocation task-id="14" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
-        <allocation task-id="21" resource-id="1" function="Default:0" responsible="false" load="20.0"/>
+        <allocation task-id="21" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="26" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="31" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="16" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="28" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="22" resource-id="2" function="Default:0" responsible="true" load="80.0"/>
-        <allocation task-id="21" resource-id="2" function="Default:0" responsible="false" load="20.0"/>
-        <allocation task-id="15" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
-        <allocation task-id="14" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="21" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="15" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="18" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="12" resource-id="3" function="Default:0" responsible="true" load="30.0"/>
         <allocation task-id="24" resource-id="3" function="Default:0" responsible="false" load="20.0"/>
-        <allocation task-id="15" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
-        <allocation task-id="14" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="15" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="20" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
     </allocations>
     <vacations/>
