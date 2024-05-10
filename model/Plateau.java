@@ -1,4 +1,5 @@
 package model;
+import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
@@ -87,13 +88,18 @@ public class Plateau implements Serializable {
     }
 
     // 2 joueurs minimum 4 maximum
-    public void initJoueurs() {
+    public void initJoueursTest() {
         // TMP : Création de 2 joueurs
         Joueur joueur1 = new Joueur("Joueur 1", this);
         Joueur joueur2 = new Joueur("Joueur 2", this);
 
         joueurs.add(joueur1);
         joueurs.add(joueur2);
+    }
+    public void initJoueurs(List<String> noms) {
+        for (String nom : noms) {
+            joueurs.add(new Joueur(nom, this));
+        }
     }
 
     public Joueur getJoueurActuel() {
@@ -364,6 +370,10 @@ public class Plateau implements Serializable {
             if (joueurActuel.getListeLettre().size() == 0) {
                 joueurActuel.addScore(pointsRestants);
             }
+        }
+        File f = new File("sauvegarde.ser");
+        if(f.exists() && !f.isDirectory()) {
+            f.delete();
         }
     }
 }

@@ -2,25 +2,22 @@ package view;
 
 import model.*;
 
-import javax.swing.*;
-
 import controler.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.awt.datatransfer.*;
 import java.util.*;
 import java.util.List;
-import java.awt.dnd.*;
-import javax.swing.Timer;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.swing.border.Border;
+
 
 public class PlateauView extends JFrame implements Serializable {
     private Plateau plateau;
@@ -33,35 +30,15 @@ public class PlateauView extends JFrame implements Serializable {
     private JPanel footerPanel;
     private JLabel scoreLabel;
     private JPanel mainPanel;
+    private JLabel sacLabel;
     
     public PlateauView() {
-        //File f = new File("sauvegarde.ser");
-        // if (f.exists() && !f.isDirectory()) {
-        //     try {
-        //         FileInputStream fis = new FileInputStream("sauvegarde.ser");
-        //         ObjectInputStream ois = new ObjectInputStream(fis);
-        //         PlateauView plateau = (PlateauView) ois.readObject(); 
-
-                
-        //         ois.close();
-        //         fis.close();
-        //     } catch (IOException ioe) {
-        //         ioe.printStackTrace();
-        //         return;
-        //     } catch (ClassNotFoundException c) {
-        //         System.out.println("Class not found");
-        //         c.printStackTrace();
-        //         return;
-        //     }
-        // } else {
             initGame();
             this.joueur = plateau.getJoueurActuel();
             initComponents();
             pack(); // Ajuste automatiquement la taille
             setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
             setVisible(true);
-        //}
-
     }
 
     public Plateau getPlateau() {
@@ -71,8 +48,38 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        plateau.initJoueurs();
+        //initJoueurs();
+        plateau.initJoueursTest();
         plateau.debutDuJeu();
+    }
+
+    private void initJoueurs() {
+        String title = "Bienvenue dans le jeu du Scrabble !";
+        String msg = "Pour commencer, veuillez choisir le nombre des joueurs :";
+        Integer[] options = {2, 3, 4};
+        Integer n = (Integer)JOptionPane.showInputDialog(this, msg, title, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+        if (n == null) {
+            System.exit(0);
+        }
+        List<String> noms = new ArrayList<>();
+        for (int i=1; i<=n; i++) {
+            String nom = JOptionPane.showInputDialog(this, "Nom du joueur " + (i) + " :");
+            if (nom == null) {
+                System.exit(0);
+            }
+            noms.add(nom);
+        }
+
+        msg = "Les joueurs sont : ";
+        for (String nom : noms) {
+            msg += "\n- " + nom;
+        }
+        int choice = JOptionPane.showConfirmDialog(this, msg, "Êtes vous sur ?", JOptionPane.OK_CANCEL_OPTION);
+        if (choice == JOptionPane.CANCEL_OPTION) {
+            initJoueurs();
+        } else {
+            plateau.initJoueurs(noms);
+        }
     }
 
     public void initComponents() {
@@ -124,6 +131,27 @@ public class PlateauView extends JFrame implements Serializable {
         int score = joueur.getScore();
         scoreLabel = new JLabel(String.valueOf(score));
 
+        try {
+            URL url = getClass().getResource("/ressources/sac_image.png");
+            Image image = ImageIO.read(url);
+
+            // Redimensionner l'image
+            Image scaledImage = image.getScaledInstance(50, 60, Image.SCALE_SMOOTH);
+            ImageIcon sacIcon = new ImageIcon(scaledImage);
+
+            // Créer le JLabel avec l'image et le texte
+            sacLabel = new JLabel(String.valueOf(plateau.getSac().getNbrLettres()), sacIcon, JLabel.CENTER);
+
+            // Positionner le texte sous l'image
+            sacLabel.setVerticalTextPosition(JLabel.CENTER);
+            sacLabel.setHorizontalTextPosition(JLabel.CENTER);
+
+            // Ajouter le JLabel au panel
+            footerPanel.add(sacLabel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        footerPanel.add(new JLabel("        "));
         footerPanel.add(valider);
         footerPanel.add(annuler);
         footerPanel.add(annulerTout);
@@ -147,6 +175,10 @@ public class PlateauView extends JFrame implements Serializable {
     public void editScore() {
         scoreLabel.setText(String.valueOf(joueur.getScore()));
         scoreLabel.revalidate();
+    }
+    public void refreshSac() {
+        sacLabel.setText(String.valueOf(plateau.getSac().getNbrLettres()));
+        sacLabel.revalidate();
     }
 
     public void removeAllLetters() {
@@ -393,6 +425,8 @@ public class PlateauView extends JFrame implements Serializable {
                 listeLettres.add(lettre);
             }
         }
+        sacLabel.setText(String.valueOf(plateau.getSac().getNbrLettres()));
+        sacLabel.revalidate();
         revalidate();
     }
 

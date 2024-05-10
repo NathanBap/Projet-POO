@@ -41,40 +41,6 @@ public class Joueur implements Serializable {
         this.score += score;
     }
 
-    // Marque le début du tour du joueur
-    public void startTour() {
-        String choix = "";  // Le choix est déterminé en cliquant sur un bouton pour choisir l'action de son tour
-
-        // Remplacer par l'affichage graphique et les boutons //
-        System.out.println("Voici votre main : \n");
-        this.afficherMain();
-        System.out.println("Quelle action voulez-vous effectuer ? \n 1 : Jouer \n 2 : Passer \n 3 : Echanger des lettres \n");
-        //
-
-        if (choix == "1") {
-            this.jouer();
-        } else if (choix == "2") {
-            this.passer();
-        } else {
-            this.echangerLettre();
-        }
-    }
-
-    // Choix 1
-    public boolean jouer() {
-        return true;
-        
-    }
-    // Choix 2
-    public void passer() {
-
-    }
-    // Choix 3
-    public void echangerLettre() {
-
-    }
-
-
     public void prendreLettre(Lettre l) {
         this.listeLettre.add(l);  
     }

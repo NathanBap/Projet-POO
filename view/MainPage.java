@@ -245,11 +245,12 @@ public class MainPage extends JFrame {
         
         // si on veut ajouter un bouton pour continuer une partie sauvegardée
         JLabel continuer = new JLabel("Continuer");
-        File f = new File("sauvegarde.ser");
         continuer.setFont(new Font("Century Gothic", Font.PLAIN, 50));
         continuer.setHorizontalAlignment(SwingConstants.CENTER);
         continuer.setBounds((850 - continuer.getPreferredSize().width) / 2, 400, (10 + continuer.getPreferredSize().width), 60);
         continuer.setOpaque(false);
+        
+        File f = new File("sauvegarde.ser");
         if(f.exists() && !f.isDirectory()) {
             continuer.setForeground(Color.WHITE);
             continuer.addMouseListener(continuerPartie);
