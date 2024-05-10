@@ -1,5 +1,8 @@
 package model;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
 
@@ -361,6 +364,8 @@ public class Plateau implements Serializable {
     }
 
     public void finPartie() {
+        Map<String, Integer> joueurScores = new LinkedHashMap<String, Integer>();
+
         for (Joueur joueur : joueurs) {
             int pointsRestants = 0;
             for (Lettre l : joueur.getListeLettre()) {
@@ -371,9 +376,20 @@ public class Plateau implements Serializable {
                 joueurActuel.addScore(pointsRestants);
             }
         }
-        File f = new File("sauvegarde.ser");
-        if(f.exists() && !f.isDirectory()) {
-            f.delete();
+        Collections.sort(joueurs);
+
+        for (Joueur j : joueurs) {
+            joueurScores.put(j.getNom(), j.getScore());
+        }
+
+        try {
+            FileOutputStream fos = new FileOutputStream("leaderboard.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(joueurScores);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
     }
 }

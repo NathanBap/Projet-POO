@@ -2,12 +2,15 @@ package view;
 
 import javax.swing.*;
 import controler.Main;
+import model.Joueur;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.*;
 
 public class MainPage extends JFrame {
 
@@ -264,6 +267,80 @@ public class MainPage extends JFrame {
         footerPanel.setBackground(Color.WHITE);
         footerPanel.add(texteFooter);
         add(footerPanel, BorderLayout.SOUTH);
+
+         
+        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
+        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
+
+        InputMap inputMap = ((JPanel)this.getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = ((JPanel)this.getContentPane()).getActionMap();
+
+        JDialog dialog = new JDialog(this, "Tableau des records"); 
+        dialog.setLayout(new GridBagLayout()); 
+
+        JPanel leaderboard = new JPanel();
+        leaderboard.setLayout(new BoxLayout(leaderboard, BoxLayout.Y_AXIS));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER; // Center the panel
+        dialog.add(leaderboard, gbc); // Add the panel with the constraints
+
+        dialog.setSize(300, 200);
+        dialog.setLocationRelativeTo(null);
+
+        // Map the key stroke to an action name
+        inputMap.put(pressM, "showDialog");
+
+        File leaderBoardFile = new File("leaderboard.ser");
+        Map<String, Integer> leaderBoardMap;
+        if(leaderBoardFile.exists()) {
+            try {
+                FileInputStream fis = new FileInputStream("leaderboard.ser");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                leaderBoardMap = (Map<String,Integer>) ois.readObject(); 
+
+                ois.close();
+                fis.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+                return;
+            } catch (ClassNotFoundException c) {
+                System.out.println("Class not found");
+                c.printStackTrace();
+                return;
+            }
+        } else {
+            leaderBoardMap = new HashMap<String,Integer>();
+            leaderBoardMap.put("Aucune partie", 0);
+        }
+
+
+        // Map the action name to an action
+        actionMap.put("showDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is pressed
+                leaderboard.removeAll();
+                for (String joueur : leaderBoardMap.keySet()) {
+                    leaderboard.add(new JLabel(joueur + " : " + leaderBoardMap.get(joueur)));
+                }
+                
+                dialog.setVisible(true);
+                dialog.requestFocus();
+            }
+        });
+
+        InputMap inputMap2 = leaderboard.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(releaseM, "hideDialog");
+        ActionMap actionMap2 = leaderboard.getActionMap();
+
+        actionMap2.put("hideDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is released
+                dialog.setVisible(false);
+            }
+        });
 
         add(bgLabel);
         bgLabel.add(welcomeLabel);

@@ -2,7 +2,7 @@ package model;
 import java.io.Serializable;
 import java.util.*;
 
-public class Joueur implements Serializable {
+public class Joueur implements Serializable, Comparable<Joueur> {
 
 // Attributs
     private int score = 0;
@@ -12,7 +12,12 @@ public class Joueur implements Serializable {
     private int tailleMain;
     private Plateau plateau;
     
-//Constructeur
+    @Override
+    public int compareTo(Joueur j) {
+        return j.score - this.score;
+    }   
+
+    //Constructeur
     public Joueur(String name, Plateau plateau) {
         this.nom = name;
         this.plateau = plateau;

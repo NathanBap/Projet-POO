@@ -6,10 +6,11 @@ import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class Main extends MouseAdapter {
+public class Main extends MouseAdapter implements Serializable {
     
     // public void launchOtherJavaFile() {
     //     // Code pour lancer la vue du plateau

@@ -104,11 +104,9 @@ public class ButtonsControler implements ActionListener, Serializable {
         } else if (action.equals("Sauvegarder et quitter")) {
             // echapDialog.setVisible(false);
             try {
-                int id = System.identityHashCode(plateauView);
-                System.out.println("Sauvegarde de " + id);
                 FileOutputStream fos = new FileOutputStream("sauvegarde.ser");
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                oos.writeObject(plateauView); // Replace with your object
+                oos.writeObject(plateauView); 
                 oos.close();
                 fos.close();
                 System.exit(0);

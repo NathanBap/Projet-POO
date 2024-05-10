@@ -7,7 +7,9 @@ import controler.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.awt.datatransfer.*;
@@ -33,12 +35,16 @@ public class PlateauView extends JFrame implements Serializable {
     private JLabel sacLabel;
     
     public PlateauView() {
-            initGame();
-            this.joueur = plateau.getJoueurActuel();
-            initComponents();
-            pack(); // Ajuste automatiquement la taille
-            setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
-            setVisible(true);
+        File f = new File("sauvegarde.ser");
+        if(f.exists() && !f.isDirectory()) {
+            f.delete();
+        }
+        initGame();
+        this.joueur = plateau.getJoueurActuel();
+        initComponents();
+        pack(); // Ajuste automatiquement la taille
+        setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
+        setVisible(true);
     }
 
     public Plateau getPlateau() {
@@ -48,8 +54,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        //initJoueurs();
-        plateau.initJoueursTest();
+        initJoueurs();
+        //plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -83,7 +89,24 @@ public class PlateauView extends JFrame implements Serializable {
     }
 
     public void initComponents() {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int choice = JOptionPane.showConfirmDialog(PlateauView.this,"Voulez-vous sauvegarder la partie ? ", "Sauvegarder ? ", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    try {
+                        FileOutputStream fos = new FileOutputStream("sauvegarde.ser");
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(PlateauView.this);
+                        oos.close();
+                        fos.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                } 
+                System.exit(0);
+            }
+        });        
         setTitle("Scrabble POO");
         
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
@@ -337,7 +360,7 @@ public class PlateauView extends JFrame implements Serializable {
             public void actionPerformed(ActionEvent e) {
                 // Perform the action when ESCAPE is pressed
                 System.out.println("Pause");
-                JDialog echapDialog = new JDialog(); // Create the dialog
+                JDialog echapDialog = new JDialog(PlateauView.this, "Menu"); // Create the dialog
 
                 JButton reprendre = new JButton("Reprendre");
                 JButton quitter = new JButton("Sauvegarder et quitter");
@@ -347,9 +370,9 @@ public class PlateauView extends JFrame implements Serializable {
                 echapDialog.add(quitter);
 
                 echapDialog.getContentPane().setLayout(new GridLayout(4, 1));
-                echapDialog.setLocationRelativeTo(null);
                 echapDialog.setSize(300, 300);
-                echapDialog.setVisible(true); // Show the dialog
+                echapDialog.setLocationRelativeTo(null);
+                echapDialog.setVisible(true); 
 
                 reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
                 quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
@@ -357,8 +380,8 @@ public class PlateauView extends JFrame implements Serializable {
             }
         });
 
-        JDialog dialog = new JDialog(); // Create the dialog
-        dialog.setLayout(new GridBagLayout()); // Set the layout to GridBagLayout
+        JDialog dialog = new JDialog(); 
+        dialog.setLayout(new GridBagLayout()); 
 
         JPanel gameState = new JPanel();
         gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
