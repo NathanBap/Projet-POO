@@ -16,7 +16,7 @@ public class ButtonsControler implements ActionListener, Serializable {
     private String action;
     private Plateau plateau;
     private PlateauView plateauView;
-    private static float passerCount = 0;
+    public static float passerCount = 0;
 
     public ButtonsControler(JButton button, PlateauView plateauView) {
         this.button = button;

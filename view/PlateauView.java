@@ -29,6 +29,7 @@ public class PlateauView extends JFrame implements Serializable {
     private JPanel listeLettres;
     private JButton passer;
     private JButton echanger;
+    private JButton aide;
     private JPanel footerPanel;
     private JLabel scoreLabel;
     private JPanel mainPanel;
@@ -45,6 +46,7 @@ public class PlateauView extends JFrame implements Serializable {
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
         setVisible(true);
+        showPlayer();
     }
 
     public Plateau getPlateau() {
@@ -54,8 +56,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        initJoueurs();
-        //plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
+        //initJoueurs();
+        plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -86,6 +88,13 @@ public class PlateauView extends JFrame implements Serializable {
         } else {
             plateau.initJoueurs(noms);
         }
+
+        aide = new JButton("Aide");
+        msg = "Voulez-vous jouer avec une aide ?";
+        choice = JOptionPane.showConfirmDialog(this, msg, "Aide", JOptionPane.YES_NO_OPTION);
+        if (choice == JOptionPane.NO_OPTION) {
+            aide.setEnabled(false);
+        } 
     }
 
     public void initComponents() {
@@ -133,11 +142,9 @@ public class PlateauView extends JFrame implements Serializable {
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
-        // A FAIRE : Créer une méthode create button, qui l'ajoute au panel et ajoute un action listener
         JButton valider = new JButton("Valider");
         JButton annuler = new JButton("Annuler");
         JButton annulerTout = new JButton("Annuler tout");
-        JButton aide = new JButton("Aide");
         // Attributs de classe
         passer = new JButton("Passer");
         echanger = new JButton("Echanger");
@@ -238,11 +245,18 @@ public class PlateauView extends JFrame implements Serializable {
             }
         }
         listeLettres.revalidate();
-        String msg = "Cliquer sur \"OK\" quand le joueur suivant est prêt";
-        JOptionPane.showMessageDialog(this, msg, "Joueur suivant", JOptionPane.INFORMATION_MESSAGE);
+
+        String msg = "<html>Cliquer sur \"OK\" quand <b>" + joueur.getNom() + "</b> est prêt</html>";
+        JOptionPane.showMessageDialog(this, msg, "Au tour de " + joueur.getNom(), JOptionPane.INFORMATION_MESSAGE);
+
         remplirMain();
         enableButtons();
         editScore();
+    }
+
+    public void showPlayer() {
+        String msg = "<html>C'est au tour de : <b>" + joueur.getNom() + "</b></html>";
+        JOptionPane.showMessageDialog(this, msg, "Début de la partie", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void removeLastLetter() {
@@ -355,13 +369,12 @@ public class PlateauView extends JFrame implements Serializable {
             }
         });
 
+        JDialog echapDialog = new JDialog(PlateauView.this, "Menu");
+        JPanel pan = (JPanel)echapDialog.getContentPane();
         actionMap.put("pause", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Perform the action when ESCAPE is pressed
-                System.out.println("Pause");
-                JDialog echapDialog = new JDialog(PlateauView.this, "Menu"); // Create the dialog
-
+                pan.removeAll();
                 JButton reprendre = new JButton("Reprendre");
                 JButton quitter = new JButton("Sauvegarder et quitter");
 
@@ -369,7 +382,7 @@ public class PlateauView extends JFrame implements Serializable {
                 echapDialog.add(reprendre);
                 echapDialog.add(quitter);
 
-                echapDialog.getContentPane().setLayout(new GridLayout(4, 1));
+                pan.setLayout(new GridLayout(4, 1));
                 echapDialog.setSize(300, 300);
                 echapDialog.setLocationRelativeTo(null);
                 echapDialog.setVisible(true); 
@@ -377,6 +390,15 @@ public class PlateauView extends JFrame implements Serializable {
                 reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
                 quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
         
+            }
+        });
+        InputMap inputMap2 = pan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(echap, "unPause");
+        ActionMap actionMap2 = pan.getActionMap();
+        actionMap2.put("unPause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                echapDialog.dispose();
             }
         });
 
@@ -414,9 +436,9 @@ public class PlateauView extends JFrame implements Serializable {
             }
         });
 
-        InputMap inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         inputMap2.put(releaseM, "hideDialog");
-        ActionMap actionMap2 = gameState.getActionMap();
+        actionMap2 = gameState.getActionMap();
 
         actionMap2.put("hideDialog", new AbstractAction() {
             @Override
@@ -487,12 +509,31 @@ public class PlateauView extends JFrame implements Serializable {
             dispose();
         } else {
             System.out.println("Nouvelle partie");
+            ButtonsControler.passerCount = 0;
             dispose();
             new PlateauView();
         }
     }
 
     public void resetControlers() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                int choice = JOptionPane.showConfirmDialog(PlateauView.this,"Voulez-vous sauvegarder la partie ? ", "Sauvegarder ? ", JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    try {
+                        FileOutputStream fos = new FileOutputStream("sauvegarde.ser");
+                        ObjectOutputStream oos = new ObjectOutputStream(fos);
+                        oos.writeObject(PlateauView.this);
+                        oos.close();
+                        fos.close();
+                    } catch (IOException ioe) {
+                        ioe.printStackTrace();
+                    }
+                } 
+                System.exit(0);
+            }
+        });   
+
         for (CaseView c : allCases) {
             c.removeMouseListener(c.getMouseListeners()[0]);
             c.addMouseListener(new CaseControler(c, this));
@@ -502,6 +543,7 @@ public class PlateauView extends JFrame implements Serializable {
             lettre.removeMouseListener(lettre.getMouseListeners()[0]);
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
         }
+        keyboardShortcuts(mainPanel);
     }
 
     public static void main(String[] args) {

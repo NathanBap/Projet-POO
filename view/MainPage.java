@@ -90,6 +90,7 @@ public class MainPage extends JFrame {
                     PlateauView plateau = (PlateauView) ois.readObject(); 
                     plateau.resetControlers();
                     plateau.setVisible(true);
+                    plateau.showPlayer();
                     dispose();
                     plateau.requestFocus();
 
@@ -269,8 +270,7 @@ public class MainPage extends JFrame {
         add(footerPanel, BorderLayout.SOUTH);
 
          
-        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
-        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
+        KeyStroke pressM = KeyStroke.getKeyStroke('m');
 
         InputMap inputMap = ((JPanel)this.getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = ((JPanel)this.getContentPane()).getActionMap();
@@ -285,7 +285,7 @@ public class MainPage extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER; // Center the panel
         dialog.add(leaderboard, gbc); // Add the panel with the constraints
 
-        dialog.setSize(300, 200);
+        dialog.setMinimumSize(new Dimension(300, 200));
         dialog.setLocationRelativeTo(null);
 
         // Map the key stroke to an action name
@@ -324,14 +324,14 @@ public class MainPage extends JFrame {
                 for (String joueur : leaderBoardMap.keySet()) {
                     leaderboard.add(new JLabel(joueur + " : " + leaderBoardMap.get(joueur)));
                 }
-                
+                dialog.pack();
                 dialog.setVisible(true);
                 dialog.requestFocus();
             }
         });
 
         InputMap inputMap2 = leaderboard.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap2.put(releaseM, "hideDialog");
+        inputMap2.put(pressM, "hideDialog");
         ActionMap actionMap2 = leaderboard.getActionMap();
 
         actionMap2.put("hideDialog", new AbstractAction() {

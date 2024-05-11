@@ -1,7 +1,9 @@
 package model;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.*;
@@ -376,13 +378,36 @@ public class Plateau implements Serializable {
                 joueurActuel.addScore(pointsRestants);
             }
         }
-        Collections.sort(joueurs);
-
-        for (Joueur j : joueurs) {
-            joueurScores.put(j.getNom(), j.getScore());
-        }
+        List<Joueur> joueursCopy = new ArrayList<Joueur>(joueurs);
 
         try {
+            File leaderBoardFile = new File("leaderboard.ser");
+            if (leaderBoardFile.exists()) {
+                FileInputStream fis = new FileInputStream("leaderboard.ser");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                Map<String, Integer> leaderBoardMap = (Map<String,Integer>)ois.readObject(); 
+                for (String s : leaderBoardMap.keySet()) {
+                    Joueur tmp = new Joueur(s, this);
+                    tmp.addScore(leaderBoardMap.get(s));
+                    joueursCopy.add(tmp);
+                }
+                Collections.sort(joueursCopy);
+                for (Joueur j : joueursCopy) {
+                    String nom = j.getNom();
+                    while (joueurScores.containsKey(nom)) {
+                        nom += '\u200B';
+                    }
+                    joueurScores.put(nom, j.getScore());
+                }
+                ois.close();
+                fis.close();
+                
+            } else {
+                Collections.sort(joueurs);
+                for (Joueur j : joueurs) {
+                    joueurScores.put(j.getNom(), j.getScore());
+                }
+            }
             FileOutputStream fos = new FileOutputStream("leaderboard.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(joueurScores);
@@ -390,6 +415,11 @@ public class Plateau implements Serializable {
             fos.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return;
         }
     }
 }
