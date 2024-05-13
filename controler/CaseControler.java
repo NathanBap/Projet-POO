@@ -88,6 +88,5 @@ public class CaseControler extends MouseAdapter implements Serializable{
         casee.setLettrePosee(lettreViewPlaced);
         plateauView.lettreClicked = null;
         casee.revalidate();
-        casee.repaint();
     }
 }

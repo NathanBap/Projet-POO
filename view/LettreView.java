@@ -45,8 +45,13 @@ public class LettreView extends JPanel implements Serializable {
     public Lettre getPiece() {
         return piece;
     }
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
+    public void setSelected() {
+        this.isSelected = !this.isSelected;
+        if (this.isSelected) {
+            setBorder(null);
+        } else {
+            setBorder(BorderFactory.createRaisedBevelBorder());
+        }
     }
     public boolean isSelected() {
         return isSelected;

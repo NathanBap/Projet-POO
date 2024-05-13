@@ -159,7 +159,7 @@ public class PlateauView extends JFrame implements Serializable {
         }
 
         int score = joueur.getScore();
-        scoreLabel = new JLabel(String.valueOf(score));
+        scoreLabel = new JLabel(joueur.getNom() + " : " + String.valueOf(score) + " points");
 
         try {
             URL url = getClass().getResource("/ressources/sac_image.png");
@@ -203,7 +203,7 @@ public class PlateauView extends JFrame implements Serializable {
     }
 
     public void editScore() {
-        scoreLabel.setText(String.valueOf(joueur.getScore()));
+        scoreLabel.setText(joueur.getNom() + " : " + String.valueOf(joueur.getScore()) + " points");
         scoreLabel.revalidate();
     }
     public void refreshSac() {
@@ -302,7 +302,13 @@ public class PlateauView extends JFrame implements Serializable {
             if (c instanceof LettreView) {
                 LettreView lettre = (LettreView) c;
                 LettreView lettreCopy = new LettreView(lettre.getPiece());
-                lettreCopy.addMouseListener(new LettreControler(lettreCopy, this, copiedListeLettres));
+                // lettreCopy.addMouseListener(new LettreControler(lettreCopy, this, copiedListeLettres));
+                lettreCopy.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        lettreCopy.setSelected();
+                    }
+                });
                 copiedListeLettres.add(lettreCopy);
             }
         }
@@ -404,6 +410,8 @@ public class PlateauView extends JFrame implements Serializable {
 
         JDialog dialog = new JDialog(); 
         dialog.setLayout(new GridBagLayout()); 
+        dialog.setSize(300, 200);
+        dialog.setTitle("Score des joueurs");
 
         JPanel gameState = new JPanel();
         gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
@@ -412,7 +420,6 @@ public class PlateauView extends JFrame implements Serializable {
         gbc.anchor = GridBagConstraints.CENTER; // Center the panel
         dialog.add(gameState, gbc); // Add the panel with the constraints
 
-        dialog.setSize(300, 200);
         dialog.setLocationRelativeTo(null);
 
         // Define the key stroke

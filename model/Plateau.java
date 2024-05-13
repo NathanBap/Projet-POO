@@ -287,6 +287,9 @@ public class Plateau implements Serializable {
         }
         int score = count * motDouble * motTriple;
         System.out.println("Score du mot : " + mot + " -> " + score);
+        while (motsPoints.containsKey(mot)) {
+            mot += '\u200B';
+        }
         motsPoints.put(mot, score);
         return score;
     }
