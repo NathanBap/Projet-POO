@@ -26,9 +26,6 @@ public class Dico extends ArrayList<String> implements Serializable{
         } catch (IOException e) {
             System.err.println("Erreur lors de la lecture du fichier : " + e.getMessage());
         }
-        // for (int i = 0; i < 20; i++) {
-        // System.out.println(dictionnaire.get(i));
-        // }
     }
 
     // vérifier si un mot est valide

@@ -1,11 +1,6 @@
 package model;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+
+import java.io.*;
 import java.util.*;
 
 
@@ -17,7 +12,6 @@ public class Plateau implements Serializable {
     private boolean premierTour = true;
     private Dico dico = new Dico();
 
-    // Attributs de Scrabble
     private List<Joueur> joueurs = new ArrayList<Joueur>();
     private int joueurActuelIndex;
     private Sac sac;
@@ -59,7 +53,7 @@ public class Plateau implements Serializable {
         return this.pendingCases;
     }
 
-    public void initPlateau() {  // A modifier pour les cases avec des bonus
+    public void initPlateau() {
         List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116, 122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
         List<Integer> LT = new ArrayList<Integer>(Arrays.asList(20, 24, 76, 80, 84, 88, 136, 140, 144, 148, 200, 204));
         List<Integer> MD = new ArrayList<Integer>(Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
@@ -116,7 +110,6 @@ public class Plateau implements Serializable {
         joueurActuel = joueurs.get(joueurActuelIndex);
     }
     
-    // Pour déterminer quel joueur commence
     public int tirageAuSort(List<Joueur> joueurs) {
         Random rand = new Random();
         return rand.nextInt(joueurs.size());
@@ -288,7 +281,7 @@ public class Plateau implements Serializable {
         int score = count * motDouble * motTriple;
         System.out.println("Score du mot : " + mot + " -> " + score);
         while (motsPoints.containsKey(mot)) {
-            mot += '\u200B';
+            mot += '\u200B';  // Caractère invisible pour éviter les doublons
         }
         motsPoints.put(mot, score);
         return score;

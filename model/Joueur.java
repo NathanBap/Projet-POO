@@ -1,4 +1,5 @@
 package model;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -9,9 +10,9 @@ public class Joueur implements Serializable, Comparable<Joueur> {
     private String nom;
     private Sac sac;
     private List<Lettre> listeLettre = new ArrayList<Lettre>();
-    private int tailleMain;
     private Plateau plateau;
-    
+  
+    // Pour trier les joueurs par score décroissant
     @Override
     public int compareTo(Joueur j) {
         return j.score - this.score;
@@ -40,7 +41,6 @@ public class Joueur implements Serializable, Comparable<Joueur> {
         for (int i = 0; i < 7; i++) {
             this.listeLettre.add(sac.piocher());
         }
-        tailleMain = 7;
     }
     public void addScore(int score) {
         this.score += score;
@@ -50,7 +50,7 @@ public class Joueur implements Serializable, Comparable<Joueur> {
         this.listeLettre.add(l);  
     }
     public void deposerLettre(Lettre l) {
-        System.out.println("remove : " + listeLettre.remove(l));
+        listeLettre.remove(l);
     }
 
     public void afficherMain() {

@@ -1,15 +1,11 @@
 package view;
 
-import javax.swing.*;
 import controler.Main;
-import model.Joueur;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.*;
 
 public class MainPage extends JFrame {
@@ -269,7 +265,6 @@ public class MainPage extends JFrame {
         footerPanel.add(texteFooter);
         add(footerPanel, BorderLayout.SOUTH);
 
-         
         KeyStroke pressM = KeyStroke.getKeyStroke('m');
 
         InputMap inputMap = ((JPanel)this.getContentPane()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -311,9 +306,7 @@ public class MainPage extends JFrame {
             }
         } else {
             leaderBoardMap = new HashMap<String,Integer>();
-            leaderBoardMap.put("Aucune partie", 0);
         }
-
 
         // Map the action name to an action
         actionMap.put("showDialog", new AbstractAction() {
@@ -331,8 +324,9 @@ public class MainPage extends JFrame {
         });
 
         InputMap inputMap2 = leaderboard.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap2.put(pressM, "hideDialog");
         ActionMap actionMap2 = leaderboard.getActionMap();
+
+        inputMap2.put(pressM, "hideDialog");
 
         actionMap2.put("hideDialog", new AbstractAction() {
             @Override

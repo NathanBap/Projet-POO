@@ -30,11 +30,15 @@ public class PlateauView extends JFrame implements Serializable {
     private JButton passer;
     private JButton echanger;
     private JButton aide;
+    private JButton valider;
+    private JButton annuler;
+    private JButton annulerTout;
     private JPanel footerPanel;
     private JLabel scoreLabel;
     private JPanel mainPanel;
     private JLabel sacLabel;
     
+    // --- Initialisation de la fenêtre --- //
     public PlateauView() {
         File f = new File("sauvegarde.ser");
         if(f.exists() && !f.isDirectory()) {
@@ -142,12 +146,15 @@ public class PlateauView extends JFrame implements Serializable {
         // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
-        JButton valider = new JButton("Valider");
-        JButton annuler = new JButton("Annuler");
-        JButton annulerTout = new JButton("Annuler tout");
         // Attributs de classe
+        valider = new JButton("Valider");
+        annuler = new JButton("Annuler");
+        annulerTout = new JButton("Annuler tout");
         passer = new JButton("Passer");
         echanger = new JButton("Echanger");
+
+        annuler.setEnabled(false);
+        annulerTout.setEnabled(false);
         
         listeLettres = new JPanel();
 
@@ -199,9 +206,11 @@ public class PlateauView extends JFrame implements Serializable {
         passer.addActionListener(new ButtonsControler(passer, this));
 
         keyboardShortcuts(mainPanel);
-        
     }
 
+    // Fin -- Initialisation de la fenêtre -- //
+
+    // --- Actualisation de la vue --- //
     public void editScore() {
         scoreLabel.setText(joueur.getNom() + " : " + String.valueOf(joueur.getScore()) + " points");
         scoreLabel.revalidate();
@@ -211,54 +220,7 @@ public class PlateauView extends JFrame implements Serializable {
         sacLabel.revalidate();
     }
 
-    public void removeAllLetters() {
-        if (plateau.arePendingCases()) {
-            for (CaseView c : this.allCases) {
-                List<Case> pendingCases = plateau.getPendingCases();
-                if (pendingCases.contains(c.getCase())) {
-                    LettreView lettrePosee = c.getLettrePosee();
-                    if (lettrePosee.getPiece().getJoker()) {
-                        lettrePosee.getPiece().setLettre('*');
-                        lettrePosee.paintLettreView();
-                    }
-                    listeLettres.add(lettrePosee);
-                    c.removeLettrePosee();
-                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
-    
-                    c.revalidate();
-                    c.repaint();
-                }
-            }
-            revalidate();
-        }
-        enableButtons();
-    }
-
-    public void joueurSuivant() {
-        plateau.passerAuJoueurSuivant();
-        joueur = plateau.getJoueurActuel();
-        for (Component c : listeLettres.getComponents()) {
-            if (c instanceof LettreView) {
-                LettreView lettre = (LettreView) c;
-                lettre.removeMouseListener(lettre.getMouseListeners()[0]);
-                listeLettres.remove(lettre);
-            }
-        }
-        listeLettres.revalidate();
-
-        String msg = "<html>Cliquer sur \"OK\" quand <b>" + joueur.getNom() + "</b> est prêt</html>";
-        JOptionPane.showMessageDialog(this, msg, "Au tour de " + joueur.getNom(), JOptionPane.INFORMATION_MESSAGE);
-
-        remplirMain();
-        enableButtons();
-        editScore();
-    }
-
-    public void showPlayer() {
-        String msg = "<html>C'est au tour de : <b>" + joueur.getNom() + "</b></html>";
-        JOptionPane.showMessageDialog(this, msg, "Début de la partie", JOptionPane.INFORMATION_MESSAGE);
-    }
-
+    // Retire la dernière lettre posée
     public void removeLastLetter() {
         if (plateau.arePendingCases()) {
             List<Case> pendingCases = plateau.getPendingCases();
@@ -286,6 +248,94 @@ public class PlateauView extends JFrame implements Serializable {
             revalidate();
         }
         if (!plateau.arePendingCases()) { enableButtons(); }
+    }
+
+    // Retire toutes les lettres posées pendant ce tour
+    public void removeAllLetters() {
+        if (plateau.arePendingCases()) {
+            for (CaseView c : this.allCases) {
+                List<Case> pendingCases = plateau.getPendingCases();
+                if (pendingCases.contains(c.getCase())) {
+                    LettreView lettrePosee = c.getLettrePosee();
+                    if (lettrePosee.getPiece().getJoker()) {
+                        lettrePosee.getPiece().setLettre('*');
+                        lettrePosee.paintLettreView();
+                    }
+                    listeLettres.add(lettrePosee);
+                    c.removeLettrePosee();
+                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
+    
+                    c.revalidate();
+                    c.repaint();
+                }
+            }
+            revalidate();
+        }
+        enableButtons();
+    }
+
+    public void remplirMain() {
+        List<Lettre> lettresDuJoueur = joueur.getListeLettre();
+
+        for (Lettre l : lettresDuJoueur) {
+            boolean found = false;
+            for (Component lView : listeLettres.getComponents()) {
+                if (lView instanceof LettreView) {
+                    LettreView lettreView = (LettreView) lView;
+                    if (lettreView.getPiece().equals(l)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found) {
+                LettreView lettre = new LettreView(l);
+                lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
+                listeLettres.add(lettre);
+            }
+        }
+        sacLabel.setText(String.valueOf(plateau.getSac().getNbrLettres()));
+        sacLabel.revalidate();
+        revalidate();
+    }
+
+    public void disableButtons() {
+        passer.setEnabled(false);
+        echanger.setEnabled(false);
+        annuler.setEnabled(true);
+        annulerTout.setEnabled(true);
+    }
+    public void enableButtons() {
+        passer.setEnabled(true);
+        echanger.setEnabled(true);
+        annuler.setEnabled(false);
+        annulerTout.setEnabled(false);
+    }
+
+    // Change de joueur et actualise la vue
+    public void joueurSuivant() {
+        plateau.passerAuJoueurSuivant();
+        joueur = plateau.getJoueurActuel();
+        for (Component c : listeLettres.getComponents()) {
+            if (c instanceof LettreView) {
+                LettreView lettre = (LettreView) c;
+                lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+                listeLettres.remove(lettre);
+            }
+        }
+        listeLettres.revalidate();
+
+        String msg = "<html>Cliquer sur \"OK\" quand <b>" + joueur.getNom() + "</b> est prêt</html>";
+        JOptionPane.showMessageDialog(this, msg, "Au tour de " + joueur.getNom(), JOptionPane.INFORMATION_MESSAGE);
+
+        remplirMain();
+        enableButtons();
+        editScore();
+    }
+
+    public void showPlayer() {
+        String msg = "<html>C'est au tour de : <b>" + joueur.getNom() + "</b></html>";
+        JOptionPane.showMessageDialog(this, msg, "Début de la partie", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void echangerLettres() {
@@ -351,145 +401,6 @@ public class PlateauView extends JFrame implements Serializable {
         }
     }
 
-    private void keyboardShortcuts(JPanel mainPanel) {
-        // Define the key stroke
-        KeyStroke commandZ = KeyStroke.getKeyStroke("meta Z");
-        KeyStroke ctrlZ = KeyStroke.getKeyStroke("control Z");
-        KeyStroke echap = KeyStroke.getKeyStroke("ESCAPE");
-
-        // Get the InputMap and ActionMap
-        InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        ActionMap actionMap = mainPanel.getActionMap();
-
-        // Map the key stroke to an action name
-        inputMap.put(ctrlZ, "undo");
-        inputMap.put(commandZ, "undo");
-        inputMap.put(echap,"pause");
-
-        // Map the action name to an action
-        actionMap.put("undo", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Perform the action when CTRL+Z is pressed
-                removeLastLetter();
-            }
-        });
-
-        JDialog echapDialog = new JDialog(PlateauView.this, "Menu");
-        JPanel pan = (JPanel)echapDialog.getContentPane();
-        actionMap.put("pause", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                pan.removeAll();
-                JButton reprendre = new JButton("Reprendre");
-                JButton quitter = new JButton("Sauvegarder et quitter");
-
-                echapDialog.add(new JPanel());
-                echapDialog.add(reprendre);
-                echapDialog.add(quitter);
-
-                pan.setLayout(new GridLayout(4, 1));
-                echapDialog.setSize(300, 300);
-                echapDialog.setLocationRelativeTo(null);
-                echapDialog.setVisible(true); 
-
-                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
-                quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
-        
-            }
-        });
-        InputMap inputMap2 = pan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap2.put(echap, "unPause");
-        ActionMap actionMap2 = pan.getActionMap();
-        actionMap2.put("unPause", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                echapDialog.dispose();
-            }
-        });
-
-        JDialog dialog = new JDialog(); 
-        dialog.setLayout(new GridBagLayout()); 
-        dialog.setSize(300, 200);
-        dialog.setTitle("Score des joueurs");
-
-        JPanel gameState = new JPanel();
-        gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.CENTER; // Center the panel
-        dialog.add(gameState, gbc); // Add the panel with the constraints
-
-        dialog.setLocationRelativeTo(null);
-
-        // Define the key stroke
-        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
-        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
-
-        // Map the key stroke to an action name
-        inputMap.put(pressM, "showDialog");
-
-        // Map the action name to an action
-        actionMap.put("showDialog", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Perform the action when M is pressed
-                gameState.removeAll();
-                for (Joueur j : plateau.getJoueurs()) {
-                    gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
-                }
-                dialog.setVisible(true);
-                dialog.requestFocus();
-            }
-        });
-
-        inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        inputMap2.put(releaseM, "hideDialog");
-        actionMap2 = gameState.getActionMap();
-
-        actionMap2.put("hideDialog", new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Perform the action when M is released
-                dialog.setVisible(false);
-            }
-        });
-
-    }
-
-    public void remplirMain() {
-        List<Lettre> lettresDuJoueur = joueur.getListeLettre();
-
-        for (Lettre l : lettresDuJoueur) {
-            boolean found = false;
-            for (Component lView : listeLettres.getComponents()) {
-                if (lView instanceof LettreView) {
-                    LettreView lettreView = (LettreView) lView;
-                    if (lettreView.getPiece().equals(l)) {
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (!found) {
-                LettreView lettre = new LettreView(l);
-                lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
-                listeLettres.add(lettre);
-            }
-        }
-        sacLabel.setText(String.valueOf(plateau.getSac().getNbrLettres()));
-        sacLabel.revalidate();
-        revalidate();
-    }
-
-    public void disableButtons() {
-        passer.setEnabled(false);
-        echanger.setEnabled(false);
-    }
-    public void enableButtons() {
-        passer.setEnabled(true);
-        echanger.setEnabled(true);
-    }
 
     public void finPartie() {
         plateau.finPartie();
@@ -522,7 +433,116 @@ public class PlateauView extends JFrame implements Serializable {
         }
     }
 
+    // --- Fin de l'actualisation de la vue --- //
+
+    // --- Contrôleurs --- //
+    private void keyboardShortcuts(JPanel mainPanel) {
+        // Define the key stroke
+        KeyStroke commandZ = KeyStroke.getKeyStroke("meta Z");
+        KeyStroke ctrlZ = KeyStroke.getKeyStroke("control Z");
+        KeyStroke echap = KeyStroke.getKeyStroke("ESCAPE");
+        KeyStroke pressM = KeyStroke.getKeyStroke("pressed M");
+        KeyStroke releaseM = KeyStroke.getKeyStroke("released M");
+        
+
+        // Get the InputMap and ActionMap
+        InputMap inputMap = mainPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = mainPanel.getActionMap();
+
+        // Map the key stroke to an action name
+        inputMap.put(ctrlZ, "undo");
+        inputMap.put(commandZ, "undo");
+        inputMap.put(echap,"pause");
+        inputMap.put(pressM, "showDialog");
+
+        // Map the action name to an action
+        actionMap.put("undo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when CTRL+Z is pressed
+                removeLastLetter();
+            }
+        });
+
+        // Quand on appui sur échap : 
+        JDialog echapDialog = new JDialog(PlateauView.this, "Menu");
+        JPanel pan = (JPanel)echapDialog.getContentPane();
+        actionMap.put("pause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pan.removeAll();
+                JButton reprendre = new JButton("Reprendre");
+                JButton quitter = new JButton("Sauvegarder et quitter");
+
+                echapDialog.add(new JPanel());
+                echapDialog.add(reprendre);
+                echapDialog.add(quitter);
+
+                pan.setLayout(new GridLayout(4, 1));
+                echapDialog.setSize(300, 300);
+                echapDialog.setLocationRelativeTo(null);
+                echapDialog.setVisible(true); 
+
+                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
+                quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
+        
+            }
+        });
+        // Quand on rappuie sur échap :
+        InputMap inputMap2 = pan.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(echap, "unPause");
+        ActionMap actionMap2 = pan.getActionMap();
+        actionMap2.put("unPause", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                echapDialog.dispose();
+            }
+        });
+
+        // Quand on appui sur M : 
+        JDialog dialog = new JDialog(); 
+        JPanel gameState = new JPanel();
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        dialog.setLayout(new GridBagLayout()); 
+        dialog.setSize(300, 200);
+        dialog.setTitle("Score des joueurs");
+        
+        gbc.anchor = GridBagConstraints.CENTER; // Center the panel
+        dialog.add(gameState, gbc); // Add the panel with the constraints
+        dialog.setLocationRelativeTo(null);
+
+        gameState.setLayout(new BoxLayout(gameState, BoxLayout.Y_AXIS));
+        actionMap.put("showDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is pressed
+                gameState.removeAll();
+                for (Joueur j : plateau.getJoueurs()) {
+                    gameState.add(new JLabel(j.getNom() + " - " + j.getScore() + " points"));
+                }
+                dialog.setVisible(true);
+                dialog.requestFocus();
+            }
+        });
+
+        inputMap2 = gameState.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap2.put(releaseM, "hideDialog");
+        actionMap2 = gameState.getActionMap();
+
+        actionMap2.put("hideDialog", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Perform the action when M is released
+                dialog.setVisible(false);
+            }
+        });
+
+    }
+
+    // La reprise de partie et le drag and drop enlèvent certains controlers des composants
     public void resetControlers() {
+        // Demande une confirmation à la fermeture de la fenêtre
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 int choice = JOptionPane.showConfirmDialog(PlateauView.this,"Voulez-vous sauvegarder la partie ? ", "Sauvegarder ? ", JOptionPane.YES_NO_OPTION);

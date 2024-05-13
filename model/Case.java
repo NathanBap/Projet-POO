@@ -1,12 +1,9 @@
 package model;
-import java.util.*;
-import view.PlateauView;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.io.Serializable;  
 
 
-public class Case extends MouseAdapter implements Serializable {
+public class Case implements Serializable {
     //attributs 
     private String bonus = "";
     private int x;
@@ -29,12 +26,6 @@ public class Case extends MouseAdapter implements Serializable {
     }
 
     //méthodes 
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // Action à effectuer lorsque la case est cliquée
-        System.out.println("Case cliquée : [" + x + ", " + y + "]");
-    }
     public void placerLettre(Lettre lettre) {
         lettre.setCase(this);
         this.lettre = lettre;

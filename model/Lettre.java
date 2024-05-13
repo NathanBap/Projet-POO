@@ -50,11 +50,8 @@ public class Lettre implements Serializable{
     public void setLettre(char l) {
         this.lettre = l;
     }
-
     public void removeCase() {
         this.casee = null;
     }
-
-    //Méthodes
 
 }

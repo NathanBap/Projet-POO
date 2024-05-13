@@ -51,6 +51,7 @@ public class Sac implements Serializable {
         for (int i=0; i<n; i++) {
             this.listLettres.add(new Lettre(l));
         }
+        melanger();
     }
     public Lettre piocher() {
         if (this.listLettres.size() > 0) {
@@ -63,6 +64,7 @@ public class Sac implements Serializable {
     }
     public void addAll(List<Lettre> list) {
         this.listLettres.addAll(list);
+        melanger();
     }
 
 }

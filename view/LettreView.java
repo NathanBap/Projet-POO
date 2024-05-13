@@ -2,10 +2,8 @@ package view;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
-import java.io.Serializable;
-import java.util.List;
 
-public class LettreView extends JPanel implements Serializable {
+public class LettreView extends JPanel {
     private Lettre piece;
     private boolean isSelected = false;
 
@@ -55,20 +53,5 @@ public class LettreView extends JPanel implements Serializable {
     }
     public boolean isSelected() {
         return isSelected;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // LettreView lettreView = new LettreView('B');
-            // JFrame frame = new JFrame();
-            // JPanel mainPanel = new JPanel();
-            // mainPanel.setLayout(new FlowLayout());
-            // mainPanel.add(lettreView);
-            // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            // frame.setPreferredSize(new Dimension(400, 200));
-            // frame.add(mainPanel);
-            // frame.pack();
-            // frame.setVisible(true);
-        });
     }
 }
