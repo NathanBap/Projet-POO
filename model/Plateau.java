@@ -212,7 +212,7 @@ public class Plateau implements Serializable {
             }
             Set<Case> casesVues = new HashSet<Case>();
             for (Case c : pendingCases) {
-                System.out.println("Cases adjacentes : " + casesAdjacentes(c, casesVues));
+                System.out.println("Case init : " + c.getX() + " " + c.getY());
                 for (Case cBis : casesAdjacentes(c, casesVues)) {
                     int scoreMot = calcMot(c, cBis, casesVues, motsPoint);
                     if (scoreMot == -1) {
@@ -294,8 +294,13 @@ public class Plateau implements Serializable {
         // Soit horizontal soit vertical
         if (x == xBis) {
             // Pour aller au début du mot dans tous les cas
-            while (!getCase(x, y - 1).isEmpty())
+            while (!getCase(x, y - 1).isEmpty()) {
                 y--;
+                if (y==1 && !getCase(x, 0).isEmpty()) {
+                    y--;
+                    break;
+                }
+            }
 
             Case currentCase = getCase(x, y);
             while (!currentCase.isEmpty()) {
@@ -305,11 +310,17 @@ public class Plateau implements Serializable {
                 motTriple = newScore[2];
                 casesVues.add(currentCase);
                 mot += currentCase.getLettre().getLettre();
-                currentCase = getCase(x, ++y);
+                if (y < 14) { currentCase = getCase(x, ++y); }
+                else { break; }
             }
         } else {
-            while (!getCase(x - 1, y).isEmpty())
+            while (!getCase(x - 1, y).isEmpty()) {
                 x--;
+                if (x==1 && !getCase(0, y).isEmpty()) {
+                    x--;
+                    break;
+                }
+            }
 
             Case currentCase = getCase(x, y);
             while (!currentCase.isEmpty()) {
@@ -319,7 +330,8 @@ public class Plateau implements Serializable {
                 motTriple = newScore[2];
                 casesVues.add(currentCase);
                 mot += currentCase.getLettre().getLettre();
-                currentCase = getCase(++x, y);
+                if (x < 14) { currentCase = getCase(++x, y); }
+                else { break; }
             }
         }
         if (!this.dico.estValide(mot)) {
@@ -362,23 +374,32 @@ public class Plateau implements Serializable {
     public List<Case> casesAdjacentes(Case c, Set<Case> casesVues) {
         int x = c.getX();
         int y = c.getY();
-        List<Case> casesAdj = new ArrayList<Case>();
 
-        if (x > 0 && !getCase(x - 1, y).isEmpty() && !this.pendingCases.contains(getCase(x - 1, y))
-                && !casesVues.contains(getCase(x - 1, y))) {
-            casesAdj.add(getCase(x - 1, y));
+        System.out.println("Case : " + x + " " + y);
+        List<Case> casesAdj = new ArrayList<Case>();
+        if (x > 0) {
+            if (!getCase(x - 1, y).isEmpty() && !this.pendingCases.contains(getCase(x - 1, y))
+                    && !casesVues.contains(getCase(x - 1, y))) {
+                casesAdj.add(getCase(x - 1, y));
+            }
         }
-        if (x < 14 && !getCase(x + 1, y).isEmpty() && !this.pendingCases.contains(getCase(x + 1, y))
-                && !casesVues.contains(getCase(x + 1, y))) {
-            casesAdj.add(getCase(x + 1, y));
+        if (x < 14) {
+            if (!getCase(x + 1, y).isEmpty() && !this.pendingCases.contains(getCase(x + 1, y))
+                    && !casesVues.contains(getCase(x + 1, y))) {
+                casesAdj.add(getCase(x + 1, y));
+            }
         }
-        if (y > 0 && !getCase(x, y - 1).isEmpty() && !this.pendingCases.contains(getCase(x, y - 1))
-                && !casesVues.contains(getCase(x, y - 1))) {
-            casesAdj.add(getCase(x, y - 1));
+        if (y > 0) {
+            if (!getCase(x, y - 1).isEmpty() && !this.pendingCases.contains(getCase(x, y - 1))
+                    && !casesVues.contains(getCase(x, y - 1))) {
+                casesAdj.add(getCase(x, y - 1));
+            }
         }
-        if (y < 14 && !getCase(x, y + 1).isEmpty() && !this.pendingCases.contains(getCase(x, y + 1))
-                && !casesVues.contains(getCase(x, y + 1))) {
-            casesAdj.add(getCase(x, y + 1));
+        if (y < 14) {
+            if (!getCase(x, y + 1).isEmpty() && !this.pendingCases.contains(getCase(x, y + 1))
+                    && !casesVues.contains(getCase(x, y + 1))) {
+                casesAdj.add(getCase(x, y + 1));
+            }
         }
         System.out.println("Aucune lettre adjacente");
         return casesAdj;
