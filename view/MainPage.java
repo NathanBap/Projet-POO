@@ -19,6 +19,7 @@ public class MainPage extends JFrame {
         setSize(850, 600);
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
 		setIconImage(new ImageIcon("ressources/Logo.png").getImage());
+        controlleur.jouerSonContinu("ressources/click.wav");
         // Arrière-plan
         Color transparentColor = new Color(255, 255, 255, 255);
 		ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");
@@ -212,6 +213,29 @@ public class MainPage extends JFrame {
             }
         };
 
+	MouseListener couperSon = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Action à exécuter lors du clic
+                controlleur.jouerSon("ressources/click.wav");
+
+                // Si le son est actuellement muet, reprendre le son continu
+                if (controlleur.sonMute) {
+                    controlleur.jouerSonContinu("ressources/click.wav");
+                    controlleur.sonMute = false;
+                } else {
+                    // Si le son n'est pas muet, arrêter le son continu
+                    controlleur.stopSonContinu();
+                    controlleur.sonMute = true;
+                }
+            
+                // Changer l'icône du bouton en fonction de l'état du son
+                JLabel bouton = (JLabel) e.getSource();
+                ImageIcon icone = controlleur.sonMute ? new ImageIcon("ressources/sonInactif.png") : new ImageIcon("ressources/sonActif.png");
+                bouton.setIcon(icone);
+            }
+        };
+
         JLabel welcomeLabel = new JLabel("Bienvenue sur notre Scrabble !");
         welcomeLabel.setFont(new Font("Century Gothic Italic", Font.PLAIN, 30));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -273,6 +297,11 @@ public class MainPage extends JFrame {
         } else {
             continuer.setForeground(Color.GRAY);
         }
+
+	ImageIcon iconeSon = new ImageIcon("ressources/sonActif.png");
+		JLabel buttonSon = new JLabel(iconeSon);
+		buttonSon.setBounds(785, 480, 50, 50);
+        buttonSon.addMouseListener(couperSon);
 
         JLabel texteFooter = new JLabel("Projet de programmation Orienté Objet de fin d'année - 2023/2024");
         texteFooter.setFont(texteFooter.getFont().deriveFont(10f));
@@ -360,6 +389,7 @@ public class MainPage extends JFrame {
         bgLabel.add(launchButton);
         bgLabel.add(quitButton);
         bgLabel.add(continuer);
+        bgLabel.add(buttonSon);
         setLocationRelativeTo(null);
         setVisible(true);
     }
