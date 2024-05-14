@@ -428,6 +428,12 @@ public class Plateau implements Serializable {
         }
         List<Joueur> joueursCopy = new ArrayList<Joueur>(joueurs);
 
+        // Supprime la sauvegarde s'il y en a une
+        File sauvegarde = new File("sauvegarde.ser");
+        if (sauvegarde.exists()) {
+            sauvegarde.delete();
+        }
+
         try {
             File leaderBoardFile = new File("leaderboard.ser");
             if (leaderBoardFile.exists()) {
