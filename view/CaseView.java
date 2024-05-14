@@ -4,6 +4,7 @@ import model.Case;
 import model.Lettre;
 
 import java.awt.*;
+
 import javax.swing.*;
 
 public class CaseView extends JPanel {

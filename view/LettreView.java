@@ -2,7 +2,6 @@ package view;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class LettreView extends JPanel {
     private Lettre piece;
@@ -44,25 +43,15 @@ public class LettreView extends JPanel {
     public Lettre getPiece() {
         return piece;
     }
-    public void setSelected(boolean isSelected) {
-        this.isSelected = isSelected;
+    public void setSelected() {
+        this.isSelected = !this.isSelected;
+        if (this.isSelected) {
+            setBorder(null);
+        } else {
+            setBorder(BorderFactory.createRaisedBevelBorder());
+        }
     }
     public boolean isSelected() {
         return isSelected;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            // LettreView lettreView = new LettreView('B');
-            // JFrame frame = new JFrame();
-            // JPanel mainPanel = new JPanel();
-            // mainPanel.setLayout(new FlowLayout());
-            // mainPanel.add(lettreView);
-            // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            // frame.setPreferredSize(new Dimension(400, 200));
-            // frame.add(mainPanel);
-            // frame.pack();
-            // frame.setVisible(true);
-        });
     }
 }

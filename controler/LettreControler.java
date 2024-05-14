@@ -1,6 +1,7 @@
 package controler;
 
 import java.awt.event.*;
+import java.io.Serializable;
 import java.awt.*;
 import java.awt.datatransfer.*;
 
@@ -10,7 +11,7 @@ import java.awt.dnd.*;
 
 import view.*;
 
-public class LettreControler extends MouseAdapter {
+public class LettreControler extends MouseAdapter implements Serializable {
     private LettreView lettreView;
     private PlateauView plateau;
     private JPanel listeLettres;
@@ -28,38 +29,37 @@ public class LettreControler extends MouseAdapter {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (plateau.lettreClicked != null) {
-            this.plateau.lettreClicked.setBackground(new Color(255, 245, 215));
-            // this.plateau.lettreClicked.setBorder(BorderFactory.createRaisedBevelBorder());
+            this.plateau.lettreClicked.setSelected();
         }
         if (lettreView.getPiece().getCase() == null) {
-            System.out.println("Lettre clicked");
-            // this.lettreView.setBackground(Color.RED);
-            this.lettreView.setBorder(null);
-            this.lettreView.setSelected(true);
-            this.plateau.lettreClicked = lettreView;
-            
+            if (plateau.lettreClicked == lettreView) {
+                this.plateau.lettreClicked = null;
+            } else {
+                this.lettreView.setSelected();
+                this.plateau.lettreClicked = lettreView;
+            }
         }
     }
 
     private void createDragControler() {
         DragSource dragSource = new DragSource();
         DragSourceListener dsl = new DragSourceAdapter() {
-                @Override
-                public void dragDropEnd(DragSourceDropEvent dsde) {
-                    if (dsde.getDropSuccess()) {
-                        listeLettres.remove(lettreView);
-                        listeLettres.revalidate();
-                    }
+            @Override
+            public void dragDropEnd(DragSourceDropEvent dsde) {
+                if (dsde.getDropSuccess()) {
+                    listeLettres.remove(lettreView);
+                    listeLettres.revalidate();
                 }
-            };
-            dragSource.addDragSourceListener(dsl);
-            dragSource.createDefaultDragGestureRecognizer(lettreView, DnDConstants.ACTION_COPY, new DragGestureListener() {
-                @Override
-                public void dragGestureRecognized(DragGestureEvent dge) {
-                    Transferable transferable = new PanelTransferable(lettreView);
-                    lettreDragged = lettreView;
-                    dragSource.startDrag(dge, DragSource.DefaultCopyDrop, transferable, null);
-                }
+            }
+        };
+        dragSource.addDragSourceListener(dsl);
+        dragSource.createDefaultDragGestureRecognizer(lettreView, DnDConstants.ACTION_COPY, new DragGestureListener() {
+            @Override
+            public void dragGestureRecognized(DragGestureEvent dge) {
+                Transferable transferable = new PanelTransferable(lettreView);
+                lettreDragged = lettreView;
+                dragSource.startDrag(dge, DragSource.DefaultCopyDrop, transferable, null);
+            }
         });
     }
 

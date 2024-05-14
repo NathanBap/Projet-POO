@@ -4,13 +4,14 @@ import view.*;
 import model.*;
 
 import java.awt.event.*;
+import java.io.Serializable;
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import javax.swing.*;
 
 import java.awt.*;
 
-public class CaseControler extends MouseAdapter{
+public class CaseControler extends MouseAdapter implements Serializable{
     private CaseView casee;
     private PlateauView plateauView;
 
@@ -87,6 +88,5 @@ public class CaseControler extends MouseAdapter{
         casee.setLettrePosee(lettreViewPlaced);
         plateauView.lettreClicked = null;
         casee.revalidate();
-        casee.repaint();
     }
 }

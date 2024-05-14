@@ -1,8 +1,10 @@
 package model;
+
+import java.io.*;
 import java.util.*;
 
 
-public class Plateau {
+public class Plateau implements Serializable {
     //Attributs
     private Case[][] plateau;
     private List<Case> pendingCases = new ArrayList<Case>();
@@ -10,7 +12,6 @@ public class Plateau {
     private boolean premierTour = true;
     private Dico dico = new Dico();
 
-    // Attributs de Scrabble
     private List<Joueur> joueurs = new ArrayList<Joueur>();
     private int joueurActuelIndex;
     private Sac sac;
@@ -52,7 +53,7 @@ public class Plateau {
         return this.pendingCases;
     }
 
-    public void initPlateau() {  // A modifier pour les cases avec des bonus
+    public void initPlateau() {
         List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116, 122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
         List<Integer> LT = new ArrayList<Integer>(Arrays.asList(20, 24, 76, 80, 84, 88, 136, 140, 144, 148, 200, 204));
         List<Integer> MD = new ArrayList<Integer>(Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
@@ -86,13 +87,18 @@ public class Plateau {
     }
 
     // 2 joueurs minimum 4 maximum
-    public void initJoueurs() {
+    public void initJoueursTest() {
         // TMP : Création de 2 joueurs
         Joueur joueur1 = new Joueur("Joueur 1", this);
         Joueur joueur2 = new Joueur("Joueur 2", this);
 
         joueurs.add(joueur1);
         joueurs.add(joueur2);
+    }
+    public void initJoueurs(List<String> noms) {
+        for (String nom : noms) {
+            joueurs.add(new Joueur(nom, this));
+        }
     }
 
     public Joueur getJoueurActuel() {
@@ -104,7 +110,6 @@ public class Plateau {
         joueurActuel = joueurs.get(joueurActuelIndex);
     }
     
-    // Pour déterminer quel joueur commence
     public int tirageAuSort(List<Joueur> joueurs) {
         Random rand = new Random();
         return rand.nextInt(joueurs.size());
@@ -275,6 +280,9 @@ public class Plateau {
         }
         int score = count * motDouble * motTriple;
         System.out.println("Score du mot : " + mot + " -> " + score);
+        while (motsPoints.containsKey(mot)) {
+            mot += '\u200B';  // Caractère invisible pour éviter les doublons
+        }
         motsPoints.put(mot, score);
         return score;
     }
@@ -354,6 +362,8 @@ public class Plateau {
     }
 
     public void finPartie() {
+        Map<String, Integer> joueurScores = new LinkedHashMap<String, Integer>();
+
         for (Joueur joueur : joueurs) {
             int pointsRestants = 0;
             for (Lettre l : joueur.getListeLettre()) {
@@ -363,6 +373,49 @@ public class Plateau {
             if (joueurActuel.getListeLettre().size() == 0) {
                 joueurActuel.addScore(pointsRestants);
             }
+        }
+        List<Joueur> joueursCopy = new ArrayList<Joueur>(joueurs);
+
+        try {
+            File leaderBoardFile = new File("leaderboard.ser");
+            if (leaderBoardFile.exists()) {
+                FileInputStream fis = new FileInputStream("leaderboard.ser");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                Map<String, Integer> leaderBoardMap = (Map<String,Integer>)ois.readObject(); 
+                for (String s : leaderBoardMap.keySet()) {
+                    Joueur tmp = new Joueur(s, this);
+                    tmp.addScore(leaderBoardMap.get(s));
+                    joueursCopy.add(tmp);
+                }
+                Collections.sort(joueursCopy);
+                for (Joueur j : joueursCopy) {
+                    String nom = j.getNom();
+                    while (joueurScores.containsKey(nom)) {
+                        nom += '\u200B';
+                    }
+                    joueurScores.put(nom, j.getScore());
+                }
+                ois.close();
+                fis.close();
+                
+            } else {
+                Collections.sort(joueurs);
+                for (Joueur j : joueurs) {
+                    joueurScores.put(j.getNom(), j.getScore());
+                }
+            }
+            FileOutputStream fos = new FileOutputStream("leaderboard.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(joueurScores);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return;
         }
     }
 }

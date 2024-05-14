@@ -1,7 +1,8 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
-public class Sac {
+public class Sac implements Serializable {
     //Attributs
     private List<Lettre> listLettres = new ArrayList<Lettre>();
 
@@ -50,6 +51,7 @@ public class Sac {
         for (int i=0; i<n; i++) {
             this.listLettres.add(new Lettre(l));
         }
+        melanger();
     }
     public Lettre piocher() {
         if (this.listLettres.size() > 0) {
@@ -62,6 +64,7 @@ public class Sac {
     }
     public void addAll(List<Lettre> list) {
         this.listLettres.addAll(list);
+        melanger();
     }
 
 }
