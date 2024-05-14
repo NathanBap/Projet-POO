@@ -24,6 +24,7 @@ public class ButtonsControler implements ActionListener, Serializable {
     private String action;
     private Plateau plateau;
     private PlateauView plateauView;
+    private JDialog echapDialog;
     public static float passerCount = 0;
 
     public ButtonsControler(JButton button, PlateauView plateauView) {
@@ -31,6 +32,14 @@ public class ButtonsControler implements ActionListener, Serializable {
         this.action = button.getText();
         this.plateauView = plateauView;
         this.plateau = plateauView.getPlateau();
+    }
+
+    public ButtonsControler(JButton button, PlateauView plateauView, JDialog echapDialog) {
+        this.button = button;
+        this.action = button.getText();
+        this.plateauView = plateauView;
+        this.plateau = plateauView.getPlateau();
+        this.echapDialog = echapDialog;
     }
 
     @Override
@@ -135,7 +144,7 @@ public class ButtonsControler implements ActionListener, Serializable {
             }
         }
         else if (action.equals("Reprendre")) {
-
+            echapDialog.setVisible(false);
         } else if (action.equals("Sauvegarder et quitter")) {
             // echapDialog.setVisible(false);
             try {

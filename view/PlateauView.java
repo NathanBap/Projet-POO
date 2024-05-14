@@ -67,8 +67,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        //initJoueurs();
-        plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
+        initJoueurs();
+        // plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -512,7 +512,7 @@ public class PlateauView extends JFrame implements Serializable {
                 echapDialog.setLocationRelativeTo(null);
                 echapDialog.setVisible(true); 
 
-                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
+                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this, echapDialog));
                 quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
         
             }
