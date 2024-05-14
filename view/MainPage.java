@@ -20,7 +20,7 @@ public class MainPage extends JFrame {
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
 		setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         // Arrière-plan
-        Color transparentColor = new Color(1, 1, 1, 100);
+        Color transparentColor = new Color(255, 255, 255, 255);
 		ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");
 		JLabel bgLabel = new JLabel(bgIcon);
 		bgLabel.setBounds(0, 0, 850, 600);
@@ -30,6 +30,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
+                controlleur.jouerSon("ressources/click.wav");
                 controlleur.openWebPage("https://github.com/NathanBap/Projet-POO");
             }
             @Override
@@ -39,6 +40,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.BLUE);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
+                label.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -46,6 +48,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -54,6 +57,7 @@ public class MainPage extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
                 //controlleur.launchOtherJavaFile();
+                controlleur.jouerSon("ressources/click.wav");
                 PlateauView plateauView = new PlateauView();
                 plateauView.setVisible(true);
                 dispose();
@@ -65,6 +69,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.GREEN);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
+                label.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -72,6 +77,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -80,6 +86,7 @@ public class MainPage extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
                 //controlleur.launchOtherJavaFile();
+                controlleur.jouerSon("ressources/click.wav");
                 try {
                     FileInputStream fis = new FileInputStream("sauvegarde.ser");
                     ObjectInputStream ois = new ObjectInputStream(fis);
@@ -108,7 +115,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.GREEN);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
-                
+                label.setBorder(BorderFactory.createLineBorder(Color.GREEN, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -124,6 +131,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
+                controlleur.jouerSon("ressources/click.wav");
                 JTextArea regles = new JTextArea("Principe du jeu : Le Scrabble est un jeu de société où les joueurs doivent former des mots à partir de lettres tirées aléatoirement. Chaque lettre a une valeur en fonction de sa rareté. Le but est de former des mots de manière stratégique pour obtenir le plus de points possible. Bonne chance !");
                 regles.setLineWrap(true); // Pour que le texte se présente sur plusieurs lignes
                 regles.setWrapStyleWord(true); // Pour que le texte se coupe aux espaces
@@ -140,6 +148,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.BLUE);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
+                label.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -147,6 +156,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -154,6 +164,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
+                controlleur.jouerSon("ressources/click.wav");
                 System.exit(0);
             }
             @Override
@@ -163,6 +174,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.RED);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
+                label.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -170,6 +182,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -177,6 +190,7 @@ public class MainPage extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
+                controlleur.jouerSon("ressources/click.wav");
                 controlleur.ouvrirPDF();
             }
             @Override
@@ -186,6 +200,7 @@ public class MainPage extends JFrame {
                 label.setForeground(Color.BLUE);
                 label.setOpaque(true);
                 label.setBackground(transparentColor);
+                label.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
             }
             @Override
             public void mouseExited(MouseEvent e) {
@@ -193,6 +208,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -203,7 +219,7 @@ public class MainPage extends JFrame {
 		welcomeLabel.setBounds((850 - welcomeLabel.getPreferredSize().width) / 2, 45, welcomeLabel.getPreferredSize().width, 50);
 
         JLabel regles = new JLabel("Règles");
-        regles.setFont(new Font("Century Gothic", Font.PLAIN, 35));
+        regles.setFont(new Font("Malgun Gothic", Font.PLAIN, 35));
         regles.setHorizontalAlignment(SwingConstants.CENTER);
 		regles.setForeground(Color.WHITE);
 		regles.setBounds(212 - (regles.getPreferredSize().width / 2), 120, (10 + regles.getPreferredSize().width), 50);
@@ -211,7 +227,7 @@ public class MainPage extends JFrame {
         regles.addMouseListener(affichageRegles);
 
         JLabel lienGit = new JLabel("Lien GitHub");
-		lienGit.setFont(new Font("Century Gothic", Font.PLAIN, 35));
+        lienGit.setFont(new Font("Malgun Gothic", Font.PLAIN, 35));        
         lienGit.setHorizontalAlignment(SwingConstants.CENTER);
 		lienGit.setForeground(Color.WHITE);
 		lienGit.setBounds(637 - (lienGit.getPreferredSize().width /2), 120, (10 + lienGit.getPreferredSize().width), 50);
@@ -219,7 +235,7 @@ public class MainPage extends JFrame {
         lienGit.addMouseListener(redirectionGit);
 
         JLabel projet = new JLabel("Le projet");
-        projet.setFont(new Font("Century Gothic", Font.PLAIN, 35));
+        projet.setFont(new Font("Malgun Gothic", Font.PLAIN, 35));
         projet.setHorizontalAlignment(SwingConstants.CENTER);
         projet.setForeground(Color.WHITE);
         projet.setBounds(212 - (projet.getPreferredSize().width / 2), 200, (10 + projet.getPreferredSize().width), 50);
@@ -227,7 +243,7 @@ public class MainPage extends JFrame {
         projet.addMouseListener(sujetProjet);
 
         JLabel quitButton = new JLabel("Quitter");
-        quitButton.setFont(new Font("Century Gothic", Font.PLAIN, 35));
+        quitButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 35));
         quitButton.setHorizontalAlignment(SwingConstants.CENTER);
         quitButton.setForeground(Color.WHITE);
 		quitButton.setBounds(637 - (quitButton.getPreferredSize().width / 2), 200, (10 + quitButton.getPreferredSize().width), 50);
@@ -235,7 +251,7 @@ public class MainPage extends JFrame {
         quitButton.addMouseListener(quitterScrabble);        
 
         JLabel launchButton = new JLabel("Nouvelle partie");
-        launchButton.setFont(new Font("Century Gothic", Font.PLAIN, 50));
+        launchButton.setFont(new Font("Malgun Gothic", Font.PLAIN, 50));
         launchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		launchButton.setForeground(Color.WHITE);
 		launchButton.setBounds((850 - launchButton.getPreferredSize().width) / 2, 300, (10 + launchButton.getPreferredSize().width), 60);
@@ -245,7 +261,7 @@ public class MainPage extends JFrame {
         
         // si on veut ajouter un bouton pour continuer une partie sauvegardée
         JLabel continuer = new JLabel("Continuer");
-        continuer.setFont(new Font("Century Gothic", Font.PLAIN, 50));
+        continuer.setFont(new Font("Malgun Gothic", Font.PLAIN, 50));
         continuer.setHorizontalAlignment(SwingConstants.CENTER);
         continuer.setBounds((850 - continuer.getPreferredSize().width) / 2, 400, (10 + continuer.getPreferredSize().width), 60);
         continuer.setOpaque(false);
