@@ -1,19 +1,22 @@
 package view;
-
-import controler.LettreControler;
 import model.Lettre;
 import javax.swing.*;
 import java.awt.*;
 
 public class LettreView extends JPanel {
     private Lettre piece;
-    private char lettre;
+    private boolean isSelected = false;
 
-    public LettreView(char lettre) {
+    public LettreView(Lettre piece) {
+        this.piece = piece;
+        paintLettreView();
+    }
 
-        this.lettre = lettre; // Initialisation de la lettre
-        this.piece = new Lettre(lettre);
+    public void paintLettreView() {
+        char lettre = piece.getLettre();
 
+        removeAll();
+        // Définir la mise en page du JPanel
         setLayout(new BorderLayout());
 
         // un JLabel pour afficher la lettre au centre
@@ -35,31 +38,21 @@ public class LettreView extends JPanel {
         setBackground(new Color(255, 245, 215));
         // Appliquer un effet 3D
         setBorder(BorderFactory.createRaisedBevelBorder());
-
     }
 
     public Lettre getPiece() {
         return piece;
     }
 
-    // Dans la classe LettreView
-    public char getLettre() {
-        // Code pour extraire et renvoyer la lettre associée à cette vue de lettre
-        return lettre;
+    public void setSelected() {
+        this.isSelected = !this.isSelected;
+        if (this.isSelected) {
+            setBorder(null);
+        } else {
+            setBorder(BorderFactory.createRaisedBevelBorder());
+        }
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            LettreView lettreView = new LettreView('B');
-            JFrame frame = new JFrame();
-            JPanel mainPanel = new JPanel();
-            mainPanel.setLayout(new FlowLayout());
-            mainPanel.add(lettreView);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setPreferredSize(new Dimension(400, 200));
-            frame.add(mainPanel);
-            frame.pack();
-            frame.setVisible(true);
-        });
+    public boolean isSelected() {
+        return isSelected;
     }
 }

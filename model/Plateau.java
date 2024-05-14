@@ -1,20 +1,26 @@
 package model;
 
+import java.io.*;
 import java.util.*;
 
 import view.LettreView;
 
-public class Plateau {
-    // Attributs
+public class Plateau implements Serializable {
+    //Attributs
     private Case[][] plateau;
     private List<Case> pendingCases = new ArrayList<Case>();
     private Joueur joueurActuel;
     private boolean premierTour = true;
     private Dico dico = new Dico();
 
-    // Constructeur
+    private List<Joueur> joueurs = new ArrayList<Joueur>();
+    private int joueurActuelIndex;
+    private Sac sac;
+
+    //Constructeur
     public Plateau() {
         this.plateau = new Case[15][15];
+        this.sac = new Sac();
     }
 
     // Getters / Setters
@@ -28,6 +34,15 @@ public class Plateau {
 
     public boolean getPremierTour() {
         return this.premierTour;
+    }
+    public Joueur getJoueur() {
+        return this.joueurActuel;
+    }
+    public Sac getSac() {
+        return this.sac;
+    }
+    public List<Joueur> getJoueurs() {
+        return this.joueurs;
     }
 
     // Méthodes
@@ -43,9 +58,9 @@ public class Plateau {
         return this.pendingCases;
     }
 
-    public void initPlateau() { // A modifier pour les cases avec des bonus
-        List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116,
-                122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
+
+    public void initPlateau() {
+        List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116, 122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
         List<Integer> LT = new ArrayList<Integer>(Arrays.asList(20, 24, 76, 80, 84, 88, 136, 140, 144, 148, 200, 204));
         List<Integer> MD = new ArrayList<Integer>(
                 Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
@@ -68,12 +83,49 @@ public class Plateau {
         }
     }
 
-    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur
-    // personnalisés
+    public void debutDuJeu() {
+        // Initialiser les mains des joueurs
+        for (Joueur joueur : joueurs) {
+            joueur.initMain();
+        }
+        // Déterminer quel joueur commence
+        joueurActuelIndex = tirageAuSort(joueurs);
+        joueurActuel = joueurs.get(joueurActuelIndex);
+    }
+
+    // 2 joueurs minimum 4 maximum
+    public void initJoueursTest() {
+        // TMP : Création de 2 joueurs
+        Joueur joueur1 = new Joueur("Joueur 1", this);
+        Joueur joueur2 = new Joueur("Joueur 2", this);
+
+        joueurs.add(joueur1);
+        joueurs.add(joueur2);
+    }
+    public void initJoueurs(List<String> noms) {
+        for (String nom : noms) {
+            joueurs.add(new Joueur(nom, this));
+        }
+    }
+
+    public Joueur getJoueurActuel() {
+        return joueurs.get(joueurActuelIndex);
+    }
+
+    public void passerAuJoueurSuivant() {
+        joueurActuelIndex = (joueurActuelIndex + 1) % joueurs.size();
+        joueurActuel = joueurs.get(joueurActuelIndex);
+    }
+    
+    public int tirageAuSort(List<Joueur> joueurs) {
+        Random rand = new Random();
+        return rand.nextInt(joueurs.size());
+    }
+
+    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
     // FAIT : Changement du système du calcul du score
-    // A FAIRE : Quand on pose un mot validé, supprimer le bonus de la case
-    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour
-    // chaque mot
+    // FAIT : Quand on pose un mot validé, supprimer le bonus de la case
+    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
 
     public String valider() { // Appelé par PlateauView
         boolean sameRow = true;
@@ -148,6 +200,9 @@ public class Plateau {
             if (!centre) {
                 return "Non centre";
             }
+            if (!dico.estValide(mot)) {
+                return "Mot invalide";
+            }
             this.premierTour = false;
             score = count * motDouble * motTriple;
             motsPoint.put(mot, score);
@@ -175,13 +230,13 @@ public class Plateau {
                 score += scoreMot;
             }
         }
-
-        System.out.println("Score : " + score);
-
-        // this.joueurActuel.addScore(score);
-
-        this.pendingCases.clear();
-
+        for (Case c : pendingCases) {
+            joueurActuel.deposerLettre(c.getLettre());
+            c.removeBonus();
+        }
+        pendingCases.clear();
+        joueurActuel.addScore(score);
+        joueurActuel.remplirMain(sac);
         return motsPoint.toString();
     }
 
@@ -273,6 +328,9 @@ public class Plateau {
         }
         int score = count * motDouble * motTriple;
         System.out.println("Score du mot : " + mot + " -> " + score);
+        while (motsPoints.containsKey(mot)) {
+            mot += '\u200B';  // Caractère invisible pour éviter les doublons
+        }
         motsPoints.put(mot, score);
         return score;
     }
@@ -346,5 +404,70 @@ public class Plateau {
             }
         }
         return false;
+    }
+
+    public List<Lettre> echangerLettres(List<Lettre> lettres) {
+        sac.addAll(lettres);
+        joueurActuel.getListeLettre().removeAll(lettres);
+        List<Lettre> lettresPiochees = joueurActuel.remplirMain(sac);
+        return lettresPiochees;
+    }
+
+    public void finPartie() {
+        Map<String, Integer> joueurScores = new LinkedHashMap<String, Integer>();
+
+        for (Joueur joueur : joueurs) {
+            int pointsRestants = 0;
+            for (Lettre l : joueur.getListeLettre()) {
+                pointsRestants += l.getPoints();
+            }
+            joueur.addScore(-pointsRestants);
+            if (joueurActuel.getListeLettre().size() == 0) {
+                joueurActuel.addScore(pointsRestants);
+            }
+        }
+        List<Joueur> joueursCopy = new ArrayList<Joueur>(joueurs);
+
+        try {
+            File leaderBoardFile = new File("leaderboard.ser");
+            if (leaderBoardFile.exists()) {
+                FileInputStream fis = new FileInputStream("leaderboard.ser");
+                ObjectInputStream ois = new ObjectInputStream(fis);
+                Map<String, Integer> leaderBoardMap = (Map<String,Integer>)ois.readObject(); 
+                for (String s : leaderBoardMap.keySet()) {
+                    Joueur tmp = new Joueur(s, this);
+                    tmp.addScore(leaderBoardMap.get(s));
+                    joueursCopy.add(tmp);
+                }
+                Collections.sort(joueursCopy);
+                for (Joueur j : joueursCopy) {
+                    String nom = j.getNom();
+                    while (joueurScores.containsKey(nom)) {
+                        nom += '\u200B';
+                    }
+                    joueurScores.put(nom, j.getScore());
+                }
+                ois.close();
+                fis.close();
+                
+            } else {
+                Collections.sort(joueurs);
+                for (Joueur j : joueurs) {
+                    joueurScores.put(j.getNom(), j.getScore());
+                }
+            }
+            FileOutputStream fos = new FileOutputStream("leaderboard.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(joueurScores);
+            oos.close();
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return;
+        } catch (ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+            return;
+        }
     }
 }

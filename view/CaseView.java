@@ -4,6 +4,7 @@ import model.Case;
 import model.Lettre;
 
 import java.awt.*;
+
 import javax.swing.*;
 
 public class CaseView extends JPanel {
@@ -62,6 +63,9 @@ public class CaseView extends JPanel {
     public Case getCase() {
         return casee;
     }
+    public LettreView getLettrePosee() {
+        return lettrePosee;
+    }
 
     public void setLettrePosee(LettreView lettrePosee) {
         this.lettrePosee = lettrePosee;
@@ -78,7 +82,6 @@ public class CaseView extends JPanel {
     }
 
     public void removeLettrePosee() {
-        // A FAIRE : La remettre dans la main du joueur
         if (lettrePosee != null) {
             remove(lettrePosee);
             lettrePosee = null;

@@ -1,9 +1,9 @@
 package model;
+import java.io.Serializable;
 import java.util.*;
 
-public class Sac {
+public class Sac implements Serializable {
     //Attributs
-    private int nbrLettres;
     private List<Lettre> listLettres = new ArrayList<Lettre>();
 
     //Constructeur
@@ -35,13 +35,12 @@ public class Sac {
         this.addLettre('X', 1);
         this.addLettre('Y', 1);
         this.addLettre('Z', 1);
-        this.nbrLettres = 102;
         this.melanger();
     }
 
     //Getters / Setters
     public int getNbrLettres() {
-        return this.nbrLettres;
+        return this.listLettres.size();
     }
     public List<Lettre> getListLettres() {
         return this.listLettres;
@@ -52,16 +51,20 @@ public class Sac {
         for (int i=0; i<n; i++) {
             this.listLettres.add(new Lettre(l));
         }
+        melanger();
     }
     public Lettre piocher() {
-        if (this.nbrLettres > 0) {
-            this.nbrLettres--;
+        if (this.listLettres.size() > 0) {
             return this.listLettres.remove(0);            
         }
         return null;
     }
     public void melanger() {
         Collections.shuffle(this.listLettres);
+    }
+    public void addAll(List<Lettre> list) {
+        this.listLettres.addAll(list);
+        melanger();
     }
 
 }

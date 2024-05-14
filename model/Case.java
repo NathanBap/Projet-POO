@@ -1,10 +1,11 @@
 package model;
-import java.util.*;
+
+import java.io.Serializable;  
 
 
-public class Case {
+public class Case implements Serializable {
     //attributs 
-    private String bonus = "  ";
+    private String bonus = "";
     private int x;
     private int y;
     private Lettre lettre;
@@ -50,5 +51,8 @@ public class Case {
     public Lettre getLettre() {
         return this.lettre;
     }
+    public void removeBonus() {
+        this.bonus = "";
+    }
 
-}
+} 
