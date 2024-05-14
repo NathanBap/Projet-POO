@@ -59,6 +59,7 @@ public class PlateauView extends JFrame implements Serializable {
         setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         setVisible(true);
         showPlayer();
+	mainPageControlleur.jouerSonContinu("ressources/click.wav");
     }
 
     public Plateau getPlateau() {
