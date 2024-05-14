@@ -35,7 +35,7 @@ public class PlateauView extends JFrame implements Serializable {
     private JPanel listeLettres;
     private JButton passer;
     private JButton echanger;
-    private JButton aide;
+    private JButton aide = new JButton("Aide");
     private JButton valider;
     private JButton annuler;
     private JButton annulerTout;
@@ -66,8 +66,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        //initJoueurs();
-        plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
+        initJoueurs();
+        //plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -99,7 +99,6 @@ public class PlateauView extends JFrame implements Serializable {
             plateau.initJoueurs(noms);
         }
 
-        aide = new JButton("Aide");
         msg = "Voulez-vous jouer avec une aide ?";
         choice = JOptionPane.showConfirmDialog(this, msg, "Aide", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.NO_OPTION) {
@@ -201,12 +200,13 @@ public class PlateauView extends JFrame implements Serializable {
         footerPanel.add(annuler);
 
         footerPanel.add(annulerTout);
+        footerPanel.add(listeLettres);
+
         footerPanel.add(aide);
         footerPanel.add(echanger);
         footerPanel.add(passer);
       
 
-        footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
         add(footerPanel, BorderLayout.SOUTH);
 
@@ -224,7 +224,7 @@ public class PlateauView extends JFrame implements Serializable {
 
         List<LettreView> footerLettres = new ArrayList<>();
 
-        for (Component component : footerPanel.getComponents()) {
+        for (Component component : listeLettres.getComponents()) {
             // Vérifier si le composant est une instance de LettreView
             if (component instanceof LettreView) {
                 LettreView lettreView = (LettreView) component;

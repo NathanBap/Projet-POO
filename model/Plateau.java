@@ -244,7 +244,7 @@ public class Plateau implements Serializable {
         List<Character> availableLetters = new ArrayList<>();
         for (LettreView lettreView : footerLettres) {
 
-            availableLetters.add(lettreView.getLettre());
+            availableLetters.add(lettreView.getPiece().getLettre());
 
         }
         return availableLetters;

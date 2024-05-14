@@ -92,7 +92,7 @@ public class ButtonsControler implements ActionListener, Serializable {
             // Conversion des LettreView en caractères
             List<Character> availableLetters = new ArrayList<>();
             for (LettreView lettreView : footerLettres) {
-                availableLetters.add(lettreView.getLettre());
+                availableLetters.add(lettreView.getPiece().getLettre());
             }
 
             List<String> suggestedWords = plateau.suggestWord(availableLetters);
