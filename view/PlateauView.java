@@ -1,4 +1,5 @@
 package view;
+
 import model.Case;
 import model.Plateau;
 
@@ -15,9 +16,10 @@ import java.util.List;
 public class PlateauView extends JFrame {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
-
     public LettreView lettreClicked;
-    
+    private JPanel footerPanel;
+    private JComboBox<String> motssugg;
+
     public PlateauView() {
         initGame();
         initComponents();
@@ -38,19 +40,19 @@ public class PlateauView extends JFrame {
     private void initComponents() {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Scrabble POO");
+        motssugg = new JComboBox<>();
 
         JPanel mainPanel = new JPanel(new GridLayout(15, 15));
-        
+
         for (int i = 0; i < 15; i++) {
             for (int j = 0; j < 15; j++) {
-              
-                
+
                 CaseView casee = new CaseView(plateau.getCase(i, j));
                 casee.addMouseListener(new CaseControler(casee, this));
 
                 mainPanel.add(casee);
                 allCases.add(casee);
-              
+
             }
         }
         // Ajout du panneau principal et du panneau flou à la fenêtre
@@ -58,11 +60,9 @@ public class PlateauView extends JFrame {
         add(mainPanel, BorderLayout.CENTER);
         pack();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setLocationRelativeTo(null);  
+        // setLocationRelativeTo(null);
 
-
-        JPanel footerPanel = new JPanel();
-        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
+        footerPanel = new JPanel();
         footerPanel.setBackground(Color.WHITE);
 
         JButton valider = new JButton("Valider");
@@ -92,7 +92,7 @@ public class PlateauView extends JFrame {
         footerPanel.add(lettre6);
         footerPanel.add(lettre7);
         footerPanel.add(lettre8);
-        
+
         add(footerPanel, BorderLayout.SOUTH);
 
         lettre.addMouseListener(new LettreControler(lettre, this));
@@ -105,7 +105,22 @@ public class PlateauView extends JFrame {
         lettre8.addMouseListener(new LettreControler(lettre8, this));
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
+        aide.addActionListener(new ButtonsControler(aide, this));
+    }
 
+    public List<LettreView> getLettreView() {
+
+        List<LettreView> footerLettres = new ArrayList<>();
+
+        for (Component component : footerPanel.getComponents()) {
+            // Vérifier si le composant est une instance de LettreView
+            if (component instanceof LettreView) {
+                LettreView lettreView = (LettreView) component;
+                footerLettres.add(lettreView);
+            }
+
+        }
+        return footerLettres;
     }
 
     public void removeAllLetters() {
@@ -116,7 +131,7 @@ public class PlateauView extends JFrame {
             }
         }
         repaint();
-        //revalidate();
+        // revalidate();
     }
 
     public static void main(String[] args) {
@@ -125,6 +140,7 @@ public class PlateauView extends JFrame {
             plateauView.setVisible(true);
         });
     }
+
 }
 
 // TODO, la pose de pièces sur le plateau

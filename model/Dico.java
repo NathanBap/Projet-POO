@@ -5,9 +5,9 @@ import java.io.BufferedReader;// lire un texte à partir d'un flux d'entrée car
 import java.io.FileReader; //lire des caractères a partir d un fichier
 import java.io.IOException;
 
-public class Dico extends ArrayList<String>{
+public class Dico extends ArrayList<String> {
     // attribut
-    //private List<String> dictionnaire;
+    // private List<String> dictionnaire;
 
     public Dico() {
         chargerDictionnaire();
@@ -33,6 +33,10 @@ public class Dico extends ArrayList<String>{
     // vérifier si un mot est valide
     public boolean estValide(String mot) {
         return contains(mot);
+    }
+
+    public List<String> getMots() {
+        return this;
     }
 
 }

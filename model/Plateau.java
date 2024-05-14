@@ -1,47 +1,55 @@
 package model;
+
 import java.util.*;
 
+import view.LettreView;
 
 public class Plateau {
-    //Attributs
+    // Attributs
     private Case[][] plateau;
     private List<Case> pendingCases = new ArrayList<Case>();
     private Joueur joueurActuel;
     private boolean premierTour = true;
     private Dico dico = new Dico();
 
-    //Constructeur
+    // Constructeur
     public Plateau() {
         this.plateau = new Case[15][15];
     }
 
-    //Getters / Setters
+    // Getters / Setters
     public Case[][] getPlateau() {
         return this.plateau;
     }
+
     public Case getCase(int x, int y) {
         return this.plateau[x][y];
     }
+
     public boolean getPremierTour() {
         return this.premierTour;
     }
 
-    //Méthodes
+    // Méthodes
     public void addPendingCase(Case c) {
         pendingCases.add(c);
     }
+
     public boolean arePendingCases() {
         return !this.pendingCases.isEmpty();
     }
+
     public List<Case> getPendingCases() {
         return this.pendingCases;
     }
 
-    public void initPlateau() {  // A modifier pour les cases avec des bonus
-        List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116, 122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
+    public void initPlateau() { // A modifier pour les cases avec des bonus
+        List<Integer> LD = new ArrayList<Integer>(Arrays.asList(3, 11, 36, 38, 45, 52, 59, 92, 96, 98, 102, 108, 116,
+                122, 126, 128, 132, 165, 172, 179, 186, 188, 213, 221));
         List<Integer> LT = new ArrayList<Integer>(Arrays.asList(20, 24, 76, 80, 84, 88, 136, 140, 144, 148, 200, 204));
-        List<Integer> MD = new ArrayList<Integer>(Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
-        List<Integer> MT = new ArrayList<Integer>(Arrays.asList(0, 7, 14, 105, 119, 210, 217, 224)); 
+        List<Integer> MD = new ArrayList<Integer>(
+                Arrays.asList(16, 28, 32, 42, 48, 56, 64, 70, 154, 160, 168, 176, 182, 192, 196, 208));
+        List<Integer> MT = new ArrayList<Integer>(Arrays.asList(0, 7, 14, 105, 119, 210, 217, 224));
 
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
@@ -60,18 +68,20 @@ public class Plateau {
         }
     }
 
-    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur personnalisés
+    // FAIT : Changer le type de retour en String pour avoir des messages d'erreur
+    // personnalisés
     // FAIT : Changement du système du calcul du score
     // A FAIRE : Quand on pose un mot validé, supprimer le bonus de la case
-    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour chaque mot
+    // FAIT : Retourner un map avec mot : score pour afficher les points gagnés pour
+    // chaque mot
 
     public String valider() { // Appelé par PlateauView
         boolean sameRow = true;
         boolean sameColumn = true;
         int firstX = pendingCases.get(0).getX();
         int firstY = pendingCases.get(0).getY();
-        int lastX = pendingCases.get(pendingCases.size()-1).getX();
-        int lastY = pendingCases.get(pendingCases.size()-1).getY();
+        int lastX = pendingCases.get(pendingCases.size() - 1).getX();
+        int lastY = pendingCases.get(pendingCases.size() - 1).getY();
 
         for (Case c : pendingCases) {
             if (c.getX() != firstX) {
@@ -86,7 +96,7 @@ public class Plateau {
             return "Pas aligne";
         }
 
-        if (sameRow) { 
+        if (sameRow) {
             for (int y = pendingCases.get(0).getY(); y < lastY; y++) {
                 if (getCase(firstX, y).isEmpty()) {
                     return "Pas connecte";
@@ -141,8 +151,7 @@ public class Plateau {
             this.premierTour = false;
             score = count * motDouble * motTriple;
             motsPoint.put(mot, score);
-        }
-        else {
+        } else {
             if (!this.motAdjacent()) {
                 return "Mot non adjacent";
             }
@@ -158,7 +167,8 @@ public class Plateau {
                 }
             }
             if (!casesVues.containsAll(pendingCases)) {
-                int scoreMot = calcMot(pendingCases.get(0), pendingCases.get(pendingCases.size()-1), casesVues, motsPoint);
+                int scoreMot = calcMot(pendingCases.get(0), pendingCases.get(pendingCases.size() - 1), casesVues,
+                        motsPoint);
                 if (scoreMot == -1) {
                     return "Mot invalide";
                 }
@@ -168,11 +178,52 @@ public class Plateau {
 
         System.out.println("Score : " + score);
 
-        //this.joueurActuel.addScore(score);
+        // this.joueurActuel.addScore(score);
 
         this.pendingCases.clear();
 
         return motsPoint.toString();
+    }
+
+    public List<Character> getAvailableLetters(List<LettreView> footerLettres) {
+        List<Character> availableLetters = new ArrayList<>();
+        for (LettreView lettreView : footerLettres) {
+
+            availableLetters.add(lettreView.getLettre());
+
+        }
+        return availableLetters;
+    }
+
+    private boolean canBeFormed(String word, List<Character> availableLetters) {
+        // Créer une copie de la liste
+        List<Character> remainingLetters = new ArrayList<>(availableLetters);
+        for (char letter : word.toCharArray()) {
+            // Vérifier si la lettre est disponible dans la liste des lettres restantes
+            if (remainingLetters.contains(letter)) {
+
+                remainingLetters.remove(Character.valueOf(letter));
+            } else {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<String> suggestWord(List<Character> availableLetters) {
+        List<String> suggestedWords = new ArrayList<>();
+
+        Dico dico = new Dico();
+
+        for (String word : dico.getMots()) {
+            if (canBeFormed(word, availableLetters)) {
+                suggestedWords.add(word);
+
+            }
+        }
+        return suggestedWords;
+
     }
 
     // c correspond à la case posée, cBis à une case adjacente
@@ -188,9 +239,10 @@ public class Plateau {
         // Soit horizontal soit vertical
         if (x == xBis) {
             // Pour aller au début du mot dans tous les cas
-            while (!getCase(x,y-1).isEmpty()) y--;
-                
-            Case currentCase = getCase(x,y);
+            while (!getCase(x, y - 1).isEmpty())
+                y--;
+
+            Case currentCase = getCase(x, y);
             while (!currentCase.isEmpty()) {
                 int[] newScore = updateScore(currentCase, count, motDouble, motTriple);
                 count = newScore[0];
@@ -198,12 +250,13 @@ public class Plateau {
                 motTriple = newScore[2];
                 casesVues.add(currentCase);
                 mot += currentCase.getLettre().getLettre();
-                currentCase = getCase(x,++y);
+                currentCase = getCase(x, ++y);
             }
         } else {
-            while (!getCase(x-1,y).isEmpty()) x--;
-                
-            Case currentCase = getCase(x,y);
+            while (!getCase(x - 1, y).isEmpty())
+                x--;
+
+            Case currentCase = getCase(x, y);
             while (!currentCase.isEmpty()) {
                 int[] newScore = updateScore(currentCase, count, motDouble, motTriple);
                 count = newScore[0];
@@ -211,7 +264,7 @@ public class Plateau {
                 motTriple = newScore[2];
                 casesVues.add(currentCase);
                 mot += currentCase.getLettre().getLettre();
-                currentCase = getCase(++x,y);
+                currentCase = getCase(++x, y);
             }
         }
         if (!this.dico.estValide(mot)) {
@@ -238,7 +291,7 @@ public class Plateau {
         } else {
             count += c.getLettre().getPoints();
         }
-        return new int[] {count, motDouble, motTriple};
+        return new int[] { count, motDouble, motTriple };
     }
 
     public void annuler() {
@@ -253,17 +306,21 @@ public class Plateau {
         int y = c.getY();
         List<Case> casesAdj = new ArrayList<Case>();
 
-        if (x > 0 && !getCase(x-1,y).isEmpty() && !this.pendingCases.contains(getCase(x-1,y)) && !casesVues.contains(getCase(x-1,y))) {
-            casesAdj.add(getCase(x-1, y));
+        if (x > 0 && !getCase(x - 1, y).isEmpty() && !this.pendingCases.contains(getCase(x - 1, y))
+                && !casesVues.contains(getCase(x - 1, y))) {
+            casesAdj.add(getCase(x - 1, y));
         }
-        if (x < 14 && !getCase(x+1,y).isEmpty() && !this.pendingCases.contains(getCase(x+1,y)) && !casesVues.contains(getCase(x+1,y))) {
-            casesAdj.add(getCase(x+1, y));
+        if (x < 14 && !getCase(x + 1, y).isEmpty() && !this.pendingCases.contains(getCase(x + 1, y))
+                && !casesVues.contains(getCase(x + 1, y))) {
+            casesAdj.add(getCase(x + 1, y));
         }
-        if (y > 0 && !getCase(x,y-1).isEmpty() && !this.pendingCases.contains(getCase(x,y-1)) && !casesVues.contains(getCase(x,y-1))) {
-            casesAdj.add(getCase(x, y-1));
+        if (y > 0 && !getCase(x, y - 1).isEmpty() && !this.pendingCases.contains(getCase(x, y - 1))
+                && !casesVues.contains(getCase(x, y - 1))) {
+            casesAdj.add(getCase(x, y - 1));
         }
-        if (y < 14 && !getCase(x,y+1).isEmpty() && !this.pendingCases.contains(getCase(x,y+1)) && !casesVues.contains(getCase(x,y+1))) {
-            casesAdj.add(getCase(x, y+1));
+        if (y < 14 && !getCase(x, y + 1).isEmpty() && !this.pendingCases.contains(getCase(x, y + 1))
+                && !casesVues.contains(getCase(x, y + 1))) {
+            casesAdj.add(getCase(x, y + 1));
         }
         System.out.println("Aucune lettre adjacente");
         return casesAdj;
@@ -275,16 +332,16 @@ public class Plateau {
             int x = c.getX();
             int y = c.getY();
 
-            if (x > 0 && !this.plateau[x-1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x-1][y])) {
+            if (x > 0 && !this.plateau[x - 1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x - 1][y])) {
                 return true;
             }
-            if (x < 14 && !this.plateau[x+1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x+1][y])) {
+            if (x < 14 && !this.plateau[x + 1][y].isEmpty() && !this.pendingCases.contains(this.plateau[x + 1][y])) {
                 return true;
             }
-            if (y > 0 && !this.plateau[x][y-1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y-1])) {
+            if (y > 0 && !this.plateau[x][y - 1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y - 1])) {
                 return true;
             }
-            if (y < 14 && !this.plateau[x][y+1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y+1])) {
+            if (y < 14 && !this.plateau[x][y + 1].isEmpty() && !this.pendingCases.contains(this.plateau[x][y + 1])) {
                 return true;
             }
         }

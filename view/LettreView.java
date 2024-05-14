@@ -7,21 +7,23 @@ import java.awt.*;
 
 public class LettreView extends JPanel {
     private Lettre piece;
+    private char lettre;
 
     public LettreView(char lettre) {
+
+        this.lettre = lettre; // Initialisation de la lettre
         this.piece = new Lettre(lettre);
 
-        // Définir la mise en page du JPanel
         setLayout(new BorderLayout());
 
         // un JLabel pour afficher la lettre au centre
         JLabel lettreLabel = new JLabel(String.valueOf(lettre));
         lettreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lettreLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        lettreLabel.setVerticalAlignment(SwingConstants.CENTER);
         lettreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(lettreLabel, BorderLayout.CENTER);
 
-        // JLabel pour afficher les points
+        // // JLabel pour afficher les points
         JLabel pointsLabel = new JLabel(String.valueOf(piece.getPoints()));
         pointsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         pointsLabel.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -38,6 +40,12 @@ public class LettreView extends JPanel {
 
     public Lettre getPiece() {
         return piece;
+    }
+
+    // Dans la classe LettreView
+    public char getLettre() {
+        // Code pour extraire et renvoyer la lettre associée à cette vue de lettre
+        return lettre;
     }
 
     public static void main(String[] args) {
