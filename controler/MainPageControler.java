@@ -13,7 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class Main extends MouseAdapter {
+public class MainPageControler extends MouseAdapter {
 
     private Clip musiqueFond;
     public boolean sonMute = false;

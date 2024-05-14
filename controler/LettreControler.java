@@ -28,6 +28,7 @@ public class LettreControler extends MouseAdapter implements Serializable {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println("Lettre clicked : " + lettreView.isSelected());
         if (plateau.lettreClicked != null) {
             this.plateau.lettreClicked.setSelected();
         }

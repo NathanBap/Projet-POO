@@ -66,8 +66,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        initJoueurs();
-        //plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
+        //initJoueurs();
+        plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -291,7 +291,7 @@ public class PlateauView extends JFrame implements Serializable {
                     }
                     listeLettres.add(lettrePosee);
                     c.removeLettrePosee();
-                    lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
+                    //lettrePosee.addMouseListener(new LettreControler(lettrePosee, this, listeLettres));
     
                     c.revalidate();
                     c.repaint();

@@ -26,6 +26,7 @@ public class CaseControler extends MouseAdapter implements Serializable{
     public void mouseClicked(MouseEvent e) {
         // Rajouter une condition pour vérifier si la case est adjacente à une lettre déjà placée SAUF pour la première lettre
         if (this.plateauView.lettreClicked != null && this.casee.getCase().isEmpty() && this.plateauView.lettreClicked.getPiece().getCase() == null){
+            this.plateauView.lettreClicked.setSelected();
             putLetter(this.plateauView.lettreClicked);
         } else {
             System.out.println("Aucune lettre n'a été sél tionnée u case pas adjacente.");
@@ -76,7 +77,7 @@ public class CaseControler extends MouseAdapter implements Serializable{
             lettrePlaced.setLettre(response.toUpperCase().charAt(0));
             lettreViewPlaced.paintLettreView();
         } 
-        lettreViewPlaced.removeMouseListener(lettreViewPlaced.getMouseListeners()[0]);
+        // lettreViewPlaced.removeMouseListener(lettreViewPlaced.getMouseListeners()[0]);
         lettreViewPlaced.setBorder(BorderFactory.createRaisedBevelBorder());
 
         // Place la lettre dans le model
