@@ -1,6 +1,6 @@
 package view;
 
-import controler.Main;
+import controler.MainPageControler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.util.*;
 
 public class MainPage extends JFrame {
 
-    Main controlleur = new Main();
+    MainPageControler controlleur = new MainPageControler();
 
     public MainPage() {
         //La totalité ou presque des fonctions seront deplacées dans le controlleur
