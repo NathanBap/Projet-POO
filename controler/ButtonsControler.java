@@ -1,13 +1,21 @@
 package controler;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+
 import javax.swing.*;
 
+import view.LettreView;
 import view.PlateauView;
 import model.Plateau;
 
@@ -36,7 +44,7 @@ public class ButtonsControler implements ActionListener, Serializable {
             } else {
                 String msg = "";
                 String valider = plateau.valider();
-                
+
                 switch (valider) {
                     case "Mot invalide":
                         msg = "Le mot formé n'est pas valide.";
@@ -75,8 +83,35 @@ public class ButtonsControler implements ActionListener, Serializable {
                     plateauView.joueurSuivant();
                     passerCount = 0;
                 }
+
             }
 
+        } else if (action.equals("Aide")) {
+            List<LettreView> footerLettres = plateauView.getLettreView();
+
+            // Conversion des LettreView en caractères
+            List<Character> availableLetters = new ArrayList<>();
+            for (LettreView lettreView : footerLettres) {
+                availableLetters.add(lettreView.getLettre());
+            }
+
+            List<String> suggestedWords = plateau.suggestWord(availableLetters);
+            if (!suggestedWords.isEmpty()) {
+                StringBuilder sb = new StringBuilder("Mots suggérés :\n");
+                for (String word : suggestedWords) {
+                    sb.append(word).append("\n");
+                }
+                JTextArea textArea = new JTextArea(sb.toString());
+                textArea.setEditable(false); // Empêche la modification du texte
+                JScrollPane scrollPane = new JScrollPane(textArea);
+
+                scrollPane.setPreferredSize(new Dimension(300, 200));
+
+                JOptionPane.showMessageDialog(null, scrollPane, "Mots suggérés", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Aucun mot suggéré trouvé.", "Aucun mot suggéré",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
         }
         
         else if (action.equals("Annuler tout")) {

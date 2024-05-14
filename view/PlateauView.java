@@ -1,5 +1,8 @@
 package view;
 
+import model.Case;
+import model.Plateau;
+
 import model.*;
 
 import controler.*;
@@ -24,6 +27,9 @@ import javax.swing.border.Border;
 public class PlateauView extends JFrame implements Serializable {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
+
+    private JComboBox<String> motssugg;
+
     private Joueur joueur;
     public LettreView lettreClicked;
     private JPanel listeLettres;
@@ -121,6 +127,8 @@ public class PlateauView extends JFrame implements Serializable {
             }
         });        
         setTitle("Scrabble POO");
+      
+        motssugg = new JComboBox<>();
         
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
 
@@ -133,6 +141,7 @@ public class PlateauView extends JFrame implements Serializable {
 
                 mainPanel.add(casee);
                 allCases.add(casee);
+
             }       
         }
         // Ajout du panneau principal et du panneau flou à la fenêtre
@@ -140,10 +149,9 @@ public class PlateauView extends JFrame implements Serializable {
         add(mainPanel, BorderLayout.CENTER);
         pack();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setLocationRelativeTo(null);  
+        // setLocationRelativeTo(null);
 
         footerPanel = new JPanel();
-        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
         // Attributs de classe
@@ -191,9 +199,12 @@ public class PlateauView extends JFrame implements Serializable {
         footerPanel.add(new JLabel("        "));
         footerPanel.add(valider);
         footerPanel.add(annuler);
+
         footerPanel.add(annulerTout);
+        footerPanel.add(aide);
         footerPanel.add(echanger);
         footerPanel.add(passer);
+      
 
         footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
@@ -201,11 +212,28 @@ public class PlateauView extends JFrame implements Serializable {
 
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
+        aide.addActionListener(new ButtonsControler(aide, this));
         annulerTout.addActionListener(new ButtonsControler(annulerTout, this));
         echanger.addActionListener(new ButtonsControler(echanger, this));
         passer.addActionListener(new ButtonsControler(passer, this));
 
         keyboardShortcuts(mainPanel);
+    }
+
+    public List<LettreView> getLettreView() {
+
+        List<LettreView> footerLettres = new ArrayList<>();
+
+        for (Component component : footerPanel.getComponents()) {
+            // Vérifier si le composant est une instance de LettreView
+            if (component instanceof LettreView) {
+                LettreView lettreView = (LettreView) component;
+                footerLettres.add(lettreView);
+            }
+
+        }
+        return footerLettres;
+      
     }
 
     // Fin -- Initialisation de la fenêtre -- //
@@ -570,6 +598,7 @@ public class PlateauView extends JFrame implements Serializable {
             lettre.removeMouseListener(lettre.getMouseListeners()[0]);
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
         }
+
         keyboardShortcuts(mainPanel);
     }
 
@@ -579,5 +608,6 @@ public class PlateauView extends JFrame implements Serializable {
             plateauView.setVisible(true);
         });
     }
+
 }
 
