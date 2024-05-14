@@ -55,6 +55,7 @@ public class PlateauView extends JFrame implements Serializable {
         initComponents();
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
+        setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         setVisible(true);
         showPlayer();
     }
