@@ -10,7 +10,7 @@ import java.util.*;
 
 public class MainPage extends JFrame {
 
-    MainPageControler controlleur = new MainPageControler();
+    private MainPageControler controlleur = new MainPageControler();
 
     public MainPage() {
         //La totalité ou presque des fonctions seront deplacées dans le controlleur
@@ -19,7 +19,7 @@ public class MainPage extends JFrame {
         setSize(850, 600);
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
 		setIconImage(new ImageIcon("ressources/Logo.png").getImage());
-        controlleur.jouerSonContinu("ressources/HollowKightGreenPath.wav");
+        MainPageControler.jouerSonContinu("ressources/HollowKnightGreenPath.wav");
         // Arrière-plan
         Color transparentColor = new Color(255, 255, 255, 255);
         ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");		
@@ -56,10 +56,8 @@ public class MainPage extends JFrame {
         MouseListener lancementPlateau = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Action à exécuter lors du clic
-                //controlleur.launchOtherJavaFile();
                 controlleur.jouerSon("ressources/click.wav");
-                controlleur.stopSonContinu();
+                // Action à exécuter lors du clic
                 PlateauView plateauView = new PlateauView();
                 plateauView.setVisible(true);
                 dispose();
@@ -215,25 +213,22 @@ public class MainPage extends JFrame {
             }
         };
 
-	MouseListener couperSon = new MouseAdapter() {
+	    MouseListener couperSon = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 // Action à exécuter lors du clic
-                // controlleur.jouerSon("ressources/click.wav");
 
                 // Si le son est actuellement muet, reprendre le son continu
-                if (controlleur.sonMute) {
-                    controlleur.reprendreSonContinu();
-                    controlleur.sonMute = false;
+                if (MainPageControler.sonMute) {
+                    MainPageControler.reprendreSonContinu();
                 } else {
                     // Si le son n'est pas muet, arrêter le son continu
-                    controlleur.stopSonContinu();
-                    controlleur.sonMute = true;
+                    MainPageControler.stopSonContinu();
                 }
             
                 // Changer l'icône du bouton en fonction de l'état du son
                 JLabel bouton = (JLabel) e.getSource();
-                ImageIcon icone = controlleur.sonMute ? new ImageIcon("ressources/sonInactif.png") : new ImageIcon("ressources/sonActif.png");
+                ImageIcon icone = MainPageControler.sonMute ? new ImageIcon("ressources/sonInactif.png") : new ImageIcon("ressources/sonActif.png");
                 bouton.setIcon(icone);
             }
         };

@@ -1,8 +1,5 @@
 package view;
 
-import model.Case;
-import model.Plateau;
-
 import model.*;
 
 import controler.*;
@@ -43,7 +40,6 @@ public class PlateauView extends JFrame implements Serializable {
     private JLabel scoreLabel;
     private JPanel mainPanel;
     private JLabel sacLabel;
-    MainPageControler mainPageControlleur = new MainPageControler();
     
     // --- Initialisation de la fenêtre --- //
     public PlateauView() {
@@ -59,7 +55,6 @@ public class PlateauView extends JFrame implements Serializable {
         setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         setVisible(true);
         showPlayer();
-	mainPageControlleur.jouerSonContinu("ressources/click.wav");
     }
 
     public Plateau getPlateau() {
@@ -169,23 +164,17 @@ public class PlateauView extends JFrame implements Serializable {
         buttonSon.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Action à exécuter lors du clic
-                mainPageControlleur.jouerSon("ressources/click.wav");
-        
-                // Inversion du statut du son mute
-                mainPageControlleur.sonMute = !mainPageControlleur.sonMute;
-        
                 // Si le son est actuellement muet, reprendre le son continu
-                if (!mainPageControlleur.sonMute) {
-                    mainPageControlleur.jouerSonContinu("ressources/click.wav");
+                if (MainPageControler.sonMute) {
+                    MainPageControler.reprendreSonContinu();
                 } else {
                     // Si le son est muet, arrêter le son continu
-                    mainPageControlleur.stopSonContinu();
+                    MainPageControler.stopSonContinu();
                 }
         
                 // Changer l'icône du bouton en fonction de l'état du son
                 JLabel bouton = (JLabel) e.getSource();
-                ImageIcon icone = mainPageControlleur.sonMute ? new ImageIcon("ressources/sonInactifNoir.png") : new ImageIcon("ressources/sonActifNoir.png");
+                ImageIcon icone = MainPageControler.sonMute ? new ImageIcon("ressources/sonInactifNoir.png") : new ImageIcon("ressources/sonActifNoir.png");
                 bouton.setIcon(icone);
             }
         });
