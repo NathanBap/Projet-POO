@@ -85,4 +85,9 @@ public class MainPageControler extends MouseAdapter {
             musiqueFond.stop();
         }
     }
+    public void reprendreSonContinu() {
+        if (musiqueFond != null && !musiqueFond.isRunning()) {
+            musiqueFond.start();
+        }
+    }
 }
