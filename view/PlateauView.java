@@ -43,6 +43,7 @@ public class PlateauView extends JFrame implements Serializable {
     private JLabel scoreLabel;
     private JPanel mainPanel;
     private JLabel sacLabel;
+    MainPageControler mainPageControlleur = new MainPageControler();
     
     // --- Initialisation de la fenêtre --- //
     public PlateauView() {
@@ -58,6 +59,7 @@ public class PlateauView extends JFrame implements Serializable {
         setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         setVisible(true);
         showPlayer();
+	mainPageControlleur.jouerSonContinu("ressources/click.wav");
     }
 
     public Plateau getPlateau() {
@@ -161,6 +163,33 @@ public class PlateauView extends JFrame implements Serializable {
         passer = new JButton("Passer");
         echanger = new JButton("Echanger");
 
+        ImageIcon iconeSon = new ImageIcon("ressources/sonActifNoir.png");
+		JLabel buttonSon = new JLabel(iconeSon);
+		buttonSon.setBounds(785, 480, 50, 50);
+        buttonSon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Action à exécuter lors du clic
+                mainPageControlleur.jouerSon("ressources/click.wav");
+        
+                // Inversion du statut du son mute
+                mainPageControlleur.sonMute = !mainPageControlleur.sonMute;
+        
+                // Si le son est actuellement muet, reprendre le son continu
+                if (!mainPageControlleur.sonMute) {
+                    mainPageControlleur.jouerSonContinu("ressources/click.wav");
+                } else {
+                    // Si le son est muet, arrêter le son continu
+                    mainPageControlleur.stopSonContinu();
+                }
+        
+                // Changer l'icône du bouton en fonction de l'état du son
+                JLabel bouton = (JLabel) e.getSource();
+                ImageIcon icone = mainPageControlleur.sonMute ? new ImageIcon("ressources/sonInactifNoir.png") : new ImageIcon("ressources/sonActifNoir.png");
+                bouton.setIcon(icone);
+            }
+        });
+        
         annuler.setEnabled(false);
         annulerTout.setEnabled(false);
         
@@ -175,6 +204,7 @@ public class PlateauView extends JFrame implements Serializable {
 
         int score = joueur.getScore();
         scoreLabel = new JLabel(joueur.getNom() + " : " + String.valueOf(score) + " points");
+        footerPanel.add(buttonSon);
 
         try {
             URL url = getClass().getResource("/ressources/sac_image.png");

@@ -59,6 +59,7 @@ public class MainPage extends JFrame {
                 // Action à exécuter lors du clic
                 //controlleur.launchOtherJavaFile();
                 controlleur.jouerSon("ressources/click.wav");
+                controlleur.stopSonContinu();
                 PlateauView plateauView = new PlateauView();
                 plateauView.setVisible(true);
                 dispose();
