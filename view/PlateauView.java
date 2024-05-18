@@ -24,12 +24,15 @@ import javax.swing.border.Border;
 public class PlateauView extends JFrame implements Serializable {
     private Plateau plateau;
     private List<CaseView> allCases = new ArrayList<CaseView>();
+
+    private JComboBox<String> motssugg;
+
     private Joueur joueur;
     public LettreView lettreClicked;
     private JPanel listeLettres;
     private JButton passer;
     private JButton echanger;
-    private JButton aide;
+    private JButton aide = new JButton("Aide");
     private JButton valider;
     private JButton annuler;
     private JButton annulerTout;
@@ -49,6 +52,7 @@ public class PlateauView extends JFrame implements Serializable {
         initComponents();
         pack(); // Ajuste automatiquement la taille
         setLocationRelativeTo(null); // Centre la fenêtre sur l'écran
+        setIconImage(new ImageIcon("ressources/Logo.png").getImage());
         setVisible(true);
         showPlayer();
     }
@@ -60,8 +64,8 @@ public class PlateauView extends JFrame implements Serializable {
     private void initGame() {
         plateau = new Plateau();
         plateau.initPlateau();
-        //initJoueurs();
-        plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
+        initJoueurs();
+        // plateau.initJoueursTest();  // Mettre en commentaire et décommenter initJoueurs() 
         plateau.debutDuJeu();
     }
 
@@ -93,7 +97,6 @@ public class PlateauView extends JFrame implements Serializable {
             plateau.initJoueurs(noms);
         }
 
-        aide = new JButton("Aide");
         msg = "Voulez-vous jouer avec une aide ?";
         choice = JOptionPane.showConfirmDialog(this, msg, "Aide", JOptionPane.YES_NO_OPTION);
         if (choice == JOptionPane.NO_OPTION) {
@@ -121,6 +124,8 @@ public class PlateauView extends JFrame implements Serializable {
             }
         });        
         setTitle("Scrabble POO");
+      
+        motssugg = new JComboBox<>();
         
         List<Lettre> lettresDuJoueur = joueur.getListeLettre();
 
@@ -133,6 +138,7 @@ public class PlateauView extends JFrame implements Serializable {
 
                 mainPanel.add(casee);
                 allCases.add(casee);
+
             }       
         }
         // Ajout du panneau principal et du panneau flou à la fenêtre
@@ -140,10 +146,9 @@ public class PlateauView extends JFrame implements Serializable {
         add(mainPanel, BorderLayout.CENTER);
         pack();
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //setLocationRelativeTo(null);  
+        // setLocationRelativeTo(null);
 
         footerPanel = new JPanel();
-        // Définir la couleur de fond ou ajouter d'autres composants au footerPanel si nécessaire
         footerPanel.setBackground(Color.WHITE);
 
         // Attributs de classe
@@ -153,6 +158,27 @@ public class PlateauView extends JFrame implements Serializable {
         passer = new JButton("Passer");
         echanger = new JButton("Echanger");
 
+        ImageIcon iconeSon = new ImageIcon("ressources/sonActifNoir.png");
+		JLabel buttonSon = new JLabel(iconeSon);
+		buttonSon.setBounds(785, 480, 50, 50);
+        buttonSon.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Si le son est actuellement muet, reprendre le son continu
+                if (MainPageControler.sonMute) {
+                    MainPageControler.reprendreSonContinu();
+                } else {
+                    // Si le son est muet, arrêter le son continu
+                    MainPageControler.stopSonContinu();
+                }
+        
+                // Changer l'icône du bouton en fonction de l'état du son
+                JLabel bouton = (JLabel) e.getSource();
+                ImageIcon icone = MainPageControler.sonMute ? new ImageIcon("ressources/sonInactifNoir.png") : new ImageIcon("ressources/sonActifNoir.png");
+                bouton.setIcon(icone);
+            }
+        });
+        
         annuler.setEnabled(false);
         annulerTout.setEnabled(false);
         
@@ -167,6 +193,7 @@ public class PlateauView extends JFrame implements Serializable {
 
         int score = joueur.getScore();
         scoreLabel = new JLabel(joueur.getNom() + " : " + String.valueOf(score) + " points");
+        footerPanel.add(buttonSon);
 
         try {
             URL url = getClass().getResource("/ressources/sac_image.png");
@@ -191,21 +218,42 @@ public class PlateauView extends JFrame implements Serializable {
         footerPanel.add(new JLabel("        "));
         footerPanel.add(valider);
         footerPanel.add(annuler);
+
         footerPanel.add(annulerTout);
+        footerPanel.add(listeLettres);
+
+        footerPanel.add(aide);
         footerPanel.add(echanger);
         footerPanel.add(passer);
+      
 
-        footerPanel.add(listeLettres);
         footerPanel.add(scoreLabel);
         add(footerPanel, BorderLayout.SOUTH);
 
         valider.addActionListener(new ButtonsControler(valider, this));
         annuler.addActionListener(new ButtonsControler(annuler, this));
+        aide.addActionListener(new ButtonsControler(aide, this));
         annulerTout.addActionListener(new ButtonsControler(annulerTout, this));
         echanger.addActionListener(new ButtonsControler(echanger, this));
         passer.addActionListener(new ButtonsControler(passer, this));
 
         keyboardShortcuts(mainPanel);
+    }
+
+    public List<LettreView> getLettreView() {
+
+        List<LettreView> footerLettres = new ArrayList<>();
+
+        for (Component component : listeLettres.getComponents()) {
+            // Vérifier si le composant est une instance de LettreView
+            if (component instanceof LettreView) {
+                LettreView lettreView = (LettreView) component;
+                footerLettres.add(lettreView);
+            }
+
+        }
+        return footerLettres;
+      
     }
 
     // Fin -- Initialisation de la fenêtre -- //
@@ -483,7 +531,7 @@ public class PlateauView extends JFrame implements Serializable {
                 echapDialog.setLocationRelativeTo(null);
                 echapDialog.setVisible(true); 
 
-                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this));
+                reprendre.addActionListener(new ButtonsControler(reprendre, PlateauView.this, echapDialog));
                 quitter.addActionListener(new ButtonsControler(quitter, PlateauView.this));
         
             }
@@ -568,8 +616,10 @@ public class PlateauView extends JFrame implements Serializable {
         for (Component l : listeLettres.getComponents()) {
             LettreView lettre = (LettreView) l;
             lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+            lettre.removeMouseListener(lettre.getMouseListeners()[0]);
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
         }
+
         keyboardShortcuts(mainPanel);
     }
 
@@ -579,5 +629,6 @@ public class PlateauView extends JFrame implements Serializable {
             plateauView.setVisible(true);
         });
     }
+
 }
 

@@ -22,11 +22,11 @@ public class LettreView extends JPanel {
         // un JLabel pour afficher la lettre au centre
         JLabel lettreLabel = new JLabel(String.valueOf(lettre));
         lettreLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        lettreLabel.setVerticalAlignment(SwingConstants.BOTTOM);
+        lettreLabel.setVerticalAlignment(SwingConstants.CENTER);
         lettreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         add(lettreLabel, BorderLayout.CENTER);
 
-        // JLabel pour afficher les points
+        // // JLabel pour afficher les points
         JLabel pointsLabel = new JLabel(String.valueOf(piece.getPoints()));
         pointsLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         pointsLabel.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -43,6 +43,7 @@ public class LettreView extends JPanel {
     public Lettre getPiece() {
         return piece;
     }
+
     public void setSelected() {
         this.isSelected = !this.isSelected;
         if (this.isSelected) {

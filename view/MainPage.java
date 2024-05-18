@@ -10,7 +10,7 @@ import java.util.*;
 
 public class MainPage extends JFrame {
 
-    MainPageControler controlleur = new MainPageControler();
+    private MainPageControler controlleur = new MainPageControler();
 
     public MainPage() {
         //La totalité ou presque des fonctions seront deplacées dans le controlleur
@@ -19,10 +19,11 @@ public class MainPage extends JFrame {
         setSize(850, 600);
         setResizable(false); /*sinon placement des éléments raté mais cela ne pose pas de problème au plateau */
 		setIconImage(new ImageIcon("ressources/Logo.png").getImage());
+        MainPageControler.jouerSonContinu("ressources/HollowKnightGreenPath.wav");
         // Arrière-plan
         Color transparentColor = new Color(255, 255, 255, 255);
-		ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");
-		JLabel bgLabel = new JLabel(bgIcon);
+        ImageIcon bgIcon = new ImageIcon("ressources/Scrabble.jpg");		
+        JLabel bgLabel = new JLabel(bgIcon);
 		bgLabel.setBounds(0, 0, 850, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -55,9 +56,8 @@ public class MainPage extends JFrame {
         MouseListener lancementPlateau = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Action à exécuter lors du clic
-                //controlleur.launchOtherJavaFile();
                 controlleur.jouerSon("ressources/click.wav");
+                // Action à exécuter lors du clic
                 PlateauView plateauView = new PlateauView();
                 plateauView.setVisible(true);
                 dispose();
@@ -123,6 +123,7 @@ public class MainPage extends JFrame {
                 JLabel label = (JLabel) e.getSource();
                 label.setForeground(Color.WHITE);
                 label.setOpaque(false);
+                label.setBorder(null);
             }
         };
 
@@ -212,6 +213,26 @@ public class MainPage extends JFrame {
             }
         };
 
+	    MouseListener couperSon = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Action à exécuter lors du clic
+
+                // Si le son est actuellement muet, reprendre le son continu
+                if (MainPageControler.sonMute) {
+                    MainPageControler.reprendreSonContinu();
+                } else {
+                    // Si le son n'est pas muet, arrêter le son continu
+                    MainPageControler.stopSonContinu();
+                }
+            
+                // Changer l'icône du bouton en fonction de l'état du son
+                JLabel bouton = (JLabel) e.getSource();
+                ImageIcon icone = MainPageControler.sonMute ? new ImageIcon("ressources/sonInactif.png") : new ImageIcon("ressources/sonActif.png");
+                bouton.setIcon(icone);
+            }
+        };
+
         JLabel welcomeLabel = new JLabel("Bienvenue sur notre Scrabble !");
         welcomeLabel.setFont(new Font("Century Gothic Italic", Font.PLAIN, 30));
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -273,6 +294,11 @@ public class MainPage extends JFrame {
         } else {
             continuer.setForeground(Color.GRAY);
         }
+
+	ImageIcon iconeSon = new ImageIcon("ressources/sonActif.png");
+    JLabel buttonSon = new JLabel(iconeSon);
+    buttonSon.setBounds(785, 480, 50, 50);
+    buttonSon.addMouseListener(couperSon);
 
         JLabel texteFooter = new JLabel("Projet de programmation Orienté Objet de fin d'année - 2023/2024");
         texteFooter.setFont(texteFooter.getFont().deriveFont(10f));
@@ -360,6 +386,7 @@ public class MainPage extends JFrame {
         bgLabel.add(launchButton);
         bgLabel.add(quitButton);
         bgLabel.add(continuer);
+        bgLabel.add(buttonSon);
         setLocationRelativeTo(null);
         setVisible(true);
     }

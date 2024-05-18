@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class Dico extends ArrayList<String> implements Serializable{
     // attribut
-    //private List<String> dictionnaire;
+    // private List<String> dictionnaire;
 
     public Dico() {
         chargerDictionnaire();
@@ -31,6 +31,10 @@ public class Dico extends ArrayList<String> implements Serializable{
     // vérifier si un mot est valide
     public boolean estValide(String mot) {
         return contains(mot);
+    }
+
+    public List<String> getMots() {
+        return this;
     }
 
 }
