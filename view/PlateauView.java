@@ -616,6 +616,7 @@ public class PlateauView extends JFrame implements Serializable {
         for (Component l : listeLettres.getComponents()) {
             LettreView lettre = (LettreView) l;
             lettre.removeMouseListener(lettre.getMouseListeners()[0]);
+            lettre.removeMouseListener(lettre.getMouseListeners()[0]);
             lettre.addMouseListener(new LettreControler(lettre, this, listeLettres));
         }
 

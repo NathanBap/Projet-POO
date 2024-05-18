@@ -212,7 +212,6 @@ public class Plateau implements Serializable {
             }
             Set<Case> casesVues = new HashSet<Case>();
             for (Case c : pendingCases) {
-                System.out.println("Case init : " + c.getX() + " " + c.getY());
                 for (Case cBis : casesAdjacentes(c, casesVues)) {
                     int scoreMot = calcMot(c, cBis, casesVues, motsPoint);
                     if (scoreMot == -1) {
@@ -375,7 +374,6 @@ public class Plateau implements Serializable {
         int x = c.getX();
         int y = c.getY();
 
-        System.out.println("Case : " + x + " " + y);
         List<Case> casesAdj = new ArrayList<Case>();
         if (x > 0) {
             if (!getCase(x - 1, y).isEmpty() && !this.pendingCases.contains(getCase(x - 1, y))
@@ -492,7 +490,6 @@ public class Plateau implements Serializable {
             ioe.printStackTrace();
             return;
         } catch (ClassNotFoundException c) {
-            System.out.println("Class not found");
             c.printStackTrace();
             return;
         }
